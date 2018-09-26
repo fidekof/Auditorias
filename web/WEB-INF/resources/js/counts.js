@@ -372,7 +372,6 @@ const obtenerValorConteo = (dato, conteoCode) =>
             if(conteoCode ==="C002"){result = dato.conteo2;}
             else{
                 if(conteoCode ==="C003"){result = dato.conteo3;}
-
             }
         }
 
