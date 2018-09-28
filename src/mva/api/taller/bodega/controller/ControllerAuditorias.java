@@ -4,6 +4,7 @@ package mva.api.taller.bodega.controller;
 import mva.api.taller.bodega.dao.DaoAuditorias;
 import mva.api.taller.bodega.interfaces.InterfaceAuditorias;
 import mva.api.taller.bodega.models.Conteo;
+import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,6 +51,16 @@ public class ControllerAuditorias {
         Conteo productF = new Conteo();
         productF.setUbicacion(ubicf);
         Collection<Conteo> productCollection = this.serviceAuditorias.ProductsGetByUbicaciones(productI,productF , DaoAuditorias.ALL_BY_BODEGA_AND_UBICACIONES);
+        return new ResponseEntity<Collection<Conteo>>(productCollection, HttpStatus.OK);
+    }
+
+
+
+
+    @PostMapping("/auditoria/{typesearch}")
+    public ResponseEntity<Collection<Conteo>> ProductGetAllByTypeSearch(@PathVariable int typesearch, @RequestBody Conteo conteo)
+    {
+        Collection<Conteo> productCollection = this.serviceAuditorias.ProductGetAllByTypeSearch(conteo , typesearch);
         return new ResponseEntity<Collection<Conteo>>(productCollection, HttpStatus.OK);
     }
 

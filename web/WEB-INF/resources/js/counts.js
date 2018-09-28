@@ -82,7 +82,7 @@ const getDataItems = async () => {
         return {};
     }
 
-    const url = getParamName(`${ambienteruta()}product/byBodegaAndCode/${bodega}/${product}/${quitarAll(auditoria)}`).replace("/index/noaud","");
+    const url = getParamName(`${ambienteruta()}product/byBodegaAndCode/${bodega}/${product}/${quitarAll(auditoria)}`).replace("/index/noaud","").replace("/index/aud","");
       // const url = `http://localhost:8080/product/byBodegaAndCode/${bodega}/${product}/${quitarAll(auditoria)}`;
     const request = {method: 'GET', url: url};
     const response = await ajax(request);
@@ -106,6 +106,163 @@ const quitarAll = (valor)=>{
     if(valor !== null){result = valor.replace("*","");}
     return result;
 }
+
+
+const getDataProductsFetch = async () => {
+    const auditoria = (document.getElementById("inp_cod_auditoria")).value;
+    const bodega = (document.getElementById("inp_cod_bodega")).value;
+    const grupo = (document.getElementById("inp_cod_group")).value;
+    const ubicI = (document.getElementById("inp_cod_ubicacion_i")).value;
+    const ubicF = (document.getElementById("inp_cod_ubicacion_f")).value;
+    const conteocode = (document.getElementById("inp_cod_count")).value;
+    const product = (document.getElementById("inp_cod_product")).value;
+
+    if (auditoria.length < 1 || auditoria.trim().length < 1) {
+        M.toast(
+            {
+                html: 'Debe inresar un codigo de auditoria',
+                classes: 'rounded red lighten-1'
+            }
+        );
+        return {};
+    }
+
+    if (bodega.length < 1 || bodega.trim().length < 1) {
+        M.toast(
+            {
+                html: 'Debe Ingresar un codigo de bodega',
+                classes: 'rounded red lighten-1'
+            }
+        );
+
+        return {};
+    }
+
+
+    if (grupo.length < 1 || grupo.trim().length < 1) {
+
+        M.toast(
+            {
+                html: 'Debe Ingresar su codigo de grupo',
+                classes: 'rounded red lighten-1'
+            }
+        );
+
+        return {};
+    }
+
+
+    if (ubicI.length < 1 || ubicI.trim().length < 1) {
+
+        M.toast(
+            {
+                html: 'Debe Ingresar la ubicacion inicial',
+                classes: 'rounded red lighten-1'
+            }
+        );
+
+
+        return {};
+    }
+
+
+    if (ubicF.length < 1 || ubicF.trim().length < 1) {
+
+        M.toast(
+            {
+                html: 'Debe Ingresar la ubicacion final',
+                classes: 'rounded red lighten-1'
+            }
+        );
+
+        return {};
+    }
+
+    const tieneT = auditoria.indexOf("*");
+      // let url = `http://localhost:8080/product/byBodegaAndUbicacion/${bodega}/${ubicI}/${ubicF}/${quitarAll(auditoria)}`;
+    const url = getParamName(`${ambienteruta()}product/auditoria/2`).replace("/index/noaud","").replace("/index/aud","");;
+
+
+
+    const myHeaders =  new Headers();
+    myHeaders.append('Accept', 'application/json');
+    myHeaders.append('Content-Type','application/json');
+
+    const conteo = {
+        auditoria: `${quitarAll(auditoria)}`,
+        bodega : `${bodega}`,
+        grupo: `${grupo}`,
+        conteocode : `${conteocode}`,
+        ubicacion : `${ubicI}`,
+        codigo : `${product}`,
+        observacion: `${ubicF}`
+    };
+
+    const MyConfig = {
+        method: 'POST',
+        headers: myHeaders,
+        body: JSON.stringify(conteo)
+    };
+
+
+
+    await fetch(url,MyConfig)
+        .then( response =>{ return response.json();})
+        .catch(error => {
+            console.log(error);
+            M.toast(
+                {
+                    html: `La busqueda no devolvio resultados`,
+                    classes: 'rounded red lighten-1'
+                }
+
+        );
+        })
+        .then(
+            response => {
+                console.log(response);
+                if(response === null)
+                {
+                    M.toast(
+                        {
+                            html: `La busqueda no devolvio resultados`,
+                            classes: 'rounded red lighten-1'
+                        }
+                    );
+                }
+                else
+                {
+                    console.log(response);
+                    if(response.length > 0)
+                    {
+                        M.toast(
+                            {
+                                html: `Se encontraron ${response.length} registros`,
+                                classes: 'rounded green lighten-1'
+                            }
+                        );
+                    }
+                    else
+                    {
+                        M.toast(
+                            {
+                                html: `No se encontraron registros`,
+                                classes: 'rounded red lighten-1'
+                            }
+                        );
+                    }
+                }
+            }
+        );
+
+
+
+}
+
+
+
+
+
 
 
 const getDataProducts = async () => {
@@ -178,20 +335,20 @@ const getDataProducts = async () => {
     }
 
     const tieneT = auditoria.indexOf("*");
-      // let url = `http://localhost:8080/product/byBodegaAndUbicacion/${bodega}/${ubicI}/${ubicF}/${quitarAll(auditoria)}`;
-     let url = getParamName(`${ambienteruta()}product/byBodegaAndUbicacion/${bodega}/${ubicI}/${ubicF}/${quitarAll(auditoria)}`);
+    // let url = `http://localhost:8080/product/byBodegaAndUbicacion/${bodega}/${ubicI}/${ubicF}/${quitarAll(auditoria)}`;
+    let url = getParamName(`${ambienteruta()}product/byBodegaAndUbicacion/${bodega}/${ubicI}/${ubicF}/${quitarAll(auditoria)}`);
     if(tieneT<0){
 
         //url = `http://localhost:8080/product/byBodegaAndUbicacion/${bodega}/${ubicI}/${ubicF}/${quitarAll(auditoria)}`;
 
-          url = getParamName(`${ambienteruta()}product/byBodegaAndUbicacion/${bodega}/${ubicI}/${ubicF}/${quitarAll(auditoria)}`)
+        url = getParamName(`${ambienteruta()}product/byBodegaAndUbicacion/${bodega}/${ubicI}/${ubicF}/${quitarAll(auditoria)}`)
     }
     else {
-          // url = `http://localhost:8080/product/byBodega/${bodega}/${quitarAll(auditoria)}`;
+        // url = `http://localhost:8080/product/byBodega/${bodega}/${quitarAll(auditoria)}`;
 
-          url = getParamName(`${ambienteruta()}product/byBodega/${bodega}/${quitarAll(auditoria)}`);
+        url = getParamName(`${ambienteruta()}product/byBodega/${bodega}/${quitarAll(auditoria)}`);
     }
-    url = url.replace("/index/noaud","");
+    url = url.replace("/index/noaud","").replace("/index/aud","");
     const request = {method: 'GET', url: url};
     const response = await ajax(request);
     switch (response.status) {
@@ -207,6 +364,9 @@ const getDataProducts = async () => {
             console.log('Error Desconocido' + response.status);
     }
 }
+
+
+
 
 
 const DrawCountsData = (data, typeAud) => {
@@ -293,16 +453,16 @@ const tablaConteos = (data, typeAud, auditoria, grupo, conteo) => {
     let tabla = `
         <table class="responsive-table striped">
             <thead>
-                <tr>
-                    <th>Cod. Bodega</th>
-                    <th>Ubicacion</th>
+                <tr>`;
+    if (typeAud === 'Y') {tabla += `<th>Cod. Bodega</th>`;}
+    tabla +=`<th>Ubicacion</th>
                     <th>Cod. Item</th>
                     <th>Descripcion</th>`;
     if (typeAud === 'Y') {
-        tabla += `<th> Cantidad </th>`;
+        tabla += `<th> Cantidad </th><th>Costo U.</th>`;
     }
 
-    tabla += `      <th>Costo U.</th>
+    tabla += `      
                     <th style="display: none">Familia</th> 
                     <th>Observacion</th>
                     <th>Conteo Actual</th>
@@ -328,17 +488,19 @@ const tablaConteos = (data, typeAud, auditoria, grupo, conteo) => {
 
             if(imprimir===true) {
                 tabla += `
-                <tr>
-                    <td>${validarNulos(dato.bodega)}</td>
-                    <td>${validarNulos(dato.ubicacion)}</td>
+                <tr>`;
+                if (typeAud === 'Y') {tabla += `<td>${validarNulos(dato.bodega)}</td>`;}
+
+                   tabla += ` <td>${validarNulos(dato.ubicacion)}</td>
                     <td>${validarNulos(dato.codigo)}</td>
                     <td>${validarNulos(dato.descripcion)}</td>`;
 
                 if (typeAud === 'Y') {
-                    tabla += `<td>${validarNulos(dato.cantidad)}</td>`;
+                    tabla += `<td>${validarNulos(dato.cantidad)}</td>
+                              <td>${validarNulos(dato.costounitario)}</td>`;
                 }
                 tabla += `
-                    <td>${validarNulos(dato.costounitario)}</td>
+                    
                     <th style="display: none">${validarNulos(dato.familia)}</th> 
                     <td><input id="observacion_${dato.bodega}${dato.ubicacion}${dato.codigo}${dato.cantidad}" type="text" value="${validarNulos(dato.observacion)}"></td>                    
                     <td><input id="${dato.bodega}${dato.ubicacion}${dato.codigo}${dato.cantidad}" type="text" value="${validarNulos(valor_contado)}"></td>
@@ -355,7 +517,8 @@ const tablaConteos = (data, typeAud, auditoria, grupo, conteo) => {
 
 const searchProductsForCounts = async (typeAud) => {
 
-    const productos = await getDataProducts();
+    // const productos = await getDataProducts();
+    const productos = await  getDataProductsFetch();
     if (productos !== null && productos.length > 0) {
         DrawCountsData(productos, typeAud);
     }
@@ -389,7 +552,7 @@ const saveCount = async (codigoAuditoria, codigoGrupo, codConteo, bodega, ubicac
     const valorConteo =  (document.getElementById(`${idValorContado}`)).value;
 
     // const url =  `http://localhost:8080/product/saveconteo/${codigoAuditoria}/${codigoGrupo}/${codConteo}/${bodega}/${ubicacion}/${itemcode}/${valorInicial}/${valorConteo}/${descripcion}`;
-    const url =  getParamName(`${ambienteruta()}product/saveconteo/${codigoAuditoria}/${codigoGrupo}/${codConteo}/${bodega}/${ubicacion}/${itemcode}/${valorInicial}/${valorConteo}/${descripcion}`).replace("/index/noaud","");
+    const url =  getParamName(`${ambienteruta()}product/saveconteo/${codigoAuditoria}/${codigoGrupo}/${codConteo}/${bodega}/${ubicacion}/${itemcode}/${valorInicial}/${valorConteo}/${descripcion}`).replace("/index/noaud","").replace("/index/Aud","");
 
 
     const request = {method: 'GET', url: url};
@@ -490,7 +653,7 @@ const saveCountPost = async (auditoria, grupo, conteocode, bodega, ubicacion, it
 
 
     // const url =  `http://localhost:8080/product/saveconteo/postmode`;
-    const url =  getParamName(`${ambienteruta()}product/saveconteo/postmode`).replace("/index/noaud","");
+    const url =  getParamName(`${ambienteruta()}product/saveconteo/postmode`).replace("/index/noaud","").replace("/index/aud","");
 
 
     await fetch(url,MyConfig)
@@ -587,5 +750,8 @@ const exportTableToCSV = (filename) =>{
     // Download CSV file
     downloadCSV(csv.join("\n"), filename);
 }
+
+
+
 
 

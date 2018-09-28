@@ -1,28 +1,32 @@
 package mva.api.taller.bodega.models;
 
 
-import org.springframework.http.server.reactive.ChannelSendOperator;
+import jdk.nashorn.internal.objects.annotations.Where;
 
-import javax.tools.Tool;
-import java.util.ArrayList;
+public class Conteo {
+    private static final int SEARCH_ALL_BY_AUDITORIA = 1;
+    private static final String CC_001 = "C001" ;
+    private static final String CC_003 = "C003" ;
+    private static final int SEARCH_ALL_BY_AUDITORIA_AND_CONTEO = 2 ;
+    private static final String CC_002 = "C002" ;;
 
-public class Conteo
-{
+
+    // Atributos
     private String observacion;
     private String conteocode;
-    private String  bodega;
-    private String  ubicacion;
-    private String  codigo;
-    private String  cantidad;
-    private String  grupo;
-    private String  descripcion;
-    private String  auditoria;
-    private String  conteo1;
-    private String  diferencia1;
-    private String  conteo2;
-    private String  diferencia2;
-    private String  conteo3;
-    private String  diferencia3;
+    private String bodega;
+    private String ubicacion;
+    private String codigo;
+    private String cantidad;
+    private String grupo;
+    private String descripcion;
+    private String auditoria;
+    private String conteo1;
+    private String diferencia1;
+    private String conteo2;
+    private String diferencia2;
+    private String conteo3;
+    private String diferencia3;
     private String costounitario;
     private String familia;
 
@@ -78,7 +82,8 @@ public class Conteo
         this.conteocode = conteocode;
     }
 
-    public Conteo() {}
+    public Conteo() {
+    }
 
     public String getBodega() {
         return bodega;
@@ -146,9 +151,9 @@ public class Conteo
     }
 
 
-    public void calculeDiferencias(){
-        if(this.cantidad != null && this.cantidad.trim().isEmpty()==false && this.conteo1 != null && this.conteo1.trim().isEmpty()==false){
-            this.diferencia1 =  "" + (Integer.parseInt(Tools.formatNumberToJDE(this.conteo1,3, Tools.SIGNO_DECIMAL))- Integer.parseInt(Tools.formatNumberToJDE(this.cantidad,3, Tools.SIGNO_DECIMAL)));
+    public void calculeDiferencias() {
+        if (this.cantidad != null && this.cantidad.trim().isEmpty() == false && this.conteo1 != null && this.conteo1.trim().isEmpty() == false) {
+            this.diferencia1 = " "  + (Integer.parseInt(Tools.formatNumberToJDE(this.conteo1, 3, Tools.SIGNO_DECIMAL)) - Integer.parseInt(Tools.formatNumberToJDE(this.cantidad, 3, Tools.SIGNO_DECIMAL)));
         }
     }
 
@@ -192,80 +197,186 @@ public class Conteo
         this.diferencia3 = diferencia3;
     }
 
-    public String generarInsertConteo()
-    {
-        String sql = " INSERT INTO JDE_TO_OPEN_CONTEO(BODEGA ," +
-                    "  UBICACION," +
-                    "  CODIGO," +
-                    "  DESCRIPCION," +
-                    "  CANTIDAD," +
-                    "  GRUPO," +
-                    "  AUDITORIA, " +
-                    "  FAMILIA, " +
-                    "  COSTO_UNITARIO," +
-                    "  OBSERVACION " +
-                    ") VALUES (" +
-                    "'" + this.bodega +"'," +
-                    "'" + this.ubicacion +"'," +
-                    "'" + this.codigo +"'," +
-                    "'" + this.descripcion +"'," +
-                    "'" + Tools.formatNumberToJDE(this.cantidad,3, Tools.SIGNO_DECIMAL) +"'," +
-                    "'" + this.grupo +"'," +
-                    "'" + this.auditoria +"'," +
-                    "'" + this.familia +"'," +
-                    "'" + Tools.formatNumberToJDE(this.costounitario,3, Tools.SIGNO_DECIMAL) +"'," +
-                    "'" + this.observacion +"'" +
-                    ")";
+    public String generarInsertConteo() {
+        String sql = "  INSERT INTO JDE_TO_OPEN_CONTEO(BODEGA ,"  +
+                "   UBICACION,"  +
+                "   CODIGO,"  +
+                "   DESCRIPCION,"  +
+                "   CANTIDAD,"  +
+                "   GRUPO,"  +
+                "   AUDITORIA, "  +
+                "   FAMILIA, "  +
+                "   COSTO_UNITARIO,"  +
+                "   OBSERVACION "  +
+                " ) VALUES ("  +
+                " '"  + this.bodega + " ',"  +
+                " '"  + this.ubicacion + " ',"  +
+                " '"  + this.codigo + " ',"  +
+                " '"  + this.descripcion + " ',"  +
+                " '"  + Tools.formatNumberToJDE(this.cantidad, 3, Tools.SIGNO_DECIMAL) + " ',"  +
+                " '"  + this.grupo + " ',"  +
+                " '"  + this.auditoria + " ',"  +
+                " '"  + this.familia + " ',"  +
+                " '"  + Tools.formatNumberToJDE(this.costounitario, 3, Tools.SIGNO_DECIMAL) + " ',"  +
+                " '"  + this.observacion + " '"  +
+                " )" ;
         return sql;
     }
 
-    public String generarUpdateConteo()
-    {
+    public String generarUpdateConteo() {
         String set = sqlSetConteo();
 
-        String sql = "" ;
-        if(set!=null && set.trim().isEmpty()==false) {
-            sql = " UPDATE JDE_TO_OPEN_CONTEO " + set + " WHERE  TRIM(UPPER(BODEGA)) = '"+this.bodega.trim().toUpperCase()+"' AND " +
-                    "  TRIM(UPPER(UBICACION)) = '"+this.ubicacion.toUpperCase()+"' AND " +
-                    "  TRIM(UPPER(CODIGO)) = '"+this.codigo.toUpperCase()+"' AND " +
-                    "  TRIM(UPPER(DESCRIPCION)) = '"+this.descripcion.toUpperCase()+"' AND " +
-                    "  TRIM(UPPER(AUDITORIA)) = '"+this.auditoria.toUpperCase()+"'";
+        String sql = " " ;
+        if (set != null && set.trim().isEmpty() == false) {
+            sql = "  UPDATE JDE_TO_OPEN_CONTEO "  + set + "  WHERE  TRIM(UPPER(BODEGA)) = '"  + this.bodega.trim().toUpperCase() + " ' AND "  +
+                    "   TRIM(UPPER(UBICACION)) = '"  + this.ubicacion.toUpperCase() + " ' AND "  +
+                    "   TRIM(UPPER(CODIGO)) = '"  + this.codigo.toUpperCase() + " ' AND "  +
+                    "   TRIM(UPPER(DESCRIPCION)) = '"  + this.descripcion.toUpperCase() + " ' AND "  +
+                    "   TRIM(UPPER(AUDITORIA)) = '"  + this.auditoria.toUpperCase() + " '" ;
         }
 
         return sql;
     }
 
 
-    private String sqlSetConteo(){
-        String result = "";
-        if(this.conteocode == null || this.conteocode.isEmpty()==true){return result;}
-        if(this.conteocode.toUpperCase().compareToIgnoreCase("C001")==0)
-        {
-            result = " SET CONTEO1 = '" + Tools.formatNumberToJDE(this.conteo1,3, Tools.SIGNO_DECIMAL) + "'," +
-                     " DIFERENCIA1 = '" + this.diferencia1 + "'," +
-                     " OBSERVACION = '" + this.observacion + "'";
-        }
-        else
-            {
-                if(this.conteocode.toUpperCase().compareToIgnoreCase("C002")==0)
-                {
-                    result = " SET CONTEO2 = '" + Tools.formatNumberToJDE(this.conteo1 ,3, Tools.SIGNO_DECIMAL)+ "'," +
-                             " DIFERENCIA2 = '" +  this.diferencia1 + "'";
-                }
-                else
-                    {
-                        if(this.conteocode.toUpperCase().compareToIgnoreCase( "C003")==0)
-                        {
-                            result = " SET CONTEO3 = '" + Tools.formatNumberToJDE(this.conteo1,3, Tools.SIGNO_DECIMAL) + "'," +
-                                     " DIFERENCIA3 = '" + this.diferencia1 + "'";
-                        }
-                    }
-            }
+    private String sqlSetConteo() {
+        String result = " " ;
+        if (this.conteocode == null || this.conteocode.isEmpty() == true) {
             return result;
+        }
+        if (this.conteocode.toUpperCase().compareToIgnoreCase(" C001" ) == 0) {
+            result = "  SET CONTEO1 = '"  + Tools.formatNumberToJDE(this.conteo1, 3, Tools.SIGNO_DECIMAL) + " ',"  +
+                    "  DIFERENCIA1 = '"  + this.diferencia1 + " ',"  +
+                    "  OBSERVACION = '"  + this.observacion + " '" ;
+        } else {
+            if (this.conteocode.toUpperCase().compareToIgnoreCase(" C002" ) == 0) {
+                result = "  SET CONTEO2 = '"  + Tools.formatNumberToJDE(this.conteo1, 3, Tools.SIGNO_DECIMAL) + " ',"  +
+                        "  DIFERENCIA2 = '"  + this.diferencia1 + " '" ;
+            } else {
+                if (this.conteocode.toUpperCase().compareToIgnoreCase(" C003" ) == 0) {
+                    result = "  SET CONTEO3 = '"  + Tools.formatNumberToJDE(this.conteo1, 3, Tools.SIGNO_DECIMAL) + " ',"  +
+                            "  DIFERENCIA3 = '"  + this.diferencia1 + " '" ;
+                }
+            }
+        }
+        return result;
     }
 
 
+    public String getWhereByTypeSearch(int typeSearch) {
+        String where = " " ;
+        switch (typeSearch) {
+            case Conteo.SEARCH_ALL_BY_AUDITORIA: {
+                where = "  WHERE "  +
+                        "    TRIM(P.BODEGA) =  TRIM('" +this.bodega+" ') "  +
+                        "    AND TRIM(P.CODIGO) = TRIM(C.CODIGO) "  +
+                        "    AND TRIM(P.BODEGA) = TRIM(C.BODEGA) "  +
+                        "    AND TRIM(P.UBICACION) = TRIM(C.UBICACION) "  +
+                        "                         AND TRIM(C.AUDITORIA) = TRIM('" +this.auditoria+" ') "  +
+                        "                         ORDER BY P.UBICACION ASC " ;
+                break;
+            }
+            case Conteo.SEARCH_ALL_BY_AUDITORIA_AND_CONTEO: {
+                if (this.conteocode != null) {
+                    if (this.conteocode.trim().compareToIgnoreCase(Conteo.CC_001) == 0) {
+                        where = "  WHERE "  +
+                                "    TRIM(P.BODEGA) =  TRIM('" +this.bodega+" ') "  +
+                                "    AND TRIM(P.CODIGO) = TRIM(C.CODIGO) "  +
+                                "    AND TRIM(P.BODEGA) = TRIM(C.BODEGA) "  +
+                                "    AND TRIM(P.UBICACION) = TRIM(C.UBICACION) "  +
+                                "    AND TRIM(C.AUDITORIA) = TRIM('" +this.auditoria+" ') "  +
+                                "    ORDER BY P.UBICACION ASC " ;
+                    } else {
+                        if (this.conteocode.trim().compareToIgnoreCase(Conteo.CC_002) == 0) {
+                            where = "  WHERE   "  +
+                                    " TRIM(P.BODEGA) =  TRIM('"+this.bodega+"')   "  +
+                                    " AND TRIM(P.CODIGO) = TRIM(C.CODIGO(+))   "  +
+                                    " AND TRIM(P.BODEGA) = TRIM(C.BODEGA(+))   "  +
+                                    " AND TRIM(P.UBICACION) = TRIM(C.UBICACION(+))   "  +
+                                    " AND TRIM(C.AUDITORIA(+)) = TRIM('"+this.auditoria+"')   "  +
+                                    " AND C.DIFERENCIA1 != 0 "  +
+                                    " UNION "  +
+                                    " SELECT   "  +
+                                    " P.BODEGA, "  +
+                                    " P.UBICACION, "  +
+                                    " P.CODIGO,  "  +
+                                    " NVL(P.CANTIDAD,0)/100 CANTIDAD,  "  +
+                                    " P.DESCRIPCION || P.DESCRIPCION2 AS DESCRIPCION,  "  +
+                                    " NVL(P.COSTO_UNITARIO,0)/10000  COSTO_UNITARIO,  "  +
+                                    " P.FAMILIA,   "  +
+                                    " P.NUMERO_CORTO,  "  +
+                                    " C.OBSERVACION, "  +
+                                    " NVL(C.CONTEO1,0)/1000 CONTEO1,  "  +
+                                    " NVL(C.DIFERENCIA1,0)/1000 DIFERENCIA1,  "  +
+                                    " NVL(C.CONTEO2,0)/1000 CONTEO2,  "  +
+                                    " NVL(C.DIFERENCIA2,0)/1000 DIFERENCIA2,  "  +
+                                    " NVL(C.CONTEO3,0)/1000 CONTEO3,  "  +
+                                    " NVL(C.DIFERENCIA3,0)/1000 DIFERENCIA3,  "  +
+                                    " C.AUDITORIA,  "  +
+                                    " C.GRUPO "  +
+                                    " FROM JDE_TO_OPEN_PRODUCTO P, JDE_TO_OPEN_CONTEO C   "  +
+                                    " WHERE   "  +
+                                    " TRIM(P.BODEGA) =  TRIM('"+this.bodega+"')   "  +
+                                    " AND TRIM(P.CODIGO) = TRIM(C.CODIGO(+))   "  +
+                                    " AND TRIM(P.BODEGA) = TRIM(C.BODEGA(+))   "  +
+                                    " AND TRIM(P.UBICACION) = TRIM(C.UBICACION(+))   "  +
+                                    " AND TRIM(C.AUDITORIA(+)) = TRIM('"+this.auditoria+"')   "  +
+                                    " AND TRIM(P.CODIGO)  NOT IN (SELECT TRIM(CV.CODIGO) FROM  JDE_TO_OPEN_CONTEO CV  WHERE  TRIM(CV.AUDITORIA) = TRIM('"+this.auditoria+"') AND TRIM(CV.BODEGA) = TRIM('"+this.bodega+"'))  " +
+                                    " ORDER BY UBICACION ASC " ;
+                        } else {
+                            if (this.conteocode.trim().compareToIgnoreCase(Conteo.CC_003) == 0) {
+                                where = " WHERE   "  +
+                                        " TRIM(P.BODEGA) =  TRIM('"+this.bodega+"')   "  +
+                                        " AND TRIM(P.CODIGO) = TRIM(C.CODIGO(+))   "  +
+                                        " AND TRIM(P.BODEGA) = TRIM(C.BODEGA(+))   "  +
+                                        " AND TRIM(P.UBICACION) = TRIM(C.UBICACION(+))   "  +
+                                        " AND TRIM(C.AUDITORIA(+)) = TRIM('"+this.auditoria+"')   "  +
+                                        " AND (C.DIFERENCIA1 != C.DIFERENCIA2 OR (C.CONTEO1 !=0 AND C.CONTEO2 = null)) "  +
+                                        " UNION "  +
+                                        " SELECT   "  +
+                                        " P.BODEGA, "  +
+                                        " P.UBICACION, "  +
+                                        " P.CODIGO,  "  +
+                                        " NVL(P.CANTIDAD,0)/100 CANTIDAD,  "  +
+                                        " P.DESCRIPCION || P.DESCRIPCION2 AS DESCRIPCION,  "  +
+                                        " NVL(P.COSTO_UNITARIO,0)/10000  COSTO_UNITARIO,  "  +
+                                        " P.FAMILIA,   "  +
+                                        " P.NUMERO_CORTO,  "  +
+                                        " C.OBSERVACION, "  +
+                                        " NVL(C.CONTEO1,0)/1000 CONTEO1,  "  +
+                                        " NVL(C.DIFERENCIA1,0)/1000 DIFERENCIA1,  "  +
+                                        " NVL(C.CONTEO2,0)/1000 CONTEO2,  "  +
+                                        " NVL(C.DIFERENCIA2,0)/1000 DIFERENCIA2,  "  +
+                                        " NVL(C.CONTEO3,0)/1000 CONTEO3,  "  +
+                                        " NVL(C.DIFERENCIA3,0)/1000 DIFERENCIA3,  "  +
+                                        " C.AUDITORIA,  "  +
+                                        " C.GRUPO "  +
+                                        " FROM JDE_TO_OPEN_PRODUCTO P, JDE_TO_OPEN_CONTEO C   "  +
+                                        " WHERE   "  +
+                                        " TRIM(P.BODEGA) =  TRIM('"+this.bodega+"')   "  +
+                                        " AND TRIM(P.CODIGO) = TRIM(C.CODIGO(+))   "  +
+                                        " AND TRIM(P.BODEGA) = TRIM(C.BODEGA(+))   "  +
+                                        " AND TRIM(P.UBICACION) = TRIM(C.UBICACION(+))   "  +
+                                        " AND TRIM(C.AUDITORIA(+)) = TRIM('"+this.auditoria+"')   "  +
+                                        " AND TRIM(P.CODIGO)  NOT IN (SELECT TRIM(CV.CODIGO) FROM  JDE_TO_OPEN_CONTEO CV  WHERE  TRIM(CV.AUDITORIA) = TRIM('"+this.auditoria+"') AND TRIM(CV.BODEGA) = TRIM('"+this.bodega+"'))  " +
+                                        " ORDER BY UBICACION ASC " ;
+                            }
+                        }
+                    }
+                }
+                break;
+            }
+            default: {
+                where = "  WHERE "  +
+                        "    TRIM(P.BODEGA) =  TRIM('" +this.bodega+" ') "  +
+                        "    AND TRIM(P.CODIGO) = TRIM(C.CODIGO) "  +
+                        "    AND TRIM(P.BODEGA) = TRIM(C.BODEGA) "  +
+                        "    AND TRIM(P.UBICACION) = TRIM(C.UBICACION) "  +
+                        "                         AND TRIM(C.AUDITORIA) = TRIM('" +this.auditoria+" ') "  +
+                        "                         ORDER BY P.UBICACION ASC " ;
+            }
+        }
+        return where;
 
-
-
+    }
 }

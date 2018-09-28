@@ -32,6 +32,10 @@ public class ServiceAuditorias implements InterfaceAuditorias {
         return (new BoAuditorias()).CountsSaveBO(conteo,  (new ConexionJde()));
     }
 
+    @Override
+    public Collection<Conteo> ProductGetAllByTypeSearch(Conteo conteo, int typesearch) {
+        return (new BoAuditorias()).ProductGetAllByTypeSearchBo(conteo, typesearch,  (new ConexionJde()));
+    }
 
 
 }

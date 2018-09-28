@@ -1,20 +1,11 @@
-*, ::after, ::before {
-    box-sizing: border-box;
+.row{
+    padding-bottom: 1rem;
 }
 
 
-.container-search
-{
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 20% 80%;
-    min-height: 100vh;
-    grid-row-gap: 1em;
-    grid-column-gap: 1em;
-    font-size: 0.6em;
+#content-table{
+    padding-top: 3rem;
 }
-
-
 
 
 

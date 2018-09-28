@@ -115,8 +115,12 @@ public class DaoAuditorias {
                         productI.getUbicacion() != null &&
                         productI.getUbicacion().trim().isEmpty()==false &&
                         productF.getUbicacion() != null &&
-                        productF.getUbicacion().trim().isEmpty()==false
+                        productF.getUbicacion().trim().isEmpty()==false &&
+                        productI.getConteocode() != null &&
+                        productI.getConteocode().isEmpty() == false
                 ){
+
+
 
 
 
@@ -129,7 +133,6 @@ public class DaoAuditorias {
                             " AND TRIM(UPPER(P.UBICACION)) BETWEEN '" +productI.getUbicacion().toUpperCase().trim() +"' AND '" +productF.getUbicacion().toUpperCase().trim() + "' " +
                             " AND TRIM(UPPER(C.AUDITORIA(+))) = TRIM('"+productI.getAuditoria().toUpperCase()+"') " +
                             " ORDER BY P.UBICACION ASC ";
-
 
                     productArrayList = getListProductFromOpen(wheresql, conexionJde);
                 }
@@ -422,5 +425,9 @@ public class DaoAuditorias {
             }
         }
         return salida;
+    }
+
+    public ArrayList<Conteo> ProductGetAllByTypeSearchBo(Conteo conteo, int typeSearch, ConexionJde conexionMotorec) {
+        return getListProductFromOpen(conteo.getWhereByTypeSearch(typeSearch), conexionMotorec);
     }
 }

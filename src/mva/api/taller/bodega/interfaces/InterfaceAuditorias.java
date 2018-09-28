@@ -10,5 +10,6 @@ public interface InterfaceAuditorias {
     public Collection<Conteo> ProductsGetByUbicaciones(Conteo productI, Conteo productF, int typeSearch);
     public Collection<Conteo> CountGet(Conteo count, int typeSeaarch);
     String CountsSave(Conteo conteo);
+    Collection<Conteo> ProductGetAllByTypeSearch(Conteo conteo, int typesearch);
 }
 
