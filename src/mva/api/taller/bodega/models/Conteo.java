@@ -453,7 +453,7 @@ public class Conteo {
                                         " AND TRIM(P.BODEGA) = TRIM(C.BODEGA)   "  +
                                         " AND TRIM(P.UBICACION) = TRIM(C.UBICACION)   "  +
                                         " AND TRIM(C.AUDITORIA) = TRIM('"+this.auditoria+"')   "  +
-                                        " AND (NVL(C.DIFERENCIA1,-999999) != NVL(C.DIFERENCIA2,-888888)) "  +
+                                        " AND ((NVL(C.DIFERENCIA1,-999999) != NVL(C.DIFERENCIA2,-888888) AND NVL(C.DIFERENCIA1,-999999)!=0 AND NVL(C.DIFERENCIA2,-888888)!=0)) " +
                                         " UNION "  +
                                         " SELECT   "  +
                                         " P.BODEGA, "  +
