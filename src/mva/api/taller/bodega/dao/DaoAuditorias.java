@@ -153,7 +153,7 @@ public class DaoAuditorias {
 
 
     private ArrayList<Conteo> getListProductFromOpen(String wheresql, ConexionJde conexionJde) {
-        String sql =  " SELECT  " +
+        String sql =  " SELECT * FROM (SELECT  " +
                 " P.BODEGA, " +
                 " P.UBICACION, " +
                 " P.CODIGO, " +
@@ -170,7 +170,13 @@ public class DaoAuditorias {
                 " NVL(C.CONTEO3,0)/1000 CONTEO3, " +
                 " NVL(C.DIFERENCIA3,0)/1000 DIFERENCIA3, " +
                 " C.AUDITORIA, " +
-                " C.GRUPO " +
+                " C.GRUPO, " +
+                " C.GRUPOC1, "+
+                " C.GRUPOC2, "+
+                " C.GRUPOC3, " +
+                " C.OBSERVACIONC1, "+
+                " C.OBSERVACIONC2, "+
+                " C.OBSERVACIONC3 "+
                 " FROM JDE_TO_OPEN_PRODUCTO P, JDE_TO_OPEN_CONTEO C "
                     + wheresql;
         ArrayList<Conteo> productArrayList = new ArrayList<Conteo>();
@@ -207,6 +213,17 @@ public class DaoAuditorias {
                     conteo.setFamilia(Tools.cleanString(rs.getString("FAMILIA")));
 
                     conteo.setObservacion(Tools.cleanString(rs.getString("OBSERVACION")));
+
+                    conteo.setgrupoc1(Tools.cleanString(rs.getString("GRUPOC1")));
+                    conteo.setgrupoc2(Tools.cleanString(rs.getString("GRUPOC2")));
+                    conteo.setgrupoc3(Tools.cleanString(rs.getString("GRUPOC3")));
+
+
+                    conteo.setObservacion1(Tools.cleanString(rs.getString("OBSERVACIONC1")));
+                    conteo.setObservacion2(Tools.cleanString(rs.getString("OBSERVACIONC2")));
+                    conteo.setObservacion3(Tools.cleanString(rs.getString("OBSERVACIONC3")));
+
+
                     productArrayList.add(conteo);
                 }
 
@@ -239,7 +256,7 @@ public class DaoAuditorias {
                             "                        AND TRIM(P.BODEGA) = TRIM(C.BODEGA) " +
                             "                        AND TRIM(P.UBICACION) = TRIM(C.UBICACION) " +
                             "                        AND TRIM(C.AUDITORIA) = TRIM('"+conteoI.getAuditoria()+"') " +
-                            "                        ORDER BY P.UBICACION ASC ";
+                            "                        ORDER BY TRIM(P.UBICACION) ASC ";
 
 
                     conteoArrayList = getListProductsCounts(wheresql, conexionJde);
@@ -264,7 +281,7 @@ public class DaoAuditorias {
                             "                        AND TRIM(P.BODEGA) = TRIM(C.BODEGA) " +
                             "                        AND TRIM(P.UBICACION) = TRIM(C.UBICACION) " +
                             "                        AND TRIM(C.AUDITORIA) = TRIM('"+conteoI.getAuditoria()+"') " +
-                            "                        ORDER BY P.UBICACION ASC ";
+                            "                        ORDER BY TRIM(P.UBICACION) ASC ";
 
 
                     conteoArrayList = getListProductsCounts(wheresql, conexionJde);
@@ -295,7 +312,7 @@ public class DaoAuditorias {
                             +   conteoI.getUbicacion().trim() +"' AND '"
                             +   conteoF.getUbicacion().trim() + "' AND " +
                             "                        AND TRIM(C.AUDITORIA) = TRIM('"+conteoI.getAuditoria()+"') " +
-                            "                        ORDER BY P.UBICACION ASC ";
+                            "                        ORDER BY TRIM(P.UBICACION) ASC ";
 
 
 
@@ -333,7 +350,14 @@ public class DaoAuditorias {
                 " NVL(C.CONTEO3,0)/1000 CONTEO3, " +
                 " NVL(C.DIFERENCIA3,0)/1000 DIFERENCIA3, " +
                 " C.AUDITORIA, " +
-                " C.GRUPO " +
+                " C.GRUPO ," +
+                " C.GRUPOC1, "+
+                " C.GRUPOC2, "+
+                " C.GRUPOC3, " +
+                " C.OBSERVACIONC1, "+
+                " C.OBSERVACIONC2, "+
+                " C.OBSERVACIONC3 "+
+
                 " FROM JDE_TO_OPEN_PRODUCTO P, JDE_TO_OPEN_CONTEO C "
                 + wheresql;
         ArrayList<Conteo> productArrayList = new ArrayList<Conteo>();
@@ -374,6 +398,16 @@ public class DaoAuditorias {
 
                     conteo.setObservacion(Tools.cleanString(rs.getString("OBSERVACION")));
 
+
+                    conteo.setgrupoc1(Tools.cleanString(rs.getString("GRUPOC1")));
+                    conteo.setgrupoc2(Tools.cleanString(rs.getString("GRUPOC2")));
+                    conteo.setgrupoc3(Tools.cleanString(rs.getString("GRUPOC3")));
+
+
+                    conteo.setObservacion1(Tools.cleanString(rs.getString("OBSERVACIONC1")));
+                    conteo.setObservacion2(Tools.cleanString(rs.getString("OBSERVACIONC2")));
+                    conteo.setObservacion3(Tools.cleanString(rs.getString("OBSERVACIONC3")));
+
                     productArrayList.add(conteo);
                 }
 
@@ -396,28 +430,11 @@ public class DaoAuditorias {
         if (connection != null) {
             try {
                 connection.setAutoCommit(false);
-                statement = connection.createStatement();
-                String insert = conteo.generarInsertConteo();
-                try {
-                    if(insert!=null && insert.trim().isEmpty()==false){resultado = statement.executeUpdate(insert);}
-                }catch (Exception e)
-                {
-                    salida  = "ERROR";
-                }
-
-
-                String update = conteo.generarUpdateConteo();
-                try {
-                    if(update!=null && update.trim().isEmpty()==false){resultado += statement.executeUpdate(update);}
-                }catch (Exception e)
-                {
-                    salida  = "ERROR";
-                }
-
-
-                statement.isClosed();
-                salida = resultado > 0 ? "OK" : "ERROR";
+                resultado += conteo.generarInsertConteo(connection);
+                resultado += conteo.generarUpdateConteo(connection);
                 connection.commit();
+                salida = resultado > 0 ? "OK" : "ERROR";
+
 
             } catch (SQLException e) {e.printStackTrace();}
             finally {

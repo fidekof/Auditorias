@@ -11,7 +11,7 @@ let dvi_inp_cod_count;
 let div_inp_cod_ubicacion_i;
 let div_inp_cod_ubicacion_f;
 let div_inp_cod_product;
-
+let GLOBAL_TYPE_SEARCH = 1;
 
 
 let but_search_items_no_aud = document.getElementById("but_search_items_no_aud");
@@ -20,21 +20,10 @@ let img_search_item_id = document.getElementById("img_search_item_id");
 let select_search_id = document.getElementById("select_search_id");
 let instance_select_search_id;
 
-but_search_items_no_aud.addEventListener("click", () => {
-    searchProductsForCounts('N')
-});
-img_search_item_id.addEventListener("click", () => {
-    searchItemsForCounts('N')
-});
 
 
-select_search_id.addEventListener("change", () => {
-    const list_value = instance_select_search_id.getSelectedValues();
-    mostrarOcultarOpcionesDeBusqueda(list_value[0]);
-});
 
-
-const mostrarTodosLosFiltros = () =>{
+const mostrarTodosLosFiltros = () => {
     div_inp_cod_bodega.style.display = 'initial';
     div_inp_cod_auditoria.style.display = 'initial';
     div_inp_cod_group.style.display = 'initial';
@@ -45,30 +34,60 @@ const mostrarTodosLosFiltros = () =>{
 
 }
 
-const mostrarOcultarOpcionesDeBusqueda = (valor) => {
-    if (valor !== null) {
+const mostrarOcultarOpcionesDeBusqueda = (value) => {
 
-        switch (valor) {
-            case BUSCAR_TODO: {
-                div_inp_cod_ubicacion_i.style.display = 'none';
-                div_inp_cod_ubicacion_f.style.display = 'none';
-                div_inp_cod_product.style.display = 'none';
-                break;
+    mostrarTodosLosFiltros();
+    if (!value) {
+        M.toast(
+            {
+                html: `Debe seleccionar un metodo de busqueda`,
+                classes: 'rounded red lighten-1'
             }
+        );
+    }
+    else {
+        try {
 
-            case BUSCAR_POR_ITEM: {
-                break;
+
+            const valor = parseInt(value);
+            GLOBAL_TYPE_SEARCH = valor;
+            if (valor !== null) {
+
+                switch (valor) {
+                    case BUSCAR_TODO: {
+                        div_inp_cod_ubicacion_i.style.display = 'none';
+                        div_inp_cod_ubicacion_f.style.display = 'none';
+                        div_inp_cod_product.style.display = 'none';
+                        break;
+                    }
+
+                    case BUSCAR_POR_ITEM: {
+                        div_inp_cod_ubicacion_i.style.display = 'none';
+                        div_inp_cod_ubicacion_f.style.display = 'none';
+
+                        break;
+                    }
+
+                    case BUSCA_UBICACION: {
+                        div_inp_cod_ubicacion_f.style.display = 'none';
+                        div_inp_cod_product.style.display = 'none';
+                        break;
+                    }
+
+                    case BUSCAR_RANGO_UBUCACIONES: {
+                        div_inp_cod_product.style.display = 'none';
+                        break;
+                    }
+
+                }
             }
-
-            case BUSCA_UBICACION: {
-                break;
-            }
-
-            case BUSCAR_RANGO_UBUCACIONES: {
-
-                break;
-            }
-
+        } catch (e) {
+            M.toast(
+                {
+                    html: `Error en seleccion de tipo busqueda: ${e.message}`,
+                    classes: 'rounded red lighten-1'
+                }
+            );
         }
     }
 }
@@ -97,6 +116,26 @@ document.addEventListener('DOMContentLoaded', () => {
     img_search_item_id = document.getElementById("img_search_item_id");
     //------------------------------------------------------------------------------------------
     select_search_id = document.getElementById("select_search_id");
-    instance_select_search_id = M.FormSelect.getInstance(select_search_id);
-    instance_select_search_id.getSelectedValues()[0];
+
+    select_search_id.addEventListener("change", (event) => {
+        if (!event.target.value) {
+            M.toast(
+                {
+                    html: `Debe seleccionar un metodo de busqueda`,
+                    classes: 'rounded red lighten-1'
+                }
+            );
+        }
+        else {
+            mostrarOcultarOpcionesDeBusqueda(event.target.value);
+        }
+    });
+
+    but_search_items_no_aud.addEventListener("click", () => {
+        searchProductsForCounts('N')
+    });
+    img_search_item_id.addEventListener("click", () => {
+        searchItemsForCounts('N')
+    });
+
 });

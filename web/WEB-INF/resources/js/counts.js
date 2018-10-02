@@ -1,9 +1,11 @@
 const produccion = false;
 
 
-const ambienteruta = () =>{
+const ambienteruta = () => {
     let result = "";
-    if(produccion === true){result = "auditorias/"}
+    if (produccion === true) {
+        result = "auditoriasV2/"
+    }
     return result;
 };
 
@@ -82,8 +84,8 @@ const getDataItems = async () => {
         return {};
     }
 
-    const url = getParamName(`${ambienteruta()}product/byBodegaAndCode/${bodega}/${product}/${quitarAll(auditoria)}`).replace("/index/noaud","").replace("/index/aud","");
-      // const url = `http://localhost:8080/product/byBodegaAndCode/${bodega}/${product}/${quitarAll(auditoria)}`;
+    const url = getParamName(`${ambienteruta()}product/byBodegaAndCode/${bodega}/${product}/${quitarAll(auditoria)}`).replace("/index/noaud", "").replace("/index/aud", "");
+    // const url = `http://localhost:8080/product/byBodegaAndCode/${bodega}/${product}/${quitarAll(auditoria)}`;
     const request = {method: 'GET', url: url};
     const response = await ajax(request);
     switch (response.status) {
@@ -101,101 +103,82 @@ const getDataItems = async () => {
 }
 
 
-const quitarAll = (valor)=>{
+const quitarAll = (valor) => {
     let result = "";
-    if(valor !== null){result = valor.replace("*","");}
+    if (valor !== null) {
+        result = valor.replace("*", "");
+    }
     return result;
 }
 
 
 const getDataProductsFetch = async () => {
-    const auditoria = (document.getElementById("inp_cod_auditoria")).value;
-    const bodega = (document.getElementById("inp_cod_bodega")).value;
-    const grupo = (document.getElementById("inp_cod_group")).value;
-    const ubicI = (document.getElementById("inp_cod_ubicacion_i")).value;
-    const ubicF = (document.getElementById("inp_cod_ubicacion_f")).value;
-    const conteocode = (document.getElementById("inp_cod_count")).value;
-    const product = (document.getElementById("inp_cod_product")).value;
+    const auditoria = document.getElementById("inp_cod_auditoria");
+    const bodega = (document.getElementById("inp_cod_bodega"));
+    const grupo = (document.getElementById("inp_cod_group"));
+    const ubicI = (document.getElementById("inp_cod_ubicacion_i"));
+    const ubicF = (document.getElementById("inp_cod_ubicacion_f"));
+    const conteocode = (document.getElementById("inp_cod_count"));
+    const product = (document.getElementById("inp_cod_product"));
+    const tipoBusqueda = select_search_id.value;
 
-    if (auditoria.length < 1 || auditoria.trim().length < 1) {
-        M.toast(
-            {
-                html: 'Debe inresar un codigo de auditoria',
-                classes: 'rounded red lighten-1'
-            }
-        );
+    if ((auditoria.value === null || auditoria.value.length < 1 || auditoria.value.trim().length < 1) && auditoria.parentNode.style.display !== 'none') {
+        M.toast({html: 'Debe inresar un codigo de auditoria', classes: 'rounded red lighten-1'});
         return {};
     }
 
-    if (bodega.length < 1 || bodega.trim().length < 1) {
-        M.toast(
-            {
-                html: 'Debe Ingresar un codigo de bodega',
-                classes: 'rounded red lighten-1'
-            }
-        );
-
+    if ((bodega.value === null || bodega.value.length < 1 || bodega.value.trim().length < 1) && bodega.parentNode.style.display !== 'none') {
+        M.toast({html: 'Debe Ingresar un codigo de bodega', classes: 'rounded red lighten-1'});
         return {};
     }
 
 
-    if (grupo.length < 1 || grupo.trim().length < 1) {
-
-        M.toast(
-            {
-                html: 'Debe Ingresar su codigo de grupo',
-                classes: 'rounded red lighten-1'
-            }
-        );
-
+    if ((grupo.value.length < 1 || grupo.value.trim().length < 1 || grupo.value === null) && (grupo.parentNode.style.display !== 'none')) {
+        M.toast({html: 'Debe Ingresar su codigo de grupo', classes: 'rounded red lighten-1'});
         return {};
     }
 
 
-    if (ubicI.length < 1 || ubicI.trim().length < 1) {
+    if ((conteocode.value === null || conteocode.value.length < 1 || conteocode.value.trim().length < 1) && (conteocode.parentNode.style.display !== 'none')) {
+        M.toast({html: 'Debe Ingresar en codigo de su conteo C001, C002, C003', classes: 'rounded red lighten-1'});
+        return {};
+    }
 
-        M.toast(
-            {
-                html: 'Debe Ingresar la ubicacion inicial',
-                classes: 'rounded red lighten-1'
-            }
-        );
-
-
+    if ((ubicI.value === null || ubicI.value.length < 1 || ubicI.value.trim().length < 1) && (ubicI.parentNode.style.display !== 'none')) {
+        M.toast({html: 'Debe Ingresar la ubicacion inicial', classes: 'rounded red lighten-1'});
         return {};
     }
 
 
-    if (ubicF.length < 1 || ubicF.trim().length < 1) {
-
-        M.toast(
-            {
-                html: 'Debe Ingresar la ubicacion final',
-                classes: 'rounded red lighten-1'
-            }
-        );
-
+    if ((ubicF.value === null || ubicF.value.length < 1 || ubicF.value.trim().length < 1) && (ubicF.parentNode.style.display !== 'none')) {
+        M.toast({html: 'Debe Ingresar la ubicacion final', classes: 'rounded red lighten-1'});
         return {};
     }
 
-    const tieneT = auditoria.indexOf("*");
-      // let url = `http://localhost:8080/product/byBodegaAndUbicacion/${bodega}/${ubicI}/${ubicF}/${quitarAll(auditoria)}`;
-    const url = getParamName(`${ambienteruta()}product/auditoria/2`).replace("/index/noaud","").replace("/index/aud","");;
+    if ((product.value === null || product.value.length < 1 || product.value.trim().length < 1) && (product.parentNode.style.display !== 'none')) {
+        M.toast({html: 'Debe Ingresar el codigo de productos', classes: 'rounded red lighten-1'});
+        return {};
+    }
 
 
+    const tieneT = auditoria.value.indexOf("*");
+    // let url = `http://localhost:8080/product/byBodegaAndUbicacion/${bodega}/${ubicI}/${ubicF}/${quitarAll(auditoria)}`;
+    const url = getParamName(`${ambienteruta()}product/auditoria/${tipoBusqueda}`).replace("/index/noaud", "").replace("/index/aud", "");
+    ;
 
-    const myHeaders =  new Headers();
+
+    const myHeaders = new Headers();
     myHeaders.append('Accept', 'application/json');
-    myHeaders.append('Content-Type','application/json');
+    myHeaders.append('Content-Type', 'application/json');
 
     const conteo = {
-        auditoria: `${quitarAll(auditoria)}`,
-        bodega : `${bodega}`,
-        grupo: `${grupo}`,
-        conteocode : `${conteocode}`,
-        ubicacion : `${ubicI}`,
-        codigo : `${product}`,
-        observacion: `${ubicF}`
+        auditoria: `${quitarAll(auditoria.value)}`,
+        bodega: `${bodega.value}`,
+        grupo: `${grupo.value}`,
+        conteocode: `${conteocode.value}`,
+        ubicacion: `${ubicI.value}`,
+        codigo: `${product.value}`,
+        observacion: `${ubicF.value}`
     };
 
     const MyConfig = {
@@ -205,64 +188,41 @@ const getDataProductsFetch = async () => {
     };
 
 
-
-    await fetch(url,MyConfig)
-        .then( response =>{ return response.json();})
+    let resultado = {};
+    await fetch(url, MyConfig)
+        .then(response => {
+            return response.json();
+        })
         .catch(error => {
             console.log(error);
-            M.toast(
-                {
-                    html: `La busqueda no devolvio resultados`,
-                    classes: 'rounded red lighten-1'
-                }
-
-        );
+            M.toast({html: `La busqueda no devolvio resultados`, classes: 'rounded red lighten-1'});
+            resultado = {};
         })
         .then(
             response => {
-                console.log(response);
-                if(response === null)
-                {
-                    M.toast(
-                        {
-                            html: `La busqueda no devolvio resultados`,
-                            classes: 'rounded red lighten-1'
-                        }
-                    );
+
+                if (response === null) {
+                    M.toast({html: `La busqueda no devolvio resultados`, classes: 'rounded red lighten-1'});
+                    resultado = {};
                 }
-                else
-                {
-                    console.log(response);
-                    if(response.length > 0)
-                    {
-                        M.toast(
-                            {
-                                html: `Se encontraron ${response.length} registros`,
-                                classes: 'rounded green lighten-1'
-                            }
-                        );
+                else {
+                    if (response.length > 0) {
+                        M.toast({
+                            html: `Se encontraron ${response.length} registros`,
+                            classes: 'rounded green lighten-1'
+                        });
+                        resultado = response;
                     }
-                    else
-                    {
-                        M.toast(
-                            {
-                                html: `No se encontraron registros`,
-                                classes: 'rounded red lighten-1'
-                            }
-                        );
+                    else {
+                        M.toast({html: `No se encontraron registros`, classes: 'rounded red lighten-1'});
+                        resultado = {};
                     }
                 }
+
             }
         );
-
-
-
+    return resultado;
 }
-
-
-
-
-
 
 
 const getDataProducts = async () => {
@@ -337,7 +297,7 @@ const getDataProducts = async () => {
     const tieneT = auditoria.indexOf("*");
     // let url = `http://localhost:8080/product/byBodegaAndUbicacion/${bodega}/${ubicI}/${ubicF}/${quitarAll(auditoria)}`;
     let url = getParamName(`${ambienteruta()}product/byBodegaAndUbicacion/${bodega}/${ubicI}/${ubicF}/${quitarAll(auditoria)}`);
-    if(tieneT<0){
+    if (tieneT < 0) {
 
         //url = `http://localhost:8080/product/byBodegaAndUbicacion/${bodega}/${ubicI}/${ubicF}/${quitarAll(auditoria)}`;
 
@@ -348,7 +308,7 @@ const getDataProducts = async () => {
 
         url = getParamName(`${ambienteruta()}product/byBodega/${bodega}/${quitarAll(auditoria)}`);
     }
-    url = url.replace("/index/noaud","").replace("/index/aud","");
+    url = url.replace("/index/noaud", "").replace("/index/aud", "");
     const request = {method: 'GET', url: url};
     const response = await ajax(request);
     switch (response.status) {
@@ -364,9 +324,6 @@ const getDataProducts = async () => {
             console.log('Error Desconocido' + response.status);
     }
 }
-
-
-
 
 
 const DrawCountsData = (data, typeAud) => {
@@ -387,8 +344,12 @@ const DrawCountsData = (data, typeAud) => {
         contenedorTable.innerHTML = '';
 
         let tabla = ``;
-        if (tieneT < 0) {tabla = tablaConteos(data, typeAud, auditoria,grupo,conteo);}
-        else {tabla = tablaResumenConteo(data);}
+        if (tieneT < 0) {
+            tabla = tablaConteos(data, typeAud, auditoria, grupo, conteo);
+        }
+        else {
+            tabla = tablaResumenConteo(data);
+        }
 
         contenedorTable.innerHTML = tabla;
     }
@@ -447,15 +408,15 @@ const tablaResumenConteo = (data) => {
 };
 
 
-
-
 const tablaConteos = (data, typeAud, auditoria, grupo, conteo) => {
     let tabla = `
         <table class="responsive-table striped">
             <thead>
                 <tr>`;
-    if (typeAud === 'Y') {tabla += `<th>Cod. Bodega</th>`;}
-    tabla +=`<th>Ubicacion</th>
+    if (typeAud === 'Y') {
+        tabla += `<th>Cod. Bodega</th>`;
+    }
+    tabla += `<th>Ubicacion</th>
                     <th>Cod. Item</th>
                     <th>Descripcion</th>`;
     if (typeAud === 'Y') {
@@ -476,22 +437,25 @@ const tablaConteos = (data, typeAud, auditoria, grupo, conteo) => {
 
     data.forEach(
         dato => {
-            const valor_contado = obtenerValorConteo(dato,conteo);
-            let imprimir = true;
-            if(conteo.toUpperCase()==='C002' && (dato.cantidad - dato.conteo1)=== 0 ){ifimprimir = false;}
-            else {
-                if(conteo.toUpperCase()==='C003')
-                {
-                    if((dato.cantidad - dato.conteo1) !== 0 && (dato.cantidad - dato.conteo2) !== 0 && (dato.conteo1 - dato.conteo2) === 0){ifimprimir = false;}
-                }
-            }
+            const dataByCount = obtenerValorConteo(dato, conteo);
 
-            if(imprimir===true) {
+            let imprimir = true;
+            // if(conteo.toUpperCase()==='C002' && (dato.cantidad - dato.conteo1)=== 0 ){ifimprimir = false;}
+            // else {
+            //     if(conteo.toUpperCase()==='C003')
+            //     {
+            //         if((dato.cantidad - dato.conteo1) !== 0 && (dato.cantidad - dato.conteo2) !== 0 && (dato.conteo1 - dato.conteo2) === 0){ifimprimir = false;}
+            //     }
+            // }
+
+            if (imprimir === true) {
                 tabla += `
                 <tr>`;
-                if (typeAud === 'Y') {tabla += `<td>${validarNulos(dato.bodega)}</td>`;}
+                if (typeAud === 'Y') {
+                    tabla += `<td>${validarNulos(dato.bodega)}</td>`;
+                }
 
-                   tabla += ` <td>${validarNulos(dato.ubicacion)}</td>
+                tabla += ` <td>${validarNulos(dato.ubicacion)}</td>
                     <td>${validarNulos(dato.codigo)}</td>
                     <td>${validarNulos(dato.descripcion)}</td>`;
 
@@ -502,8 +466,8 @@ const tablaConteos = (data, typeAud, auditoria, grupo, conteo) => {
                 tabla += `
                     
                     <th style="display: none">${validarNulos(dato.familia)}</th> 
-                    <td><input id="observacion_${dato.bodega}${dato.ubicacion}${dato.codigo}${dato.cantidad}" type="text" value="${validarNulos(dato.observacion)}"></td>                    
-                    <td><input id="${dato.bodega}${dato.ubicacion}${dato.codigo}${dato.cantidad}" type="text" value="${validarNulos(valor_contado)}"></td>
+                    <td><input id="observacion_${dato.bodega}${dato.ubicacion}${dato.codigo}${dato.cantidad}" type="text" value="${validarNulos(dataByCount.observacion)}"></td>                    
+                    <td><input id="${dato.bodega}${dato.ubicacion}${dato.codigo}${dato.cantidad}" type="text" value="${validarNulos(dataByCount.conteo)}"></td>
                     <td>
                         <i class="material-icons" onclick="saveCountPost('${quitarAll(auditoria)}', '${grupo}', '${conteo}', '${dato.bodega}','${dato.ubicacion}','${dato.codigo}','${dato.cantidad}', '${dato.bodega}${dato.ubicacion}${dato.codigo}${dato.cantidad}', '${dato.descripcion}','${dato.costounitario}', '${dato.familia}', 'observacion_${dato.bodega}${dato.ubicacion}${dato.codigo}${dato.cantidad}')">save</i></td>
                 </tr>
@@ -518,23 +482,36 @@ const tablaConteos = (data, typeAud, auditoria, grupo, conteo) => {
 const searchProductsForCounts = async (typeAud) => {
 
     // const productos = await getDataProducts();
-    const productos = await  getDataProductsFetch();
+    const productos = await getDataProductsFetch();
     if (productos !== null && productos.length > 0) {
         DrawCountsData(productos, typeAud);
     }
 };
 
 
-const obtenerValorConteo = (dato, conteoCode) =>
-{
+const obtenerValorConteo = (dato, conteoCode) => {
     let result = "";
-    if(conteoCode!==null && dato!=null)
-    {
-        if(conteoCode ==="C001"){result = dato.conteo1;}
-        else{
-            if(conteoCode ==="C002"){result = dato.conteo2;}
-            else{
-                if(conteoCode ==="C003"){result = dato.conteo3;}
+    if (conteoCode !== null && dato != null) {
+        if (conteoCode === "C001") {
+            result = {
+                'conteo': dato.conteo1,
+                'observacion': dato.observacion1
+            };
+        }
+        else {
+            if (conteoCode === "C002") {
+                result = {
+                    'conteo': dato.conteo2,
+                    'observacion': dato.observacion2
+                };
+            }
+            else {
+                if (conteoCode === "C003") {
+                    result = {
+                        'conteo': dato.conteo3,
+                        'observacion': dato.observacion3
+                    };
+                }
             }
         }
 
@@ -543,16 +520,16 @@ const obtenerValorConteo = (dato, conteoCode) =>
 }
 
 
-const validarNulos = cadena =>{
+const validarNulos = cadena => {
     return cadena !== null ? cadena : " ";
 };
 
 const saveCount = async (codigoAuditoria, codigoGrupo, codConteo, bodega, ubicacion, itemcode, valorInicial, idValorContado, descripcion) => {
-    descripcion = descripcion.replace("/","_");
-    const valorConteo =  (document.getElementById(`${idValorContado}`)).value;
+    descripcion = descripcion.replace("/", "_");
+    const valorConteo = (document.getElementById(`${idValorContado}`)).value;
 
     // const url =  `http://localhost:8080/product/saveconteo/${codigoAuditoria}/${codigoGrupo}/${codConteo}/${bodega}/${ubicacion}/${itemcode}/${valorInicial}/${valorConteo}/${descripcion}`;
-    const url =  getParamName(`${ambienteruta()}product/saveconteo/${codigoAuditoria}/${codigoGrupo}/${codConteo}/${bodega}/${ubicacion}/${itemcode}/${valorInicial}/${valorConteo}/${descripcion}`).replace("/index/noaud","").replace("/index/Aud","");
+    const url = getParamName(`${ambienteruta()}product/saveconteo/${codigoAuditoria}/${codigoGrupo}/${codConteo}/${bodega}/${ubicacion}/${itemcode}/${valorInicial}/${valorConteo}/${descripcion}`).replace("/index/noaud", "").replace("/index/Aud", "");
 
 
     const request = {method: 'GET', url: url};
@@ -560,7 +537,7 @@ const saveCount = async (codigoAuditoria, codigoGrupo, codConteo, bodega, ubicac
     switch (response.status) {
         case 200: {
             const respuesta = response.responseText;
-            if(respuesta.replace("\"","").replace("\"","") === 'OK'){
+            if (respuesta.replace("\"", "").replace("\"", "") === 'OK') {
                 M.toast(
                     {
                         html: `Se guardo el conteo del item ${itemcode}`,
@@ -598,20 +575,17 @@ const searchItemsForCounts = async (typeAud) => {
 };
 
 
-
 const saveCountPost = async (auditoria, grupo, conteocode, bodega, ubicacion, itemcode, cantidad, codconteo1, descripcion, costounitario, familia, codobservacion) => {
     // descripcion = descripcion.replace("/","_");
-    const observacionI =  (document.getElementById(`${codobservacion}`)).value;
-    const conteo1 =  (document.getElementById(`${codconteo1}`)).value;
+    const observacionI = (document.getElementById(`${codobservacion}`)).value;
+    const conteo1 = (document.getElementById(`${codconteo1}`)).value;
     const diferencia1 = parseFloat(cantidad) - parseFloat(conteo1);
-
 
 
     descripcion = (descripcion !== null) ? (descripcion.replace("/", "_").replace("&", " ").replace("(", "_").replace(")", "_")) : "";
     const observacion = (observacionI !== null) ? (observacionI.replace("/", "_").replace("&", " ").replace("(", "_").replace(")", "_")) : "";
 
-    if((ubicacion===null || ubicacion.trim().length<1) && (observacion===null || observacion.trim().length<1))
-    {
+    if ((ubicacion === null || ubicacion.trim().length < 1) && (observacion === null || observacion.trim().length < 1)) {
         M.toast(
             {
                 html: `El item ${itemcode} no tiene ubicacion
@@ -623,26 +597,31 @@ const saveCountPost = async (auditoria, grupo, conteocode, bodega, ubicacion, it
         return;
 
     }
-    else{ubicacion=observacion}
+    else {
+        if (ubicacion === null || ubicacion.trim().length < 1) {
+            ubicacion = observacion
+        }
+    }
 
-    const myHeaders =  new Headers();
+    const myHeaders = new Headers();
     myHeaders.append('Accept', 'application/json');
-    myHeaders.append('Content-Type','application/json');
+    myHeaders.append('Content-Type', 'application/json');
 
     const conteo = {
         auditoria: `${quitarAll(auditoria)}`,
-        bodega : `${bodega}`,
+        bodega: `${bodega}`,
         grupo: `${grupo}`,
-        conteocode : `${conteocode}`,
-        ubicacion : `${ubicacion}`,
-        codigo : `${itemcode}`,
-        descripcion : `${descripcion}`,
-        cantidad : `${cantidad}`,
-        conteo1 : `${conteo1}`,
+        conteocode: `${conteocode}`,
+        grupoc1: `${grupo}`,
+        ubicacion: `${ubicacion}`,
+        codigo: `${itemcode}`,
+        descripcion: `${descripcion}`,
+        cantidad: `${cantidad}`,
+        conteo1: `${conteo1}`,
         diferencia1: `${diferencia1}`,
-        costounitario: `${costounitario}` ,
-        familia: `${familia}` ,
-        observacion: `${observacion}`
+        costounitario: `${costounitario}`,
+        familia: `${familia}`,
+        observacion1: `${observacion}`
     };
 
     const MyConfig = {
@@ -653,11 +632,13 @@ const saveCountPost = async (auditoria, grupo, conteocode, bodega, ubicacion, it
 
 
     // const url =  `http://localhost:8080/product/saveconteo/postmode`;
-    const url =  getParamName(`${ambienteruta()}product/saveconteo/postmode`).replace("/index/noaud","").replace("/index/aud","");
+    const url = getParamName(`${ambienteruta()}product/saveconteo/postmode`).replace("/index/noaud", "").replace("/index/aud", "");
 
 
-    await fetch(url,MyConfig)
-        .then( response =>{ return response.json();})
+    await fetch(url, MyConfig)
+        .then(response => {
+            return response.json();
+        })
         .catch(error => {
             M.toast(
                 {
@@ -668,10 +649,26 @@ const saveCountPost = async (auditoria, grupo, conteocode, bodega, ubicacion, it
             );
         })
         .then(
-                response => {
-                    console.log(response);
-                    if(response === 'ERROR')
-                    {
+            response => {
+                console.log(response);
+                if (response === 'ERROR') {
+                    M.toast(
+                        {
+                            html: `No se guardo el conteo del item ${itemcode}`,
+                            classes: 'rounded red lighten-1'
+                        }
+                    );
+                }
+                else {
+                    if (response === 'OK') {
+                        M.toast(
+                            {
+                                html: `Se guardo el conteo del item ${itemcode}`,
+                                classes: 'rounded green lighten-1'
+                            }
+                        );
+                    }
+                    else {
                         M.toast(
                             {
                                 html: `No se guardo el conteo del item ${itemcode}`,
@@ -679,34 +676,13 @@ const saveCountPost = async (auditoria, grupo, conteocode, bodega, ubicacion, it
                             }
                         );
                     }
-                    else
-                        {
-                            if(response === 'OK')
-                            {
-                                M.toast(
-                                    {
-                                        html: `Se guardo el conteo del item ${itemcode}`,
-                                        classes: 'rounded green lighten-1'
-                                    }
-                                );
-                            }
-                            else
-                            {
-                                M.toast(
-                                    {
-                                        html: `No se guardo el conteo del item ${itemcode}`,
-                                        classes: 'rounded red lighten-1'
-                                    }
-                                );
-                            }
-                        }
                 }
-            );
+            }
+        );
 };
 
 
-
- const downloadCSV = (csv, filename) => {
+const downloadCSV = (csv, filename) => {
     var csvFile;
     var downloadLink;
 
@@ -733,8 +709,7 @@ const saveCountPost = async (auditoria, grupo, conteocode, bodega, ubicacion, it
 }
 
 
-
-const exportTableToCSV = (filename) =>{
+const exportTableToCSV = (filename) => {
     var csv = [];
     var rows = document.querySelectorAll("table tr");
 
@@ -750,8 +725,3 @@ const exportTableToCSV = (filename) =>{
     // Download CSV file
     downloadCSV(csv.join("\n"), filename);
 }
-
-
-
-
-

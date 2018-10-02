@@ -1,7 +1,7 @@
 <component name="ArtifactManager">
-  <artifact type="war" name="auditorias">
-    <output-path>$PROJECT_DIR$/out/artifacts/auditorias</output-path>
-    <root id="archive" name="auditorias.war">
+  <artifact type="war" name="auditoriasV2">
+    <output-path>$PROJECT_DIR$/out/artifacts/auditoriasV2</output-path>
+    <root id="archive" name="auditoriasV2.war">
       <element id="javaee-facet-resources" facet="Auditorias/web/Web" />
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
