@@ -149,36 +149,8 @@ public class DaoAuditorias {
     }
 
 
+    private ArrayList<Conteo> getListProductFromOpen(String sql, ConexionJde conexionJde) {
 
-
-
-    private ArrayList<Conteo> getListProductFromOpen(String wheresql, ConexionJde conexionJde) {
-        String sql =  " SELECT * FROM (SELECT  " +
-                " P.BODEGA, " +
-                " P.UBICACION, " +
-                " P.CODIGO, " +
-                " NVL(P.CANTIDAD,0)/100 CANTIDAD, " +
-                " P.DESCRIPCION || P.DESCRIPCION2 AS DESCRIPCION, " +
-                " NVL(P.COSTO_UNITARIO,0)/10000 COSTO_UNITARIO, " +
-                " P.FAMILIA,  " +
-                " P.NUMERO_CORTO, " +
-                " C.OBSERVACION, " +
-                " NVL(C.CONTEO1,0)/1000 CONTEO1, " +
-                " NVL(C.DIFERENCIA1,0)/1000 DIFERENCIA1, " +
-                " NVL(C.CONTEO2,0)/1000 CONTEO2, " +
-                " NVL(C.DIFERENCIA2,0)/1000 DIFERENCIA2, " +
-                " NVL(C.CONTEO3,0)/1000 CONTEO3, " +
-                " NVL(C.DIFERENCIA3,0)/1000 DIFERENCIA3, " +
-                " C.AUDITORIA, " +
-                " C.GRUPO, " +
-                " C.GRUPOC1, "+
-                " C.GRUPOC2, "+
-                " C.GRUPOC3, " +
-                " C.OBSERVACIONC1, "+
-                " C.OBSERVACIONC2, "+
-                " C.OBSERVACIONC3 "+
-                " FROM JDE_TO_OPEN_PRODUCTO P, JDE_TO_OPEN_CONTEO C "
-                    + wheresql;
         ArrayList<Conteo> productArrayList = new ArrayList<Conteo>();
         Statement stmt;
         try
@@ -445,6 +417,6 @@ public class DaoAuditorias {
     }
 
     public ArrayList<Conteo> ProductGetAllByTypeSearchBo(Conteo conteo, int typeSearch, ConexionJde conexionMotorec) {
-        return getListProductFromOpen(conteo.getWhereByTypeSearch(typeSearch), conexionMotorec);
+        return getListProductFromOpen(conteo.getSqlByTypeSearch(typeSearch), conexionMotorec);
     }
 }

@@ -2,6 +2,7 @@ const BUSCAR_TODO = 1;
 const BUSCAR_POR_ITEM = 2;
 const BUSCA_UBICACION = 3;
 const BUSCAR_RANGO_UBUCACIONES = 4;
+const BUSCAR_MAESTRO_OPEN = 5;
 
 // VALOR DE LOS INPUTS
 let div_inp_cod_bodega;
@@ -15,7 +16,6 @@ let GLOBAL_TYPE_SEARCH = 1;
 
 
 let but_search_items_no_aud = document.getElementById("but_search_items_no_aud");
-let img_search_item_id = document.getElementById("img_search_item_id");
 
 let select_search_id = document.getElementById("select_search_id");
 let instance_select_search_id;
@@ -113,9 +113,13 @@ document.addEventListener('DOMContentLoaded', () => {
     //------------------------------------------------------------------------------------------
 
     but_search_items_no_aud = document.getElementById("but_search_items_no_aud");
-    img_search_item_id = document.getElementById("img_search_item_id");
+
     //------------------------------------------------------------------------------------------
     select_search_id = document.getElementById("select_search_id");
+
+
+    let pushpin = document.querySelectorAll('.pushpin');
+    let instances_pushpin = M.Pushpin.init(pushpin, {});
 
     select_search_id.addEventListener("change", (event) => {
         if (!event.target.value) {
@@ -134,8 +138,24 @@ document.addEventListener('DOMContentLoaded', () => {
     but_search_items_no_aud.addEventListener("click", () => {
         searchProductsForCounts('N')
     });
-    img_search_item_id.addEventListener("click", () => {
-        searchItemsForCounts('N')
-    });
+
+
+    const button_add = document.getElementById('img_add_item_id');
+    button_add.addEventListener('click', () => {
+        const itemcode = (document.getElementById("inp_cod_product")).value;
+        const conteo = getCountForTipoSearch();
+        const url = getParamName(`${ambienteruta()}product/auditoria/${BUSCAR_MAESTRO_OPEN}`).replace("/index/noaud", "").replace("/index/aud", "");
+        if (itemcode != null && itemcode.trim().length > 0) {
+            addItemForMI(conteo, BUSCAR_MAESTRO_OPEN, url);
+        }
+        else {
+            M.toast(
+                {
+                    html: `El codigo de item Ingresado es invalido`,
+                    classes: 'rounded red lighten-1'
+                }
+            );
+        }
+    })
 
 });

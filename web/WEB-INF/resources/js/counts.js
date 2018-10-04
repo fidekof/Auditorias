@@ -112,6 +112,54 @@ const quitarAll = (valor) => {
 }
 
 
+const getDataProductsFetch2 = async (conteo, tipoBusqueda, url) => {
+    const myHeaders = new Headers();
+    myHeaders.append('Accept', 'application/json');
+    myHeaders.append('Content-Type', 'application/json');
+
+    const MyConfig = {
+        method: 'POST',
+        headers: myHeaders,
+        body: JSON.stringify(conteo)
+    };
+
+
+    let resultado = {};
+    await fetch(url, MyConfig)
+        .then(response => {
+            return response.json();
+        })
+        .catch(error => {
+            console.log(error);
+            M.toast({html: `La busqueda no devolvio resultados`, classes: 'rounded red lighten-1'});
+            resultado = {};
+        })
+        .then(
+            response => {
+
+                if (response === null) {
+                    M.toast({html: `La busqueda no devolvio resultados`, classes: 'rounded red lighten-1'});
+                    resultado = {};
+                }
+                else {
+                    if (response.length > 0) {
+                        M.toast({
+                            html: `Se encontraron ${response.length} registros`,
+                            classes: 'rounded green lighten-1'
+                        });
+                        resultado = response;
+                    }
+                    else {
+                        M.toast({html: `No se encontraron registros`, classes: 'rounded red lighten-1'});
+                        resultado = {};
+                    }
+                }
+
+            }
+        );
+    return resultado;
+}
+
 const getDataProductsFetch = async () => {
     const auditoria = document.getElementById("inp_cod_auditoria");
     const bodega = (document.getElementById("inp_cod_bodega"));
@@ -164,7 +212,7 @@ const getDataProductsFetch = async () => {
     const tieneT = auditoria.value.indexOf("*");
     // let url = `http://localhost:8080/product/byBodegaAndUbicacion/${bodega}/${ubicI}/${ubicF}/${quitarAll(auditoria)}`;
     const url = getParamName(`${ambienteruta()}product/auditoria/${tipoBusqueda}`).replace("/index/noaud", "").replace("/index/aud", "");
-    ;
+
 
 
     const myHeaders = new Headers();
@@ -400,7 +448,7 @@ const tablaResumenConteo = (data) => {
                    <td>${validarNulos(dato.diferencia2)}</td>  
                    <td>${validarNulos(dato.conteo3)}</td>  
                    <td>${validarNulos(dato.diferencia3)}</td>  
-                   <td>${validarNulos(dato.observacion)}</td>   
+                   <td>${validarNulos(dato.observacion1)} |:| ${validarNulos(dato.observacion2)} |:| ${validarNulos(dato.observacion3)} </td>   
                 </tr>
             `;
         });
@@ -725,3 +773,208 @@ const exportTableToCSV = (filename) => {
     // Download CSV file
     downloadCSV(csv.join("\n"), filename);
 }
+
+
+const addItemForMI = async (conteo, BUSCAR_MAESTRO_OPEN, url) => {
+
+    const productos = await getDataProductsFetch2(conteo, BUSCAR_MAESTRO_OPEN, url);
+    if (productos != null) {
+        DrawDataInsert(productos);
+    }
+};
+
+
+const getCountForTipoSearch = () => {
+    const auditoria = document.getElementById("inp_cod_auditoria");
+    const bodega = (document.getElementById("inp_cod_bodega"));
+    const grupo = (document.getElementById("inp_cod_group"));
+    const ubicI = (document.getElementById("inp_cod_ubicacion_i"));
+    const ubicF = (document.getElementById("inp_cod_ubicacion_f"));
+    const conteocode = (document.getElementById("inp_cod_count"));
+    const product = (document.getElementById("inp_cod_product"));
+
+
+    if ((auditoria.value === null || auditoria.value.length < 1 || auditoria.value.trim().length < 1) && auditoria.parentNode.style.display !== 'none') {
+        M.toast({html: 'Debe inresar un codigo de auditoria', classes: 'rounded red lighten-1'});
+        return {};
+    }
+
+    if ((bodega.value === null || bodega.value.length < 1 || bodega.value.trim().length < 1) && bodega.parentNode.style.display !== 'none') {
+        M.toast({html: 'Debe Ingresar un codigo de bodega', classes: 'rounded red lighten-1'});
+        return {};
+    }
+
+
+    if ((grupo.value.length < 1 || grupo.value.trim().length < 1 || grupo.value === null) && (grupo.parentNode.style.display !== 'none')) {
+        M.toast({html: 'Debe Ingresar su codigo de grupo', classes: 'rounded red lighten-1'});
+        return {};
+    }
+
+
+    if ((conteocode.value === null || conteocode.value.length < 1 || conteocode.value.trim().length < 1) && (conteocode.parentNode.style.display !== 'none')) {
+        M.toast({html: 'Debe Ingresar en codigo de su conteo C001, C002, C003', classes: 'rounded red lighten-1'});
+        return {};
+    }
+
+    if ((ubicI.value === null || ubicI.value.length < 1 || ubicI.value.trim().length < 1) && (ubicI.parentNode.style.display !== 'none')) {
+        M.toast({html: 'Debe Ingresar la ubicacion inicial', classes: 'rounded red lighten-1'});
+        return {};
+    }
+
+
+    if ((ubicF.value === null || ubicF.value.length < 1 || ubicF.value.trim().length < 1) && (ubicF.parentNode.style.display !== 'none')) {
+        M.toast({html: 'Debe Ingresar la ubicacion final', classes: 'rounded red lighten-1'});
+        return {};
+    }
+
+    if ((product.value === null || product.value.length < 1 || product.value.trim().length < 1) && (product.parentNode.style.display !== 'none')) {
+        M.toast({html: 'Debe Ingresar el codigo de productos', classes: 'rounded red lighten-1'});
+        return {};
+    }
+
+
+    const tieneT = auditoria.value.indexOf("*");
+
+    const conteo = {
+        auditoria: `${quitarAll(auditoria.value)}`,
+        bodega: `${bodega.value}`,
+        grupo: `${grupo.value}`,
+        conteocode: `${conteocode.value}`,
+        ubicacion: `${ubicI.value}`,
+        codigo: `${product.value}`,
+        observacion: `${ubicF.value}`
+    };
+
+    return conteo;
+
+}
+
+
+const DrawDataInsert = (data) => {
+    console.log(data);
+    const auditoria = (document.getElementById("inp_cod_auditoria")).value;
+    const bodega = (document.getElementById("inp_cod_bodega")).value;
+    const grupo = (document.getElementById("inp_cod_group")).value;
+    const ubicI = (document.getElementById("inp_cod_ubicacion_i")).value;
+    const ubicF = (document.getElementById("inp_cod_ubicacion_f")).value;
+    const conteo = (document.getElementById("inp_cod_count")).value;
+    const contenedorTable = document.getElementById("content-table");
+
+
+    let tabla = `
+        <table class="responsive-table striped">
+            <thead>
+                <tr>
+                    <th>Ubicacion</th>
+                    <th>Cod. Item</th>
+                    <th>Descripcion</th>             
+                    <th>Acciones</th>   
+                </tr>
+            </thead>
+            <tbody>
+        `;
+
+    data.forEach(
+        dato => {
+            tabla += `
+                <tr>
+                    <td><input id="ubicacion_${bodega}${dato.codigo}" type="text" value=""></td>
+                    <td>${validarNulos(dato.codigo)}</td>
+                    <td>${validarNulos(dato.descripcion)}</td>
+                    <td><i class="material-icons" onclick="saveItemPost('${bodega}','ubicacion_${bodega}${dato.codigo}','${dato.codigo}', '${dato.descripcion}',${dato.cantidad}, ${dato.costounitario}, '${dato.familia}')">send</i></td>
+                </tr>
+                `;
+        });
+
+
+    return tabla;
+}
+
+
+const saveItemPost = async (bodega, ubicacion_id, codigo, descripcion_total, cantidad, costounitario, familia) => {
+
+    const ubicacion = (document.getElementById(`${ubicacion_id}`)).value;
+    if ((ubicacion === null || ubicacion.trim().length < 1)) {
+        M.toast(
+            {
+                html: `El item ${codigo} no tiene ubicacion
+                Ingresela en la observacion`,
+                classes: 'rounded red lighten-1'
+            }
+        );
+
+        return;
+    }
+
+
+    const myHeaders = new Headers();
+    myHeaders.append('Accept', 'application/json');
+    myHeaders.append('Content-Type', 'application/json');
+
+    const conteo = {
+        auditoria: `${quitarAll(auditoria)}`,
+        bodega: `${bodega}`,
+        ubicacion: `${ubicacion}`,
+        codigo: `${codigo}`,
+        descripcion: `${descripcion_total}`,
+        cantidad: `${cantidad}`,
+        costounitario: `${costounitario}`,
+        familia: `${familia}`
+    };
+
+    const MyConfig = {
+        method: 'POST',
+        headers: myHeaders,
+        body: JSON.stringify(conteo)
+    };
+
+
+    // const url =  `http://localhost:8080/product/saveconteo/postmode`;
+    const url = getParamName(`${ambienteruta()}product/saveitem/postmode`).replace("/index/noaud", "").replace("/index/aud", "");
+
+
+    await fetch(url, MyConfig)
+        .then(response => {
+            return response.json();
+        })
+        .catch(error => {
+            M.toast(
+                {
+                    html: `No se guardo el conteo del item ${codigo}
+                           Error encontrado ${error}`,
+                    classes: 'rounded red lighten-1'
+                }
+            );
+        })
+        .then(
+            response => {
+                console.log(response);
+                if (response === 'ERROR') {
+                    M.toast(
+                        {
+                            html: `No se guardo el conteo del item ${codigo}`,
+                            classes: 'rounded red lighten-1'
+                        }
+                    );
+                }
+                else {
+                    if (response === 'OK') {
+                        M.toast(
+                            {
+                                html: `Se guardo el conteo del item ${codigo}`,
+                                classes: 'rounded green lighten-1'
+                            }
+                        );
+                    }
+                    else {
+                        M.toast(
+                            {
+                                html: `No se guardo el conteo del item ${codigo}`,
+                                classes: 'rounded red lighten-1'
+                            }
+                        );
+                    }
+                }
+            }
+        );
+};
