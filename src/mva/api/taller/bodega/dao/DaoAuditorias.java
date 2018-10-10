@@ -419,4 +419,24 @@ public class DaoAuditorias {
     public ArrayList<Conteo> ProductGetAllByTypeSearchBo(Conteo conteo, int typeSearch, ConexionJde conexionMotorec) {
         return getListProductFromOpen(conteo.getSqlByTypeSearch(typeSearch), conexionMotorec);
     }
+
+    public String ItemSaveDAO(Conteo conteo, ConexionJde conexionMotorec) {
+        Statement statement = null;
+        int resultado = 0;
+        String salida = "ERROR";
+        Connection connection = conexionMotorec.getConexionOpenMotorec().getCon();
+        if (connection != null) {
+            try {
+                connection.setAutoCommit(false);
+                resultado += conteo.generarInsertItem(connection);
+                connection.commit();
+                salida = resultado > 0 ? "OK" : "ERROR";
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                return salida;
+            }
+        }
+        return salida;
+    }
 }

@@ -3,7 +3,6 @@ package mva.api.taller.bodega.bo;
 import mva.api.taller.bodega.conexion.ConexionJde;
 import mva.api.taller.bodega.dao.DaoAuditorias;
 import mva.api.taller.bodega.models.Conteo;
-import mva.api.taller.bodega.models.Product;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -86,5 +85,20 @@ public class BoAuditorias
             }
         }
         return productArrayList;
+    }
+
+    public String ItemSaveBO(Conteo conteo, ConexionJde conexionMotorec) {
+        String result = "ERROR";
+        if (conexionMotorec != null) {
+            try {
+                DaoAuditorias daoAuditorias = new DaoAuditorias();
+                result = daoAuditorias.ItemSaveDAO(conteo, conexionMotorec);
+            } catch (Exception e) {
+                return result;
+            } finally {
+                conexionMotorec.desconectarJD();
+            }
+        }
+        return result;
     }
 }

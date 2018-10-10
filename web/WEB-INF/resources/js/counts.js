@@ -1,4 +1,4 @@
-const produccion = false;
+const produccion = true;
 
 
 const ambienteruta = () => {
@@ -448,10 +448,11 @@ const tablaResumenConteo = (data) => {
                    <td>${validarNulos(dato.diferencia2)}</td>  
                    <td>${validarNulos(dato.conteo3)}</td>  
                    <td>${validarNulos(dato.diferencia3)}</td>  
-                   <td>${validarNulos(dato.observacion1)} |:| ${validarNulos(dato.observacion2)} |:| ${validarNulos(dato.observacion3)} </td>   
+                   <td>${validarNulos(dato.observacion1)} -- ${validarNulos(dato.observacion2)} -- ${validarNulos(dato.observacion3)} </td>   
                 </tr>
             `;
         });
+    tabla += ` </tbody></table> `;
     return tabla;
 };
 
@@ -523,7 +524,7 @@ const tablaConteos = (data, typeAud, auditoria, grupo, conteo) => {
             }
         });
 
-
+    tabla += ` </tbody></table> `;
     return tabla;
 };
 
@@ -663,13 +664,13 @@ const saveCountPost = async (auditoria, grupo, conteocode, bodega, ubicacion, it
         grupoc1: `${grupo}`,
         ubicacion: `${ubicacion}`,
         codigo: `${itemcode}`,
-        descripcion: `${descripcion}`,
+        descripcion: `${descripcion.replace('"', ' ')}`,
         cantidad: `${cantidad}`,
         conteo1: `${conteo1}`,
         diferencia1: `${diferencia1}`,
         costounitario: `${costounitario}`,
-        familia: `${familia}`,
-        observacion1: `${observacion}`
+        familia: `${familia.replace('"', ' ')}`,
+        observacion1: `${observacion.replace('"', ' ')}`
     };
 
     const MyConfig = {
@@ -778,8 +779,12 @@ const exportTableToCSV = (filename) => {
 const addItemForMI = async (conteo, BUSCAR_MAESTRO_OPEN, url) => {
 
     const productos = await getDataProductsFetch2(conteo, BUSCAR_MAESTRO_OPEN, url);
+    const contenedorTable = document.getElementById("content-table");
+
     if (productos != null) {
-        DrawDataInsert(productos);
+        const tabla = DrawDataInsert(productos);
+        const contenedorTable = document.getElementById("content-table");
+        contenedorTable.innerHTML = tabla;
     }
 };
 
@@ -886,7 +891,7 @@ const DrawDataInsert = (data) => {
                 `;
         });
 
-
+    tabla += ` </tbody></table> `;
     return tabla;
 }
 
@@ -912,7 +917,7 @@ const saveItemPost = async (bodega, ubicacion_id, codigo, descripcion_total, can
     myHeaders.append('Content-Type', 'application/json');
 
     const conteo = {
-        auditoria: `${quitarAll(auditoria)}`,
+
         bodega: `${bodega}`,
         ubicacion: `${ubicacion}`,
         codigo: `${codigo}`,

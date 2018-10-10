@@ -1,12 +1,8 @@
 package mva.api.taller.bodega.models;
 
 
-import jdk.nashorn.internal.objects.annotations.Where;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class Conteo {
     public static final int BUSCAR_TODO = 1;
@@ -318,6 +314,54 @@ public class Conteo {
     public void setgrupoc3(String grupoc3) {
         this.grupoc3 = grupoc3;
     }
+
+    public int generarInsertItem(Connection con) {
+        int result = 0;
+        if (con != null) {
+            String sql = "  INSERT INTO JDE_TO_OPEN_PRODUCTO(BODEGA, UBICACION, CODIGO, DESCRIPCION, DESCRIPCION2, CANTIDAD, COSTO_UNITARIO, FAMILIA) VALUES (" +
+                    " TRIM(?), " +
+                    " TRIM(?), " +
+                    " TRIM(?), " +
+                    " TRIM(?)," +
+                    " TRIM(?)," +
+                    " ?," +
+                    " ?," +
+                    " TRIM(?)" +
+                    " )";
+            try {
+                PreparedStatement st = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+                String des1 = " ", des2 = " ", partes[];
+                if (this.descripcion != null && this.descripcion.isEmpty() == false) {
+                    partes = this.descripcion.split("===");
+                    if (partes.length > 1) {
+                        des1 = partes[0].replace("===", "");
+                        des2 = partes[1].replace("===", "");
+                    } else {
+                        des1 = this.descripcion.replace("===", "");
+                        des2 = " ";
+                    }
+                }
+                st.setString(1, this.bodega);
+                st.setString(2, this.ubicacion);
+                st.setString(3, this.codigo);
+                st.setString(4, des1);
+                st.setString(5, des2);
+                st.setString(6, Tools.formatNumberToJDE(this.cantidad, 3, Tools.SIGNO_DECIMAL));
+                st.setString(7, this.costounitario);
+                st.setString(8, this.familia);
+                result = st.executeUpdate();
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                result = 0;
+            }
+        }
+        return result;
+    }
+
+
+
 
     public int generarInsertConteo(Connection con) {
         int result = 0;

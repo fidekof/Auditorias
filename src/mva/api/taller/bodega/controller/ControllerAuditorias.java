@@ -4,7 +4,6 @@ package mva.api.taller.bodega.controller;
 import mva.api.taller.bodega.dao.DaoAuditorias;
 import mva.api.taller.bodega.interfaces.InterfaceAuditorias;
 import mva.api.taller.bodega.models.Conteo;
-import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -105,6 +104,16 @@ public class ControllerAuditorias {
         if(conteo!= null){
             conteo.calculeDiferencias();
             respuesta = this.serviceAuditorias.CountsSave(conteo);
+        }
+        return new ResponseEntity<String>(respuesta, HttpStatus.OK);
+    }
+
+
+    @PostMapping("/saveitem/postmode")
+    public ResponseEntity<String> SaveItem(@RequestBody Conteo conteo) {
+        String respuesta = "ERROR";
+        if (conteo != null) {
+            respuesta = this.serviceAuditorias.ItemSave(conteo);
         }
         return new ResponseEntity<String>(respuesta, HttpStatus.OK);
     }

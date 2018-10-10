@@ -4,7 +4,6 @@ import mva.api.taller.bodega.bo.BoAuditorias;
 import mva.api.taller.bodega.conexion.ConexionJde;
 import mva.api.taller.bodega.interfaces.InterfaceAuditorias;
 import mva.api.taller.bodega.models.Conteo;
-import mva.api.taller.bodega.models.Product;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -35,6 +34,11 @@ public class ServiceAuditorias implements InterfaceAuditorias {
     @Override
     public Collection<Conteo> ProductGetAllByTypeSearch(Conteo conteo, int typesearch) {
         return (new BoAuditorias()).ProductGetAllByTypeSearchBo(conteo, typesearch,  (new ConexionJde()));
+    }
+
+    @Override
+    public String ItemSave(Conteo conteo) {
+        return (new BoAuditorias()).ItemSaveBO(conteo, (new ConexionJde()));
     }
 
 

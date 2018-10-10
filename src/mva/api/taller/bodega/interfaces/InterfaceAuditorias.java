@@ -1,7 +1,6 @@
 package mva.api.taller.bodega.interfaces;
 
 import mva.api.taller.bodega.models.Conteo;
-import mva.api.taller.bodega.models.Product;
 
 import java.util.Collection;
 
@@ -11,5 +10,7 @@ public interface InterfaceAuditorias {
     public Collection<Conteo> CountGet(Conteo count, int typeSeaarch);
     String CountsSave(Conteo conteo);
     Collection<Conteo> ProductGetAllByTypeSearch(Conteo conteo, int typesearch);
+
+    String ItemSave(Conteo conteo);
 }
 
