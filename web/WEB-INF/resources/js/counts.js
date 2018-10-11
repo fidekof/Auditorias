@@ -474,8 +474,9 @@ const tablaConteos = (data, typeAud, auditoria, grupo, conteo) => {
 
     tabla += `      
                     <th style="display: none">Familia</th> 
-                    <th>Observacion</th>
                     <th>Conteo Actual</th>
+                    <th>Observacion</th>
+                    <th>Nueva Ubicacion</th>
                     <th>Acciones</th>
                     
                     
@@ -515,10 +516,21 @@ const tablaConteos = (data, typeAud, auditoria, grupo, conteo) => {
                 tabla += `
                     
                     <th style="display: none">${validarNulos(dato.familia)}</th> 
-                    <td><input id="observacion_${dato.bodega}${dato.ubicacion}${dato.codigo}${dato.cantidad}" type="text" value="${validarNulos(dataByCount.observacion)}"></td>                    
                     <td><input id="${dato.bodega}${dato.ubicacion}${dato.codigo}${dato.cantidad}" type="text" value="${validarNulos(dataByCount.conteo)}"></td>
+                    <td><input id="observacion_${dato.bodega}${(dato.ubicacion === null || dato.ubicacion.trim().length < 1) ? '--' : dato.ubicacion}${dato.codigo}${dato.cantidad}" type="text" value="${validarNulos(dataByCount.observacion)}"></td>                    
+                    <td><input id="new_ubicacion_${dato.bodega}${dato.ubicacion}${dato.codigo}${dato.cantidad}" type="text" value="${validarNulos(dato.observacion)}"></td>
                     <td>
-                        <i class="material-icons" onclick="saveCountPost('${quitarAll(auditoria)}', '${grupo}', '${conteo}', '${dato.bodega}','${dato.ubicacion}','${dato.codigo}','${dato.cantidad}', '${dato.bodega}${dato.ubicacion}${dato.codigo}${dato.cantidad}', '${dato.descripcion}','${dato.costounitario}', '${dato.familia}', 'observacion_${dato.bodega}${dato.ubicacion}${dato.codigo}${dato.cantidad}')">save</i></td>
+                        <i class="material-icons" onclick="saveCountPost('${quitarAll(auditoria)}',
+                         '${grupo}',
+                          '${conteo}',
+                           '${dato.bodega}',
+                           '${dato.ubicacion}',
+                           '${dato.codigo}',
+                           '${dato.cantidad}',
+                            '${dato.bodega}${dato.ubicacion}${dato.codigo}${dato.cantidad}', '${dato.descripcion}',
+                            '${dato.costounitario}', '${dato.familia}',
+                             'observacion_${dato.bodega}${dato.ubicacion}${dato.codigo}${dato.cantidad}'
+                        ,'new_ubicacion_${dato.bodega}${dato.ubicacion}${dato.codigo}${dato.cantidad}')">save</i></td>
                 </tr>
                 `;
             }
@@ -664,13 +676,13 @@ const saveCountPost = async (auditoria, grupo, conteocode, bodega, ubicacion, it
         grupoc1: `${grupo}`,
         ubicacion: `${ubicacion}`,
         codigo: `${itemcode}`,
-        descripcion: `${descripcion.replace('"', ' ')}`,
+        descripcion: `${quitarCaracteres(descripcion, null)}`,
         cantidad: `${cantidad}`,
         conteo1: `${conteo1}`,
         diferencia1: `${diferencia1}`,
         costounitario: `${costounitario}`,
         familia: `${familia.replace('"', ' ')}`,
-        observacion1: `${observacion.replace('"', ' ')}`
+        observacion1: `${quitarCaracteres(observacion, null)}`
     };
 
     const MyConfig = {
@@ -921,7 +933,7 @@ const saveItemPost = async (bodega, ubicacion_id, codigo, descripcion_total, can
         bodega: `${bodega}`,
         ubicacion: `${ubicacion}`,
         codigo: `${codigo}`,
-        descripcion: `${descripcion_total}`,
+        descripcion: `${quitarCaracteres(descripcion_total, null)}`,
         cantidad: `${cantidad}`,
         costounitario: `${costounitario}`,
         familia: `${familia}`
