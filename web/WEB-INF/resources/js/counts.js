@@ -1,10 +1,31 @@
 const produccion = true;
 
 
+const
+    caracteres_especiales = '"&\'*#';
+
+const quitarCaracteres = (cadena, caracteres) => {
+    if (cadena != null && cadena.trim().length > 0) {
+        if (caracteres_especiales != null && caracteres_especiales.trim().length > 0) {
+            caracteres_especiales.split('').forEach(dato => {
+                cadena = cadena.replace(dato, '');
+            });
+        }
+
+        if (caracteres != null && caracteres.trim().length > 0) {
+            caracteres.split('').forEach(dato => {
+                cadena = cadena.replace(dato, '');
+            });
+        }
+    }
+    return cadena;
+}
+
+
 const ambienteruta = () => {
     let result = "";
     if (produccion === true) {
-        result = "auditoriasV2/"
+        result = "auditoriasV3/"
     }
     return result;
 };
@@ -414,10 +435,12 @@ const tablaResumenConteo = (data) => {
                     <td>Bodega</td>
                     <td>Grupo</td>
                     <td>Ubicacion</td>
+                    <td>Nueva Ubicacion</td>
                     <td>Item Cod.</td>
                     <td>Descripcion</td>
                     <td>Cantidad</td>
                     <td>Costo U.</td>
+                    <td>Diferencia Final</td>
                     <td>Conteo 1</td>                    
                     <td>Diferencia 1</td>
                     <td>Conteo 2</td>
@@ -438,10 +461,12 @@ const tablaResumenConteo = (data) => {
                    <td>${validarNulos(dato.bodega)}</td>            
                    <td>${validarNulos(dato.grupo)}</td>
                    <td>${validarNulos(dato.ubicacion)}</td>
+                   <td>${validarNulos(dato.observacion)}</td>
                    <td>${validarNulos(dato.codigo)}</td>
                    <td>${validarNulos(dato.descripcion)}</td>   
                    <td>${validarNulos(dato.cantidad)}</td>
-                   <td>${validarNulos(dato.costounitario)}</td>     
+                   <td>${validarNulos(dato.costounitario)}</td>   
+                   <td>${validarNulos(dato.conteofinal)}</td>  
                    <td>${validarNulos(dato.conteo1)}</td>  
                    <td>${validarNulos(dato.diferencia1)}</td>  
                    <td>${validarNulos(dato.conteo2)}</td>  
@@ -516,21 +541,22 @@ const tablaConteos = (data, typeAud, auditoria, grupo, conteo) => {
                 tabla += `
                     
                     <th style="display: none">${validarNulos(dato.familia)}</th> 
-                    <td><input id="${dato.bodega}${dato.ubicacion}${dato.codigo}${dato.cantidad}" type="text" value="${validarNulos(dataByCount.conteo)}"></td>
-                    <td><input id="observacion_${dato.bodega}${(dato.ubicacion === null || dato.ubicacion.trim().length < 1) ? '--' : dato.ubicacion}${dato.codigo}${dato.cantidad}" type="text" value="${validarNulos(dataByCount.observacion)}"></td>                    
-                    <td><input id="new_ubicacion_${dato.bodega}${dato.ubicacion}${dato.codigo}${dato.cantidad}" type="text" value="${validarNulos(dato.observacion)}"></td>
+                    <td><input id="${dato.bodega}${validarNulos2(dato.ubicacion)}${dato.codigo}${dato.cantidad}" type="text" value="${validarNulos(dataByCount.conteo)}"></td>
+                    <td><input id="observacion_${dato.bodega}${validarNulos2(dato.ubicacion)}${dato.codigo}${dato.cantidad}" type="text" value="${validarNulos(dataByCount.observacion)}"></td>                    
+                    <td><input id="new_ubicacion_${dato.bodega}${validarNulos2(dato.ubicacion)}${dato.codigo}${dato.cantidad}" type="text" value="${validarNulos(dato.observacion)}"></td>
                     <td>
-                        <i class="material-icons" onclick="saveCountPost('${quitarAll(auditoria)}',
-                         '${grupo}',
-                          '${conteo}',
-                           '${dato.bodega}',
-                           '${dato.ubicacion}',
-                           '${dato.codigo}',
-                           '${dato.cantidad}',
-                            '${dato.bodega}${dato.ubicacion}${dato.codigo}${dato.cantidad}', '${dato.descripcion}',
-                            '${dato.costounitario}', '${dato.familia}',
-                             'observacion_${dato.bodega}${dato.ubicacion}${dato.codigo}${dato.cantidad}'
-                        ,'new_ubicacion_${dato.bodega}${dato.ubicacion}${dato.codigo}${dato.cantidad}')">save</i></td>
+                        <i class="material-icons" onclick="saveCountPost(
+                             '${quitarAll(auditoria)}',
+                             '${grupo}',
+                             '${conteo}',
+                             '${dato.bodega}',
+                             '${validarNulos2(dato.ubicacion)}',
+                             '${dato.codigo}',
+                             '${dato.cantidad}',
+                             '${dato.bodega}${validarNulos2(dato.ubicacion)}${dato.codigo}${dato.cantidad}', '${dato.descripcion}',
+                             '${dato.costounitario}', '${dato.familia}',
+                             'observacion_${dato.bodega}${validarNulos2(dato.ubicacion)}${dato.codigo}${dato.cantidad}',
+                             'new_ubicacion_${dato.bodega}${validarNulos2(dato.ubicacion)}${dato.codigo}${dato.cantidad}')">save</i></td>
                 </tr>
                 `;
             }
@@ -585,6 +611,11 @@ const validarNulos = cadena => {
     return cadena !== null ? cadena : " ";
 };
 
+
+const validarNulos2 = cadena => {
+    return (cadena !== null && cadena.trim().length > 0) ? cadena.trim() : "---";
+};
+
 const saveCount = async (codigoAuditoria, codigoGrupo, codConteo, bodega, ubicacion, itemcode, valorInicial, idValorContado, descripcion) => {
     descripcion = descripcion.replace("/", "_");
     const valorConteo = (document.getElementById(`${idValorContado}`)).value;
@@ -636,21 +667,24 @@ const searchItemsForCounts = async (typeAud) => {
 };
 
 
-const saveCountPost = async (auditoria, grupo, conteocode, bodega, ubicacion, itemcode, cantidad, codconteo1, descripcion, costounitario, familia, codobservacion) => {
+const saveCountPost = async (auditoria, grupo, conteocode, bodega, ubicacion, itemcode, cantidad, codconteo1, descripcion, costounitario, familia, codobservacion, cod_new_ubicacion) => {
     // descripcion = descripcion.replace("/","_");
+    const newubucacioncod = (document.getElementById(`${cod_new_ubicacion}`)).value;
     const observacionI = (document.getElementById(`${codobservacion}`)).value;
     const conteo1 = (document.getElementById(`${codconteo1}`)).value;
     const diferencia1 = parseFloat(cantidad) - parseFloat(conteo1);
 
 
-    descripcion = (descripcion !== null) ? (descripcion.replace("/", "_").replace("&", " ").replace("(", "_").replace(")", "_")) : "";
+    //descripcion = (descripcion !== null) ? (descripcion.replace("/", "_").replace("&", " ").replace("(", "_").replace(")", "_")) : "";
     const observacion = (observacionI !== null) ? (observacionI.replace("/", "_").replace("&", " ").replace("(", "_").replace(")", "_")) : "";
+    const newubucacion = quitarCaracteres(newubucacioncod);
 
-    if ((ubicacion === null || ubicacion.trim().length < 1) && (observacion === null || observacion.trim().length < 1)) {
+
+    if ((ubicacion === null || ubicacion.trim().length < 1 || ubicacion.indexOf("---") !== -1) && (newubucacion === null || newubucacion.trim().length < 1)) {
         M.toast(
             {
                 html: `El item ${itemcode} no tiene ubicacion
-                Ingresela en la observacion`,
+                Ingresela en el campo nueva ubicacion`,
                 classes: 'rounded red lighten-1'
             }
         );
@@ -658,11 +692,7 @@ const saveCountPost = async (auditoria, grupo, conteocode, bodega, ubicacion, it
         return;
 
     }
-    else {
-        if (ubicacion === null || ubicacion.trim().length < 1) {
-            ubicacion = observacion
-        }
-    }
+
 
     const myHeaders = new Headers();
     myHeaders.append('Accept', 'application/json');
@@ -682,7 +712,8 @@ const saveCountPost = async (auditoria, grupo, conteocode, bodega, ubicacion, it
         diferencia1: `${diferencia1}`,
         costounitario: `${costounitario}`,
         familia: `${familia.replace('"', ' ')}`,
-        observacion1: `${quitarCaracteres(observacion, null)}`
+        observacion1: `${quitarCaracteres(observacion, null)}`,
+        observacion: `${validarNulos2(newubucacion)}`
     };
 
     const MyConfig = {
@@ -728,6 +759,8 @@ const saveCountPost = async (auditoria, grupo, conteocode, bodega, ubicacion, it
                                 classes: 'rounded green lighten-1'
                             }
                         );
+                        drawSaveItem(cod_new_ubicacion, true);
+
                     }
                     else {
                         M.toast(
@@ -736,12 +769,22 @@ const saveCountPost = async (auditoria, grupo, conteocode, bodega, ubicacion, it
                                 classes: 'rounded red lighten-1'
                             }
                         );
+
+                        drawSaveItem(cod_new_ubicacion, false);
                     }
                 }
             }
         );
 };
 
+
+const drawSaveItem = (id_item, isSaved) => {
+    let draw_item = document.getElementById(id_item).parentElement.parentElement;
+    if (isSaved == true)
+        draw_item.setAttribute('class', ' teal lighten-2')
+    else
+        draw_item.setAttribute('class', '')
+}
 
 const downloadCSV = (csv, filename) => {
     var csvFile;
@@ -898,7 +941,7 @@ const DrawDataInsert = (data) => {
                     <td><input id="ubicacion_${bodega}${dato.codigo}" type="text" value=""></td>
                     <td>${validarNulos(dato.codigo)}</td>
                     <td>${validarNulos(dato.descripcion)}</td>
-                    <td><i class="material-icons" onclick="saveItemPost('${bodega}','ubicacion_${bodega}${dato.codigo}','${dato.codigo}', '${dato.descripcion}',${dato.cantidad}, ${dato.costounitario}, '${dato.familia}')">send</i></td>
+                    <td><i class="material-icons" onclick="saveItemPost('${auditoria}','${bodega}','ubicacion_${bodega}${dato.codigo}','${dato.codigo}', '${dato.descripcion}',${dato.cantidad}, ${dato.costounitario}, '${dato.familia}')">send</i></td>
                 </tr>
                 `;
         });
@@ -908,7 +951,7 @@ const DrawDataInsert = (data) => {
 }
 
 
-const saveItemPost = async (bodega, ubicacion_id, codigo, descripcion_total, cantidad, costounitario, familia) => {
+const saveItemPost = async (auditoria, bodega, ubicacion_id, codigo, descripcion_total, cantidad, costounitario, familia) => {
 
     const ubicacion = (document.getElementById(`${ubicacion_id}`)).value;
     if ((ubicacion === null || ubicacion.trim().length < 1)) {
@@ -929,7 +972,7 @@ const saveItemPost = async (bodega, ubicacion_id, codigo, descripcion_total, can
     myHeaders.append('Content-Type', 'application/json');
 
     const conteo = {
-
+        auditoria: `${auditoria}`,
         bodega: `${bodega}`,
         ubicacion: `${ubicacion}`,
         codigo: `${codigo}`,

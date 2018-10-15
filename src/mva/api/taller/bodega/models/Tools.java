@@ -45,4 +45,17 @@ public class Tools {
         return output;
     }
 
+    public static Double stringToDoube(String valor) {
+        Double result = Double.valueOf(0);
+        if (valor != null && valor.isEmpty() == false) {
+            try {
+                result = Double.parseDouble(valor);
+            } catch (Exception e) {
+                return 0.0;
+            }
+        }
+        return result;
+
+    }
+
 }

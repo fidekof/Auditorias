@@ -196,6 +196,7 @@ public class DaoAuditorias {
                     conteo.setObservacion3(Tools.cleanString(rs.getString("OBSERVACIONC3")));
 
 
+                    conteo.generarConteoFinal();
                     productArrayList.add(conteo);
                 }
 
@@ -380,6 +381,8 @@ public class DaoAuditorias {
                     conteo.setObservacion2(Tools.cleanString(rs.getString("OBSERVACIONC2")));
                     conteo.setObservacion3(Tools.cleanString(rs.getString("OBSERVACIONC3")));
 
+
+                    conteo.generarConteoFinal();
                     productArrayList.add(conteo);
                 }
 
