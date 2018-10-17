@@ -1,10 +1,31 @@
-.row{
-    padding-bottom: 1rem;
-}
+/*.row{*/
+/*padding-bottom: 1rem;*/
+/*}*/
 
 
 #content-table{
     padding-top: 3rem;
+}
+
+tbody {
+    display: block;
+    height: 69vh;
+    overflow: auto;
+}
+
+thead, tbody tr {
+    display: table;
+    width: 100%;
+    overflow-x: auto;
+    table-layout: fixed;
+}
+
+thead {
+    width: calc(100% - 1em)
+}
+
+table {
+    width: 100%;
 }
 
 

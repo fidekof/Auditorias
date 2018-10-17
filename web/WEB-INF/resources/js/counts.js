@@ -1,4 +1,4 @@
-const produccion = true;
+const produccion = false;
 
 
 const
@@ -25,7 +25,7 @@ const quitarCaracteres = (cadena, caracteres) => {
 const ambienteruta = () => {
     let result = "";
     if (produccion === true) {
-        result = "auditoriasV3/"
+        result = "auditoriasV4/"
     }
     return result;
 };
@@ -532,7 +532,7 @@ const tablaConteos = (data, typeAud, auditoria, grupo, conteo) => {
 
                 tabla += ` <td>${validarNulos(dato.ubicacion)}</td>
                     <td>${validarNulos(dato.codigo)}</td>
-                    <td>${validarNulos(dato.descripcion)}</td>`;
+                    <td id="descripcion_${dato.bodega}${validarNulos2(dato.ubicacion)}${dato.codigo}${dato.cantidad}">${validarNulos(dato.descripcion)}</td>`;
 
                 if (typeAud === 'Y') {
                     tabla += `<td>${validarNulos(dato.cantidad)}</td>
@@ -541,11 +541,11 @@ const tablaConteos = (data, typeAud, auditoria, grupo, conteo) => {
                 tabla += `
                     
                     <th style="display: none">${validarNulos(dato.familia)}</th> 
-                    <td><input id="${dato.bodega}${validarNulos2(dato.ubicacion)}${dato.codigo}${dato.cantidad}" type="text" value="${validarNulos(dataByCount.conteo)}"></td>
+                    <td><input id="${dato.bodega}${validarNulos2(dato.ubicacion)}${dato.codigo}${dato.cantidad}" onkeyup="saveWithIntro(event,'but_${dato.bodega}${validarNulos2(dato.ubicacion)}${dato.codigo}${dato.cantidad}')" type="text" value="${validarNulos(dataByCount.conteo)}"></td>
                     <td><input id="observacion_${dato.bodega}${validarNulos2(dato.ubicacion)}${dato.codigo}${dato.cantidad}" type="text" value="${validarNulos(dataByCount.observacion)}"></td>                    
                     <td><input id="new_ubicacion_${dato.bodega}${validarNulos2(dato.ubicacion)}${dato.codigo}${dato.cantidad}" type="text" value="${validarNulos(dato.observacion)}"></td>
                     <td>
-                        <i class="material-icons" onclick="saveCountPost(
+                        <i class="material-icons" id="but_${dato.bodega}${validarNulos2(dato.ubicacion)}${dato.codigo}${dato.cantidad}" onclick="saveCountPost(
                              '${quitarAll(auditoria)}',
                              '${grupo}',
                              '${conteo}',
@@ -553,7 +553,8 @@ const tablaConteos = (data, typeAud, auditoria, grupo, conteo) => {
                              '${validarNulos2(dato.ubicacion)}',
                              '${dato.codigo}',
                              '${dato.cantidad}',
-                             '${dato.bodega}${validarNulos2(dato.ubicacion)}${dato.codigo}${dato.cantidad}', '${dato.descripcion}',
+                             '${dato.bodega}${validarNulos2(dato.ubicacion)}${dato.codigo}${dato.cantidad}', 
+                             'descripcion_${dato.bodega}${validarNulos2(dato.ubicacion)}${dato.codigo}${dato.cantidad}',
                              '${dato.costounitario}', '${dato.familia}',
                              'observacion_${dato.bodega}${validarNulos2(dato.ubicacion)}${dato.codigo}${dato.cantidad}',
                              'new_ubicacion_${dato.bodega}${validarNulos2(dato.ubicacion)}${dato.codigo}${dato.cantidad}')">save</i></td>
@@ -565,6 +566,21 @@ const tablaConteos = (data, typeAud, auditoria, grupo, conteo) => {
     tabla += ` </tbody></table> `;
     return tabla;
 };
+
+
+const saveWithIntro = (event, id_element) => {
+    if (event.defaultPrevented) {
+        return; // Do nothing if the event was already processed
+    }
+
+    switch (event.key) {
+        case 'Enter': {
+            document.getElementById(id_element).click();
+        }
+    }
+}
+
+
 
 const searchProductsForCounts = async (typeAud) => {
 
@@ -667,8 +683,8 @@ const searchItemsForCounts = async (typeAud) => {
 };
 
 
-const saveCountPost = async (auditoria, grupo, conteocode, bodega, ubicacion, itemcode, cantidad, codconteo1, descripcion, costounitario, familia, codobservacion, cod_new_ubicacion) => {
-    // descripcion = descripcion.replace("/","_");
+const saveCountPost = async (auditoria, grupo, conteocode, bodega, ubicacion, itemcode, cantidad, codconteo1, descripcionid, costounitario, familia, codobservacion, cod_new_ubicacion) => {
+    const descripcion = (document.getElementById(`${descripcionid}`)).innerText;
     const newubucacioncod = (document.getElementById(`${cod_new_ubicacion}`)).value;
     const observacionI = (document.getElementById(`${codobservacion}`)).value;
     const conteo1 = (document.getElementById(`${codconteo1}`)).value;
@@ -939,9 +955,9 @@ const DrawDataInsert = (data) => {
             tabla += `
                 <tr>
                     <td><input id="ubicacion_${bodega}${dato.codigo}" type="text" value=""></td>
-                    <td>${validarNulos(dato.codigo)}</td>
-                    <td>${validarNulos(dato.descripcion)}</td>
-                    <td><i class="material-icons" onclick="saveItemPost('${auditoria}','${bodega}','ubicacion_${bodega}${dato.codigo}','${dato.codigo}', '${dato.descripcion}',${dato.cantidad}, ${dato.costounitario}, '${dato.familia}')">send</i></td>
+                    <td id="itemcode_${bodega}${dato.codigo}">${validarNulos(dato.codigo)}</td>
+                    <td id="descripcion_${bodega}${dato.codigo}">${validarNulos(dato.descripcion)}</td>
+                    <td><i class="material-icons" onclick="saveItemPost('${auditoria}','${bodega}','ubicacion_${bodega}${dato.codigo}','itemcode_${bodega}${dato.codigo}', 'descripcion_${bodega}${dato.codigo}',${dato.cantidad}, ${dato.costounitario}, '${dato.familia}')">send</i></td>
                 </tr>
                 `;
         });
@@ -951,8 +967,10 @@ const DrawDataInsert = (data) => {
 }
 
 
-const saveItemPost = async (auditoria, bodega, ubicacion_id, codigo, descripcion_total, cantidad, costounitario, familia) => {
+const saveItemPost = async (auditoria, bodega, ubicacion_id, codigo_id, descripcion_total_id, cantidad, costounitario, familia) => {
 
+    const codigo = (document.getElementById(`${codigo_id}`)).innerText;
+    const descripcion_total = (document.getElementById(`${descripcion_total_id}`)).innerText;
     const ubicacion = (document.getElementById(`${ubicacion_id}`)).value;
     if ((ubicacion === null || ubicacion.trim().length < 1)) {
         M.toast(

@@ -1,10 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Master</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <!--<meta http-equiv="refresh" content="5">-->
+    <title id="id_title">Conteos</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <!--PRODUCCION-->
+    <!--<link rel="stylesheet" href="/auditoriasV3/resources/css/normalize.css">-->
+    <!--<link rel="stylesheet" href="/auditoriasV3/resources/css/materialize.css">-->
+    <!--<link rel="stylesheet" href="/auditoriasV3/resources/css/counts.css">-->
+
+    <!--&lt;!&ndash;PRUEBAS&ndash;&gt;-->
+    <link rel="stylesheet" href="/resources/css/normalize.css">
+    <link rel="stylesheet" href="/resources/css/materialize.css">
+    <link rel="stylesheet" href="/resources/css/counts.css">
+
+    <!--&lt;!&ndash;PREPROS&ndash;&gt;-->
+    <!--<link rel="stylesheet" href="../resources/css/normalize.css">-->
+    <!--<link rel="stylesheet" href="../resources/css/materialize.css">-->
+    <!--<link rel="stylesheet" href="../resources/css/counts.css">-->
+
+
+
 </head>
 <body>
+
+<!-- Navbar goes here -->
+<div class="row">
+    <!-- Dropdown Structure -->
+
+    <div class="navbar-fixed">
+        <nav class="deep-orange accent-4 nav-extended">
+            <div class="nav-wrapper grey lighten-5">
+                <div class="row">
+                    <div class="col s2">
+                        <!-- Dropdown Trigger -->
+                        <div class="input-field col s12">
+                            <select id="select_search_id">
+                                <option value="999" selected>Ingrese el Tipo de Busqueda</option>
+                                <option value="1">Todos</option>
+                                <option value="2">Codigo de Item</option>
+                                <option value="3">Ubicacion Unica</option>
+                                <option value="4">Rango Ubicaciones</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input-field col s1" id="div_inp_cod_auditoria">
+                        <input placeholder="Ingrese Cod. Aud." id="inp_cod_auditoria" type="text"
+                               class="validate">
+                        <label for="inp_cod_auditoria">Cod. Auditoria</label>
+                    </div>
+
+                    <div class="input-field col s1" id="div_inp_cod_bodega">
+                        <input placeholder="Ingrese Cod. Bod." id="inp_cod_bodega" type="text" class="validate">
+                        <label for="inp_cod_bodega">Cod. Bodega</label>
+                    </div>
+
+                    <div class="input-field col s1" id="div_inp_cod_group">
+                        <input placeholder="Ingrese Cod. Grup." id="inp_cod_group" type="text" class="validate">
+                        <label for="inp_cod_group">Cod. Grupo</label>
+                    </div>
+
+                    <div class="input-field col s1" id="dvi_inp_cod_count">
+                        <input placeholder="Ingrese Cod. Cont." id="inp_cod_count" type="text" class="validate">
+                        <label for="inp_cod_count">Cod. Conteo</label>
+                    </div>
+
+                    <div class="input-field col s1" id="div_inp_cod_ubicacion_i">
+                        <input placeholder="Ingrese Ubi. Ini." id="inp_cod_ubicacion_i" type="text"
+                               class="validate">
+                        <label for="inp_cod_ubicacion_i">Ubicaci&oacute;n Inicial</label>
+                    </div>
+
+                    <div class="input-field col s1" id="div_inp_cod_ubicacion_f">
+                        <input placeholder="Ingrese Ubi. Ini." id="inp_cod_ubicacion_f" type="text"
+                               class="validate">
+                        <label for="inp_cod_ubicacion_f">Ubicaci&oacute;n Final</label>
+                    </div>
+
+                    <div class="input-field col s2" id="div_inp_cod_product">
+                        <input placeholder="Ingrese Codigo Item" id="inp_cod_product" type="text"
+                               class="validate">
+                        <label for="inp_cod_product">
+                            Codigo Item
+                            <ul class="left hide-on-med-and-down">
+                                <li>
+                                    <a id="img_add_item_id"
+                                       class="waves-effect waves-light btn light-blue darken-4">
+                                        <i class="material-icons left">control_point</i>
+                                    </a>
+                                </li>
+                            </ul>
+
+                        </label>
+                    </div>
+
+                    <div class=" col s2">
+                        <ul class="right hide-on-med-and-down">
+                            <li>
+                                <a class="waves-effect waves-light btn" id="but_search_items_no_aud">
+                                    Iniciar <i class="material-icons left">play_circle_outline</i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="row">
+                        <div class=" col s2">
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+<!-- Page Layout here -->
+
+
+<div class="col s12 m8 l9"> <!-- Note that "m8 l9" was added -->
+    <div id="content-table" class="col s10">
+
+    </div>
+</div>
+
+</div>
+
+
+<!--PRODUCCION-->
+<!--<script src="/auditoriasV3/resources/js/materialize.js"></script>-->
+<!--<script src="/auditoriasV3/resources/js/ajax_library_flascano.js"></script>-->
+<!--<script src="/auditoriasV3/resources/js/counts.js"></script>-->
+<!--<script src="/auditoriasV3/resources/js/counts_noaud.js"></script>-->
+
+<!--PRUEBA-->
+<script src="/resources/js/materialize.js"></script>
+<script src="/resources/js/ajax_library_flascano.js"></script>
+<script src="/resources/js/counts.js"></script>
+<script src="/resources/js/counts_noaud.js"></script>
+
+
+<!--PREPROS-->
+<!--<script src="../resources/js/materialize.js"></script>-->
+<!--<script src="../resources/js/ajax_library_flascano.js"></script>-->
+<!--<script src="../resources/js/counts.js"></script>-->
+<!--<script src="../resources/js/counts_noaud.js"></script>-->
+
 
 </body>
 </html>
