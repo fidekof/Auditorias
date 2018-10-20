@@ -1,0 +1,18 @@
+.row {
+    padding-bottom: 1rem;
+}
+
+#content-table {
+    padding-top: 3rem;
+}
+
+#content-table table {
+    padding-top: 3rem;
+    font-size: 0.8rem;
+    max-width: 50vw;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px darkgray solid;
+    box-shadow: 5px 3px 5px black;
+
+}

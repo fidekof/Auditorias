@@ -316,12 +316,12 @@ public class DaoAuditorias {
                 " P.FAMILIA,  " +
                 " P.NUMERO_CORTO, " +
                 " C.OBSERVACION, " +
-                " NVL(C.CONTEO1,0)/1000 CONTEO1, " +
-                " NVL(C.DIFERENCIA1,0)/1000 DIFERENCIA1, " +
-                " NVL(C.CONTEO2,0)/1000 CONTEO2, " +
-                " NVL(C.DIFERENCIA2,0)/1000 DIFERENCIA2, " +
-                " NVL(C.CONTEO3,0)/1000 CONTEO3, " +
-                " NVL(C.DIFERENCIA3,0)/1000 DIFERENCIA3, " +
+                " NVL(C.CONTEO1,-1000000)/1000 CONTEO1, " +
+                " NVL(C.DIFERENCIA1,-1000000)/1000 DIFERENCIA1, " +
+                " NVL(C.CONTEO2,-1000000)/1000 CONTEO2, " +
+                " NVL(C.DIFERENCIA2,-1000000)/1000 DIFERENCIA2, " +
+                " NVL(C.CONTEO3,-1000000)/1000 CONTEO3, " +
+                " NVL(C.DIFERENCIA3,-1000000)/1000 DIFERENCIA3, " +
                 " C.AUDITORIA, " +
                 " C.GRUPO ," +
                 " C.GRUPOC1, "+
@@ -441,5 +441,48 @@ public class DaoAuditorias {
             }
         }
         return salida;
+    }
+
+    public ArrayList<Conteo> searchResumenCountsBo(Conteo conteo, int typesearch, ConexionJde conexionMotorec) {
+        return getListResumenFromOpen(conteo.getSqlResumenByTypeSearch(typesearch), conexionMotorec);
+    }
+
+    private ArrayList<Conteo> getListResumenFromOpen(String sqlResumenByTypeSearch, ConexionJde conexionMotorec) {
+        ArrayList<Conteo> productArrayList = new ArrayList<Conteo>();
+        Statement stmt;
+        try {
+            stmt = conexionMotorec.getConexionOpenMotorec().getCon().createStatement();
+            ResultSet rs = stmt.executeQuery(sqlResumenByTypeSearch);
+            if (rs != null) {
+                Conteo conteo;
+                while (rs.next() == true) {
+                    conteo = new Conteo();
+                    conteo.setBodega(Tools.cleanString(rs.getString("BODEGA")));
+                    conteo.setUbicacion(Tools.cleanString(rs.getString("UBICACION")));
+
+
+                    conteo.setCantidad(Tools.cleanString(rs.getString("CANTIDAD")));
+
+                    conteo.setGrupo(Tools.cleanString(rs.getString("GRUPOC1")));
+                    conteo.setAuditoria(Tools.cleanString(rs.getString("AUDITORIA")));
+
+                    conteo.setConteo1(Tools.cleanString(rs.getString("CONTEO1")));
+                    conteo.setCostounitario(Tools.cleanString(rs.getString("COSTO_UNITARIO")));
+
+                    conteo.setConteo2(Tools.cleanString(rs.getString("CONTEO2")));
+
+                    conteo.setgrupoc1(Tools.cleanString(rs.getString("GRUPOC1")));
+
+                    conteo.generarConteoFinal();
+                    productArrayList.add(conteo);
+                }
+
+            }
+        } catch (SQLException e) {
+            productArrayList.add(new Conteo());
+        } finally {
+            return productArrayList;
+        }
+
     }
 }

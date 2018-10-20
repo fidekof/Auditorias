@@ -28,4 +28,10 @@ public class ControllerCounts {
     }
 
 
+    @GetMapping("resumen_conteo")
+    public String ResumenConteo(Locale locale, Model model) {
+        return "resumen_conteo";
+    }
+
+
 }

@@ -1,6 +1,6 @@
-/*.row{*/
-/*padding-bottom: 1rem;*/
-/*}*/
+.row {
+    padding-bottom: 1rem;
+}
 
 
 #content-table{
@@ -26,6 +26,7 @@ thead {
 
 table {
     width: 100%;
+    font-size: 0.8rem;
 }
 
 

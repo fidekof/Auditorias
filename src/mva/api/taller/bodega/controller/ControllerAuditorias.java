@@ -117,4 +117,12 @@ public class ControllerAuditorias {
         }
         return new ResponseEntity<String>(respuesta, HttpStatus.OK);
     }
+
+
+    @PostMapping("/resumen/{typesearch}")
+    public ResponseEntity<Collection<Conteo>> searchResumenCounts(@PathVariable int typesearch, @RequestBody Conteo conteo) {
+        Collection<Conteo> productCollection = this.serviceAuditorias.searchResumenCounts(conteo, typesearch);
+        return new ResponseEntity<Collection<Conteo>>(productCollection, HttpStatus.OK);
+    }
+
 }

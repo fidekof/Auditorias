@@ -101,4 +101,19 @@ public class BoAuditorias
         }
         return result;
     }
+
+    public Collection<Conteo> searchResumenCountsBo(Conteo conteo, int typesearch, ConexionJde conexionMotorec) {
+        ArrayList<Conteo> productArrayList = new ArrayList<Conteo>();
+        if (conexionMotorec != null) {
+            try {
+                DaoAuditorias daoAuditorias = new DaoAuditorias();
+                productArrayList = daoAuditorias.searchResumenCountsBo(conteo, typesearch, conexionMotorec);
+            } catch (Exception e) {
+                return productArrayList;
+            } finally {
+                conexionMotorec.desconectarJD();
+            }
+        }
+        return productArrayList;
+    }
 }

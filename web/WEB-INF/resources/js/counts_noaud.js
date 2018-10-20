@@ -16,7 +16,6 @@ let GLOBAL_TYPE_SEARCH = 1;
 
 
 let but_search_items_no_aud = document.getElementById("but_search_items_no_aud");
-
 let select_search_id = document.getElementById("select_search_id");
 let instance_select_search_id;
 

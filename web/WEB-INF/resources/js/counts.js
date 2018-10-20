@@ -1,4 +1,4 @@
-const produccion = false;
+const produccion = true;
 
 
 const
@@ -25,7 +25,7 @@ const quitarCaracteres = (cadena, caracteres) => {
 const ambienteruta = () => {
     let result = "";
     if (produccion === true) {
-        result = "auditoriasV4/"
+        result = "auditoriasV5/"
     }
     return result;
 };
@@ -466,13 +466,13 @@ const tablaResumenConteo = (data) => {
                    <td>${validarNulos(dato.descripcion)}</td>   
                    <td>${validarNulos(dato.cantidad)}</td>
                    <td>${validarNulos(dato.costounitario)}</td>   
-                   <td>${validarNulos(dato.conteofinal)}</td>  
-                   <td>${validarNulos(dato.conteo1)}</td>  
-                   <td>${validarNulos(dato.diferencia1)}</td>  
-                   <td>${validarNulos(dato.conteo2)}</td>  
-                   <td>${validarNulos(dato.diferencia2)}</td>  
-                   <td>${validarNulos(dato.conteo3)}</td>  
-                   <td>${validarNulos(dato.diferencia3)}</td>  
+                   <td>${validarNulos(validarVacios(dato.conteofinal))}</td>  
+                   <td>${validarNulos(validarVacios(dato.conteo1))}</td>  
+                   <td>${validarNulos(validarVacios(dato.diferencia1))}</td>  
+                   <td>${validarNulos(validarVacios(dato.conteo2))}</td>  
+                   <td>${validarNulos(validarVacios(dato.diferencia2))}</td>  
+                   <td>${validarNulos(validarVacios(dato.conteo3))}</td>  
+                   <td>${validarNulos(validarVacios(dato.diferencia3))}</td>  
                    <td>${validarNulos(dato.observacion1)} -- ${validarNulos(dato.observacion2)} -- ${validarNulos(dato.observacion3)} </td>   
                 </tr>
             `;
@@ -541,7 +541,7 @@ const tablaConteos = (data, typeAud, auditoria, grupo, conteo) => {
                 tabla += `
                     
                     <th style="display: none">${validarNulos(dato.familia)}</th> 
-                    <td><input id="${dato.bodega}${validarNulos2(dato.ubicacion)}${dato.codigo}${dato.cantidad}" onkeyup="saveWithIntro(event,'but_${dato.bodega}${validarNulos2(dato.ubicacion)}${dato.codigo}${dato.cantidad}')" type="text" value="${validarNulos(dataByCount.conteo)}"></td>
+                    <td><input id="${dato.bodega}${validarNulos2(dato.ubicacion)}${dato.codigo}${dato.cantidad}" onkeyup="saveWithIntro(event,'but_${dato.bodega}${validarNulos2(dato.ubicacion)}${dato.codigo}${dato.cantidad}')" type="text" value="${validarNulos(validarVacios(dataByCount.conteo))}"></td>
                     <td><input id="observacion_${dato.bodega}${validarNulos2(dato.ubicacion)}${dato.codigo}${dato.cantidad}" type="text" value="${validarNulos(dataByCount.observacion)}"></td>                    
                     <td><input id="new_ubicacion_${dato.bodega}${validarNulos2(dato.ubicacion)}${dato.codigo}${dato.cantidad}" type="text" value="${validarNulos(dato.observacion)}"></td>
                     <td>
@@ -568,6 +568,18 @@ const tablaConteos = (data, typeAud, auditoria, grupo, conteo) => {
 };
 
 
+const validarVacios = (valor) => {
+    result = '';
+    if (valor != null && valor.length > 0 && valor !== -9999.999 && valor !== '-9999.999') {
+        result = valor;
+    }
+    return result;
+};
+
+
+
+
+
 const saveWithIntro = (event, id_element) => {
     if (event.defaultPrevented) {
         return; // Do nothing if the event was already processed
@@ -586,9 +598,8 @@ const searchProductsForCounts = async (typeAud) => {
 
     // const productos = await getDataProducts();
     const productos = await getDataProductsFetch();
-    if (productos !== null && productos.length > 0) {
-        DrawCountsData(productos, typeAud);
-    }
+    DrawCountsData(productos, typeAud);
+
 };
 
 

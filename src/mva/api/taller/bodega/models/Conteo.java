@@ -24,12 +24,12 @@ public class Conteo {
             " P.FAMILIA,  " +
             " P.NUMERO_CORTO, " +
             " C.OBSERVACION, " +
-            " NVL(C.CONTEO1,0)/1000 CONTEO1, " +
-            " NVL(C.DIFERENCIA1,0)/1000 DIFERENCIA1, " +
-            " NVL(C.CONTEO2,0)/1000 CONTEO2, " +
-            " NVL(C.DIFERENCIA2,0)/1000 DIFERENCIA2, " +
-            " NVL(C.CONTEO3,0)/1000 CONTEO3, " +
-            " NVL(C.DIFERENCIA3,0)/1000 DIFERENCIA3, " +
+            " NVL(C.CONTEO1,-9999999)/1000  CONTEO1, " +
+            " NVL(C.DIFERENCIA1,-9999999)/1000  DIFERENCIA1, " +
+            " NVL(C.CONTEO2,-9999999)/1000  CONTEO2, " +
+            " NVL(C.DIFERENCIA2,-9999999)/1000  DIFERENCIA2, " +
+            " NVL(C.CONTEO3,-9999999)/1000  CONTEO3, " +
+            " NVL(C.DIFERENCIA3,-9999999)/1000  DIFERENCIA3, " +
             " C.AUDITORIA, " +
             " C.GRUPO ," +
             " C.GRUPOC1, " +
@@ -505,7 +505,8 @@ public class Conteo {
                         "    AND TRIM(P.CODIGO) = TRIM(C.CODIGO) " +
                         "    AND TRIM(P.BODEGA) = TRIM(C.BODEGA) " +
                         "    AND TRIM(P.UBICACION) = TRIM(C.UBICACION) " +
-                        "                         AND TRIM(C.AUDITORIA) = TRIM('" + this.auditoria + " ')) " +
+                        "    AND UPPER(TRIM(C.AUDITORIA)) = UPPER(TRIM('" + this.auditoria + " ')) " +
+                        " ) " +
                         "                         ORDER BY TRIM(UBICACION) ASC ";
                 break;
             }
@@ -518,7 +519,9 @@ public class Conteo {
                                 "    AND TRIM(P.CODIGO) = TRIM(C.CODIGO(+)) " +
                                 "    AND TRIM(P.BODEGA) = TRIM(C.BODEGA(+)) " +
                                 "    AND NVL(TRIM(P.UBICACION),'---') = TRIM(C.UBICACION(+)) " +
-                                "    AND TRIM(C.AUDITORIA(+)) = TRIM('" + this.auditoria + " ')) " +
+                                "  AND UPPER(TRIM(P.AUDITORIA)) = UPPER(TRIM('" + this.auditoria + " ')) AND UPPER(TRIM(C.AUDITORIA)) = UPPER(TRIM(P.AUDITORIA)) " +
+                                // -----------------------------------------------------------------------------
+                                " ) " +
                                 "    ORDER BY TRIM(UBICACION) ASC ";
                     } else {
                         if (this.conteocode.trim().compareToIgnoreCase(Conteo.CC_002) == 0) {
@@ -540,12 +543,12 @@ public class Conteo {
                                     " P.FAMILIA,   " +
                                     " P.NUMERO_CORTO,  " +
                                     " C.OBSERVACION, " +
-                                    " NVL(C.CONTEO1,0)/1000 CONTEO1,  " +
-                                    " NVL(C.DIFERENCIA1,0)/1000 DIFERENCIA1,  " +
-                                    " NVL(C.CONTEO2,0)/1000 CONTEO2,  " +
-                                    " NVL(C.DIFERENCIA2,0)/1000 DIFERENCIA2,  " +
-                                    " NVL(C.CONTEO3,0)/1000 CONTEO3,  " +
-                                    " NVL(C.DIFERENCIA3,0)/1000 DIFERENCIA3,  " +
+                                    " NVL(C.CONTEO1, -1000000)/1000 CONTEO1,  " +
+                                    " NVL(C.DIFERENCIA1,-9999999)/1000  DIFERENCIA1,  " +
+                                    " NVL(C.CONTEO2,-9999999)/1000  CONTEO2,  " +
+                                    " NVL(C.DIFERENCIA2,-9999999)/1000  DIFERENCIA2,  " +
+                                    " NVL(C.CONTEO3,-9999999)/1000  CONTEO3,  " +
+                                    " NVL(C.DIFERENCIA3,-9999999)/1000  DIFERENCIA3,  " +
                                     " C.AUDITORIA,  " +
                                     " C.GRUPO, " +
                                     " C.GRUPOC1, " +
@@ -560,7 +563,7 @@ public class Conteo {
                                     " AND TRIM(P.CODIGO) = TRIM(C.CODIGO(+))   " +
                                     " AND TRIM(P.BODEGA) = TRIM(C.BODEGA(+))   " +
                                     " AND TRIM(P.UBICACION) = TRIM(C.UBICACION(+))   " +
-                                    " AND TRIM(C.AUDITORIA(+)) = TRIM('" + this.auditoria + "')   " +
+                                    " AND UPPER(TRIM(P.AUDITORIA)) = UPPER(TRIM('" + this.auditoria + " ')) AND UPPER(TRIM(C.AUDITORIA)) = UPPER(TRIM(P.AUDITORIA))   " +
                                     " AND TRIM(P.CODIGO)  NOT IN (SELECT TRIM(CV.CODIGO) FROM  JDE_TO_OPEN_CONTEO CV  WHERE  TRIM(CV.AUDITORIA) = TRIM('" + this.auditoria + "') AND TRIM(CV.BODEGA) = TRIM('" + this.bodega + "')))  " +
                                     " ORDER BY TRIM(UBICACION) ASC ";
                         } else {
@@ -583,12 +586,12 @@ public class Conteo {
                                         " P.FAMILIA,   " +
                                         " P.NUMERO_CORTO,  " +
                                         " C.OBSERVACION, " +
-                                        " NVL(C.CONTEO1,0)/1000 CONTEO1,  " +
-                                        " NVL(C.DIFERENCIA1,0)/1000 DIFERENCIA1,  " +
-                                        " NVL(C.CONTEO2,0)/1000 CONTEO2,  " +
-                                        " NVL(C.DIFERENCIA2,0)/1000 DIFERENCIA2,  " +
-                                        " NVL(C.CONTEO3,0)/1000 CONTEO3,  " +
-                                        " NVL(C.DIFERENCIA3,0)/1000 DIFERENCIA3,  " +
+                                        " NVL(C.CONTEO1,-9999999)/1000  CONTEO1,  " +
+                                        " NVL(C.DIFERENCIA1,-9999999)/1000  DIFERENCIA1,  " +
+                                        " NVL(C.CONTEO2,-9999999)/1000  CONTEO2,  " +
+                                        " NVL(C.DIFERENCIA2,-9999999)/1000  DIFERENCIA2,  " +
+                                        " NVL(C.CONTEO3,-9999999)/1000  CONTEO3,  " +
+                                        " NVL(C.DIFERENCIA3,-9999999)/1000  DIFERENCIA3,  " +
                                         " C.AUDITORIA,  " +
                                         " C.GRUPO, " +
                                         " C.GRUPOC1, " +
@@ -603,7 +606,7 @@ public class Conteo {
                                         " AND TRIM(P.CODIGO) = TRIM(C.CODIGO(+))   " +
                                         " AND TRIM(P.BODEGA) = TRIM(C.BODEGA(+))   " +
                                         " AND TRIM(P.UBICACION) = TRIM(C.UBICACION(+))   " +
-                                        " AND TRIM(C.AUDITORIA(+)) = TRIM('" + this.auditoria + "')   " +
+                                        " AND UPPER(TRIM(P.AUDITORIA)) = UPPER(TRIM('" + this.auditoria + " ')) AND UPPER(TRIM(C.AUDITORIA)) = UPPER(TRIM(P.AUDITORIA))   " +
                                         " AND TRIM(P.CODIGO)  NOT IN (SELECT TRIM(CV.CODIGO) FROM  JDE_TO_OPEN_CONTEO CV  WHERE  TRIM(CV.AUDITORIA) = TRIM('" + this.auditoria + "') AND TRIM(CV.BODEGA) = TRIM('" + this.bodega + "')))  " +
                                         " ORDER BY TRIM(UBICACION) ASC ";
                             }
@@ -624,7 +627,7 @@ public class Conteo {
                                 "    AND TRIM(P.CODIGO) LIKE TRIM('" + this.codigo.trim() + "%') " +
                                 "    AND TRIM(P.BODEGA) = TRIM(C.BODEGA(+)) " +
                                 "    AND NVL(TRIM(P.UBICACION),'---') = TRIM(C.UBICACION(+)) " +
-                                "    AND TRIM(C.AUDITORIA(+)) = TRIM('" + this.auditoria + " ')) " +
+                                "    AND UPPER(TRIM(P.AUDITORIA)) = UPPER(TRIM('" + this.auditoria + " ')) AND UPPER(TRIM(C.AUDITORIA)) = UPPER(TRIM(P.AUDITORIA))) " +
                                 "    ORDER BY TRIM(UBICACION) ASC ";
                     } else {
                         if (this.conteocode.trim().compareToIgnoreCase(Conteo.CC_002) == 0) {
@@ -648,12 +651,12 @@ public class Conteo {
                                     " P.FAMILIA,   " +
                                     " P.NUMERO_CORTO,  " +
                                     " C.OBSERVACION, " +
-                                    " NVL(C.CONTEO1,0)/1000 CONTEO1,  " +
-                                    " NVL(C.DIFERENCIA1,0)/1000 DIFERENCIA1,  " +
-                                    " NVL(C.CONTEO2,0)/1000 CONTEO2,  " +
-                                    " NVL(C.DIFERENCIA2,0)/1000 DIFERENCIA2,  " +
-                                    " NVL(C.CONTEO3,0)/1000 CONTEO3,  " +
-                                    " NVL(C.DIFERENCIA3,0)/1000 DIFERENCIA3,  " +
+                                    " NVL(C.CONTEO1,-9999999)/1000  CONTEO1,  " +
+                                    " NVL(C.DIFERENCIA1,-9999999)/1000  DIFERENCIA1,  " +
+                                    " NVL(C.CONTEO2,-9999999)/1000  CONTEO2,  " +
+                                    " NVL(C.DIFERENCIA2,-9999999)/1000  DIFERENCIA2,  " +
+                                    " NVL(C.CONTEO3,-9999999)/1000  CONTEO3,  " +
+                                    " NVL(C.DIFERENCIA3,-9999999)/1000  DIFERENCIA3,  " +
                                     " C.AUDITORIA,  " +
                                     " C.GRUPO, " +
                                     " C.GRUPOC1, " +
@@ -669,7 +672,7 @@ public class Conteo {
                                     "    AND TRIM(P.CODIGO) LIKE TRIM('" + this.codigo.trim() + "%') " +
                                     " AND TRIM(P.BODEGA) = TRIM(C.BODEGA(+))   " +
                                     " AND TRIM(P.UBICACION) = TRIM(C.UBICACION(+))   " +
-                                    " AND TRIM(C.AUDITORIA(+)) = TRIM('" + this.auditoria + "')   " +
+                                    " AND UPPER(TRIM(P.AUDITORIA)) = UPPER(TRIM('" + this.auditoria + " ')) AND UPPER(TRIM(C.AUDITORIA)) = UPPER(TRIM(P.AUDITORIA))   " +
                                     " AND TRIM(P.CODIGO)  NOT IN (SELECT TRIM(CV.CODIGO) FROM  JDE_TO_OPEN_CONTEO CV  WHERE  TRIM(CV.AUDITORIA) = TRIM('" + this.auditoria + "') AND TRIM(CV.BODEGA) = TRIM('" + this.bodega + "')))  " +
                                     " ORDER BY TRIM(UBICACION) ASC ";
                         } else {
@@ -693,12 +696,12 @@ public class Conteo {
                                         " P.FAMILIA,   " +
                                         " P.NUMERO_CORTO,  " +
                                         " C.OBSERVACION, " +
-                                        " NVL(C.CONTEO1,0)/1000 CONTEO1,  " +
-                                        " NVL(C.DIFERENCIA1,0)/1000 DIFERENCIA1,  " +
-                                        " NVL(C.CONTEO2,0)/1000 CONTEO2,  " +
-                                        " NVL(C.DIFERENCIA2,0)/1000 DIFERENCIA2,  " +
-                                        " NVL(C.CONTEO3,0)/1000 CONTEO3,  " +
-                                        " NVL(C.DIFERENCIA3,0)/1000 DIFERENCIA3,  " +
+                                        " NVL(C.CONTEO1,-9999999)/1000  CONTEO1,  " +
+                                        " NVL(C.DIFERENCIA1,-9999999)/1000  DIFERENCIA1,  " +
+                                        " NVL(C.CONTEO2,-9999999)/1000  CONTEO2,  " +
+                                        " NVL(C.DIFERENCIA2,-9999999)/1000  DIFERENCIA2,  " +
+                                        " NVL(C.CONTEO3,-9999999)/1000  CONTEO3,  " +
+                                        " NVL(C.DIFERENCIA3,-9999999)/1000  DIFERENCIA3,  " +
                                         " C.AUDITORIA,  " +
                                         " C.GRUPO, " +
                                         " C.GRUPOC1, " +
@@ -714,7 +717,7 @@ public class Conteo {
                                         "    AND TRIM(P.CODIGO) LIKE TRIM('" + this.codigo.trim() + "%') " +
                                         " AND TRIM(P.BODEGA) = TRIM(C.BODEGA(+))   " +
                                         " AND TRIM(P.UBICACION) = TRIM(C.UBICACION(+))   " +
-                                        " AND TRIM(C.AUDITORIA(+)) = TRIM('" + this.auditoria + "')   " +
+                                        " AND UPPER(TRIM(P.AUDITORIA)) = UPPER(TRIM('" + this.auditoria + " ')) AND UPPER(TRIM(C.AUDITORIA)) = UPPER(TRIM(P.AUDITORIA))   " +
                                         " AND TRIM(P.CODIGO)  NOT IN (SELECT TRIM(CV.CODIGO) FROM  JDE_TO_OPEN_CONTEO CV  WHERE  TRIM(CV.AUDITORIA) = TRIM('" + this.auditoria + "') AND TRIM(CV.BODEGA) = TRIM('" + this.bodega + "')))  " +
                                         " ORDER BY TRIM(UBICACION) ASC ";
                             }
@@ -735,7 +738,7 @@ public class Conteo {
                                 "    AND TRIM(P.BODEGA) = TRIM(C.BODEGA(+)) " +
                                 "    AND NVL(TRIM(P.UBICACION),'---') = TRIM(C.UBICACION(+)) " +
                                 "    AND UPPER(TRIM(P.UBICACION)) LIKE UPPER(TRIM('" + this.ubicacion.trim() + "%'))" +
-                                "    AND UPPER(TRIM(C.AUDITORIA(+))) = UPPER(TRIM('" + this.auditoria + " '))) " +
+                                "   AND UPPER(TRIM(P.AUDITORIA)) = UPPER(TRIM('" + this.auditoria + " ')) AND UPPER(TRIM(C.AUDITORIA)) = UPPER(TRIM(P.AUDITORIA))) " +
                                 "    ORDER BY TRIM(UBICACION) ASC ";
                     } else {
                         if (this.conteocode.trim().compareToIgnoreCase(Conteo.CC_002) == 0) {
@@ -758,12 +761,12 @@ public class Conteo {
                                     " P.FAMILIA,   " +
                                     " P.NUMERO_CORTO,  " +
                                     " C.OBSERVACION, " +
-                                    " NVL(C.CONTEO1,0)/1000 CONTEO1,  " +
-                                    " NVL(C.DIFERENCIA1,0)/1000 DIFERENCIA1,  " +
-                                    " NVL(C.CONTEO2,0)/1000 CONTEO2,  " +
-                                    " NVL(C.DIFERENCIA2,0)/1000 DIFERENCIA2,  " +
-                                    " NVL(C.CONTEO3,0)/1000 CONTEO3,  " +
-                                    " NVL(C.DIFERENCIA3,0)/1000 DIFERENCIA3,  " +
+                                    " NVL(C.CONTEO1,-9999999)/1000  CONTEO1,  " +
+                                    " NVL(C.DIFERENCIA1,-9999999)/1000  DIFERENCIA1,  " +
+                                    " NVL(C.CONTEO2,-9999999)/1000  CONTEO2,  " +
+                                    " NVL(C.DIFERENCIA2,-9999999)/1000  DIFERENCIA2,  " +
+                                    " NVL(C.CONTEO3,-9999999)/1000  CONTEO3,  " +
+                                    " NVL(C.DIFERENCIA3,-9999999)/1000  DIFERENCIA3,  " +
                                     " C.AUDITORIA,  " +
                                     " C.GRUPO, " +
                                     " C.GRUPOC1, " +
@@ -803,12 +806,12 @@ public class Conteo {
                                         " P.FAMILIA,   " +
                                         " P.NUMERO_CORTO,  " +
                                         " C.OBSERVACION, " +
-                                        " NVL(C.CONTEO1,0)/1000 CONTEO1,  " +
-                                        " NVL(C.DIFERENCIA1,0)/1000 DIFERENCIA1,  " +
-                                        " NVL(C.CONTEO2,0)/1000 CONTEO2,  " +
-                                        " NVL(C.DIFERENCIA2,0)/1000 DIFERENCIA2,  " +
-                                        " NVL(C.CONTEO3,0)/1000 CONTEO3,  " +
-                                        " NVL(C.DIFERENCIA3,0)/1000 DIFERENCIA3,  " +
+                                        " NVL(C.CONTEO1,-9999999)/1000  CONTEO1,  " +
+                                        " NVL(C.DIFERENCIA1,-9999999)/1000  DIFERENCIA1,  " +
+                                        " NVL(C.CONTEO2,-9999999)/1000  CONTEO2,  " +
+                                        " NVL(C.DIFERENCIA2,-9999999)/1000  DIFERENCIA2,  " +
+                                        " NVL(C.CONTEO3,-9999999)/1000  CONTEO3,  " +
+                                        " NVL(C.DIFERENCIA3,-9999999)/1000  DIFERENCIA3,  " +
                                         " C.AUDITORIA,  " +
                                         " C.GRUPO, " +
                                         " C.GRUPOC1, " +
@@ -824,7 +827,7 @@ public class Conteo {
                                         " AND TRIM(P.BODEGA) = TRIM(C.BODEGA(+))   " +
                                         " AND UPPER(TRIM(P.UBICACION)) = UPPER(TRIM(C.UBICACION(+)))   " +
                                         "    AND UPPER(TRIM(P.UBICACION)) LIKE UPPER(TRIM('" + this.ubicacion.trim() + "%'))" +
-                                        " AND TRIM(C.AUDITORIA(+)) = TRIM('" + this.auditoria + "')   " +
+                                        " AND UPPER(TRIM(P.AUDITORIA)) = UPPER(TRIM('" + this.auditoria + " ')) AND UPPER(TRIM(C.AUDITORIA)) = UPPER(TRIM(P.AUDITORIA))   " +
                                         " AND TRIM(P.CODIGO)  NOT IN (SELECT TRIM(CV.CODIGO) FROM  JDE_TO_OPEN_CONTEO CV  WHERE  UPPER(TRIM(CV.AUDITORIA)) = UPPER(TRIM('" + this.auditoria + "')) AND UPPER(TRIM(CV.BODEGA)) = UPPER(TRIM('" + this.bodega + "'))))  " +
                                         " ORDER BY TRIM(UBICACION) ASC ";
                             }
@@ -844,7 +847,7 @@ public class Conteo {
                                 "    AND TRIM(P.BODEGA) = TRIM(C.BODEGA(+)) " +
                                 "    AND NVL(TRIM(P.UBICACION),'---') = TRIM(C.UBICACION(+)) " +
                                 "    AND UPPER(TRIM(P.UBICACION)) BETWEEN UPPER(TRIM('" + this.ubicacion + "')) AND UPPER(TRIM('" + this.observacion + "')) " +
-                                "    AND UPPER(TRIM(C.AUDITORIA(+))) = UPPER(TRIM('" + this.auditoria + " '))) " +
+                                "   AND UPPER(TRIM(P.AUDITORIA)) = UPPER(TRIM('" + this.auditoria + " ')) AND UPPER(TRIM(C.AUDITORIA)) = UPPER(TRIM(P.AUDITORIA))) " +
                                 "    ORDER BY TRIM(UBICACION) ASC ";
                     } else {
                         if (this.conteocode.trim().compareToIgnoreCase(Conteo.CC_002) == 0) {
@@ -867,12 +870,12 @@ public class Conteo {
                                     " P.FAMILIA,   " +
                                     " P.NUMERO_CORTO,  " +
                                     " C.OBSERVACION, " +
-                                    " NVL(C.CONTEO1,0)/1000 CONTEO1,  " +
-                                    " NVL(C.DIFERENCIA1,0)/1000 DIFERENCIA1,  " +
-                                    " NVL(C.CONTEO2,0)/1000 CONTEO2,  " +
-                                    " NVL(C.DIFERENCIA2,0)/1000 DIFERENCIA2,  " +
-                                    " NVL(C.CONTEO3,0)/1000 CONTEO3,  " +
-                                    " NVL(C.DIFERENCIA3,0)/1000 DIFERENCIA3,  " +
+                                    " NVL(C.CONTEO1,-9999999)/1000  CONTEO1,  " +
+                                    " NVL(C.DIFERENCIA1,-9999999)/1000  DIFERENCIA1,  " +
+                                    " NVL(C.CONTEO2,-9999999)/1000  CONTEO2,  " +
+                                    " NVL(C.DIFERENCIA2,-9999999)/1000  DIFERENCIA2,  " +
+                                    " NVL(C.CONTEO3,-9999999)/1000  CONTEO3,  " +
+                                    " NVL(C.DIFERENCIA3,-9999999)/1000  DIFERENCIA3,  " +
                                     " C.AUDITORIA,  " +
                                     " C.GRUPO, " +
                                     " C.GRUPOC1, " +
@@ -912,12 +915,12 @@ public class Conteo {
                                         " P.FAMILIA,   " +
                                         " P.NUMERO_CORTO,  " +
                                         " C.OBSERVACION, " +
-                                        " NVL(C.CONTEO1,0)/1000 CONTEO1,  " +
-                                        " NVL(C.DIFERENCIA1,0)/1000 DIFERENCIA1,  " +
-                                        " NVL(C.CONTEO2,0)/1000 CONTEO2,  " +
-                                        " NVL(C.DIFERENCIA2,0)/1000 DIFERENCIA2,  " +
-                                        " NVL(C.CONTEO3,0)/1000 CONTEO3,  " +
-                                        " NVL(C.DIFERENCIA3,0)/1000 DIFERENCIA3,  " +
+                                        " NVL(C.CONTEO1,-9999999)/1000  CONTEO1,  " +
+                                        " NVL(C.DIFERENCIA1,-9999999)/1000  DIFERENCIA1,  " +
+                                        " NVL(C.CONTEO2,-9999999)/1000  CONTEO2,  " +
+                                        " NVL(C.DIFERENCIA2,-9999999)/1000  DIFERENCIA2,  " +
+                                        " NVL(C.CONTEO3,-9999999)/1000  CONTEO3,  " +
+                                        " NVL(C.DIFERENCIA3,-9999999)/1000  DIFERENCIA3,  " +
                                         " C.AUDITORIA,  " +
                                         " C.GRUPO, " +
                                         " C.GRUPOC1, " +
@@ -933,7 +936,7 @@ public class Conteo {
                                         " AND TRIM(P.BODEGA) = TRIM(C.BODEGA(+))   " +
                                         " AND UPPER(TRIM(P.UBICACION)) = UPPER(TRIM(C.UBICACION(+)))   " +
                                         "    AND UPPER(TRIM(P.UBICACION)) BETWEEN UPPER(TRIM('" + this.ubicacion + "')) AND UPPER(TRIM('" + this.observacion + "')) " +
-                                        " AND TRIM(C.AUDITORIA(+)) = TRIM('" + this.auditoria + "')   " +
+                                        " AND UPPER(TRIM(P.AUDITORIA)) = UPPER(TRIM('" + this.auditoria + " ')) AND UPPER(TRIM(C.AUDITORIA)) = UPPER(TRIM(P.AUDITORIA))   " +
                                         " AND TRIM(P.CODIGO)  NOT IN (SELECT TRIM(CV.CODIGO) FROM  JDE_TO_OPEN_CONTEO CV  WHERE  UPPER(TRIM(CV.AUDITORIA)) = UPPER(TRIM('" + this.auditoria + "')) AND UPPER(TRIM(CV.BODEGA)) = UPPER(TRIM('" + this.bodega + "'))))  " +
                                         " ORDER BY TRIM(UBICACION) ASC ";
                             }
@@ -974,6 +977,13 @@ public class Conteo {
         diferencia2 = Tools.stringToDoube(this.diferencia2);
         conteo3 = Tools.stringToDoube(this.conteo3);
         diferencia3 = Tools.stringToDoube(this.diferencia3);
+
+        conteo1 = (conteo1 == -9999.999) ? 0 : conteo1;
+        diferencia1 = (diferencia1 == -9999.999) ? 0 : diferencia1;
+        conteo2 = (conteo2 == -9999.999) ? 0 : conteo2;
+        diferencia2 = (diferencia2 == -9999.999) ? 0 : diferencia2;
+        conteo3 = (conteo3 == -9999.999) ? 0 : conteo3;
+        diferencia3 = (diferencia3 == -9999.999) ? 0 : diferencia3;
         if (conteo1 == 0 && diferencia1 == 0 && conteo2 == 0 && diferencia2 == 0 && conteo3 == 0 && diferencia3 == 0) {
             cfinal = cantidad * (-1);
         } else {
@@ -1010,4 +1020,449 @@ public class Conteo {
     }
 
 
+    public String getSqlResumenByTypeSearch(int typesearch) {
+        String where = " ";
+        String sql = "";
+        switch (typesearch) {
+
+            case Conteo.BUSCAR_TODO: {
+                sql = Conteo.SELECT_CONTEO;
+                if (this.conteocode != null) {
+                    if (this.conteocode.trim().compareToIgnoreCase(Conteo.CC_001) == 0) {
+                        where = " SELECT AUDITORIA, BODEGA, GRUPOC1, SUM(CONTEO1) CONTEO1, COUNT(UBICACION) UBICACION, SUM(CANTIDAD) CANTIDAD, SUM(COSTO_UNITARIO * CANTIDAD) COSTO_UNITARIO, SUM(CONTEO1*COSTO_UNITARIO)CONTEO2 " +
+                                " FROM " +
+                                " (" +
+                                " SELECT TRIM(C.AUDITORIA) AUDITORIA, " +
+                                " UPPER(TRIM(C.BODEGA))    BODEGA, " +
+                                " UPPER(TRIM(C.GRUPOC1))   GRUPOC1, " +
+                                " NVL(C.CONTEO1, 0) / 1000  CONTEO1, " +
+                                " UPPER(TRIM(C.UBICACION)) UBICACION, " +
+                                " (NVL(C.CANTIDAD, 0) / 1000) CANTIDAD, " +
+                                " (NVL(C.COSTO_UNITARIO, 0) / 10000) COSTO_UNITARIO, " +
+                                " (NVL(C.CONTEO1, 0) / 10000) CONTEO2 " +
+                                " FROM JDE_TO_OPEN_CONTEO C " +
+                                " WHERE UPPER(TRIM(C.AUDITORIA)) = UPPER(TRIM('" + this.auditoria + "')) " +
+                                " AND UPPER(TRIM(C.BODEGA)) = UPPER(TRIM('" + this.bodega + "')) " +
+                                " AND NVL(C.DIFERENCIA1,-999999) != -999999 " +
+                                " UNION " +
+                                " SELECT UPPER(TRIM(P.AUDITORIA))    AUDITORIA, " +
+                                " UPPER(TRIM(P.BODEGA))       BODEGA, " +
+                                " TO_NCHAR('FALTANTE') GRUPOC1, " +
+                                " 0                    CONTEO1, " +
+                                " UPPER(TRIM(NVL(P.UBICACION,'---')))  UBICACION, " +
+                                " (NVL(P.CANTIDAD, 0) / 100)  CANTIDAD, " +
+                                " (NVL(P.COSTO_UNITARIO, 0) / 10000) COSTO_UNITARIO, " +
+                                " (NVL(P.COSTO_UNITARIO, 0) / 10000) CONTEO2 " +
+                                " FROM JDE_TO_OPEN_PRODUCTO P " +
+                                " WHERE UPPER(TRIM(P.AUDITORIA)) = UPPER(TRIM('" + this.auditoria + "')) " +
+                                " AND UPPER(TRIM(P.BODEGA)) = UPPER(TRIM('" + this.bodega + "')) " +
+                                " AND UPPER(TRIM(P.CODIGO)) NOT IN (SELECT UPPER(TRIM(CV.CODIGO)) FROM JDE_TO_OPEN_CONTEO CV WHERE " +
+                                " UPPER(TRIM(CV.AUDITORIA)) = UPPER(TRIM('" + this.auditoria + "')) AND " +
+                                " NVL(CV.DIFERENCIA1,-999999) != -999999 AND " +
+                                " UPPER(TRIM(CV.BODEGA)) = UPPER(TRIM('" + this.bodega + "'))))  RESUMEN " +
+                                " GROUP BY RESUMEN.AUDITORIA, RESUMEN.BODEGA, RESUMEN.GRUPOC1 " +
+                                " ORDER BY RESUMEN.GRUPOC1 ";
+                    } else {
+                        if (this.conteocode.trim().compareToIgnoreCase(Conteo.CC_002) == 0) {
+                            where = " SELECT TRIM(C.AUDITORIA) AUDITORIA,  TRIM(C.BODEGA) BODEGA, TRIM(C.GRUPOC2)  GRUPOC1, SUM(NVL(C.CONTEO1,0)/1000) CONTEO1, COUNT(C.UBICACION) UBICACION, SUM(NVL(C.CANTIDAD,0)/100) CANTIDAD, SUM(NVL(C.COSTO_UNITARIO,0)) COSTO_UNITARIO FROM JDE_TO_OPEN_CONTEO C WHERE TRIM(C.AUDITORIA) = TRIM('" + this.auditoria + "') AND TRIM(C.BODEGA) = TRIM('" + this.bodega + "')  AND NVL(C.DIFERENCIA1,-999999)!= 0 GROUP BY C.AUDITORIA, C.GRUPOC2, C.BODEGA " +
+                                    " UNION " +
+                                    " SELECT TRIM(P.AUDITORIA) AUDITORIA, TRIM(P.BODEGA) BODEGA, TO_NCHAR('G999') GRUPOC1,         -9999 AS CONTEO1, COUNT(P.UBICACION) UBICACION, SUM(NVL(P.CANTIDAD,0)/100) CANTIDAD,            SUM(NVL(P.COSTO_UNITARIO,0)) COSTO_UNITARIO FROM JDE_TO_OPEN_PRODUCTO P WHERE TRIM(P.AUDITORIA) = TRIM('" + this.auditoria + "') AND TRIM(P.BODEGA) = TRIM('" + this.bodega + "') AND TRIM(P.CODIGO)  NOT IN (SELECT TRIM(CV.CODIGO) FROM  JDE_TO_OPEN_CONTEO CV  WHERE  TRIM(CV.AUDITORIA) = TRIM('" + this.auditoria + "') AND TRIM(CV.BODEGA) = TRIM('" + this.bodega + "')) GROUP BY P.AUDITORIA, P.BODEGA ";
+                        } else {
+                            if (this.conteocode.trim().compareToIgnoreCase(Conteo.CC_003) == 0) {
+                                where = " WHERE   " +
+                                        " TRIM(P.BODEGA) =  TRIM('" + this.bodega + "')   " +
+                                        " AND TRIM(P.CODIGO) = TRIM(C.CODIGO)   " +
+                                        " AND TRIM(P.BODEGA) = TRIM(C.BODEGA)   " +
+                                        "    AND NVL(TRIM(P.UBICACION),'---') = TRIM(C.UBICACION) " +
+                                        " AND TRIM(C.AUDITORIA) = TRIM('" + this.auditoria + "')   " +
+                                        " AND ((NVL(C.DIFERENCIA1,-999999) != NVL(C.DIFERENCIA2,-888888) AND NVL(C.DIFERENCIA1,-999999)!=0 AND NVL(C.DIFERENCIA2,-888888)!=0)) " +
+                                        " UNION " +
+                                        " SELECT   " +
+                                        " P.BODEGA, " +
+                                        " P.UBICACION, " +
+                                        " P.CODIGO,  " +
+                                        " NVL(P.CANTIDAD,0)/100 CANTIDAD,  " +
+                                        " P.DESCRIPCION || P.DESCRIPCION2 AS DESCRIPCION,  " +
+                                        " NVL(P.COSTO_UNITARIO,0)/10000  COSTO_UNITARIO,  " +
+                                        " P.FAMILIA,   " +
+                                        " P.NUMERO_CORTO,  " +
+                                        " C.OBSERVACION, " +
+                                        " NVL(C.CONTEO1,-9999999)/1000  CONTEO1,  " +
+                                        " NVL(C.DIFERENCIA1,-9999999)/1000  DIFERENCIA1,  " +
+                                        " NVL(C.CONTEO2,-9999999)/1000  CONTEO2,  " +
+                                        " NVL(C.DIFERENCIA2,-9999999)/1000  DIFERENCIA2,  " +
+                                        " NVL(C.CONTEO3,-9999999)/1000  CONTEO3,  " +
+                                        " NVL(C.DIFERENCIA3,-9999999)/1000  DIFERENCIA3,  " +
+                                        " C.AUDITORIA,  " +
+                                        " C.GRUPO, " +
+                                        " C.GRUPOC1, " +
+                                        " C.GRUPOC2, " +
+                                        " C.GRUPOC3, " +
+                                        " C.OBSERVACIONC1, " +
+                                        " C.OBSERVACIONC2, " +
+                                        " C.OBSERVACIONC3 " +
+                                        " FROM JDE_TO_OPEN_PRODUCTO P, JDE_TO_OPEN_CONTEO C   " +
+                                        " WHERE   " +
+                                        " TRIM(P.BODEGA) =  TRIM('" + this.bodega + "')   " +
+                                        " AND TRIM(P.CODIGO) = TRIM(C.CODIGO(+))   " +
+                                        " AND TRIM(P.BODEGA) = TRIM(C.BODEGA(+))   " +
+                                        " AND TRIM(P.UBICACION) = TRIM(C.UBICACION(+))   " +
+                                        " AND UPPER(TRIM(P.AUDITORIA)) = UPPER(TRIM('" + this.auditoria + " ')) AND UPPER(TRIM(C.AUDITORIA)) = UPPER(TRIM(P.AUDITORIA))   " +
+                                        " AND TRIM(P.CODIGO)  NOT IN (SELECT TRIM(CV.CODIGO) FROM  JDE_TO_OPEN_CONTEO CV  WHERE  TRIM(CV.AUDITORIA) = TRIM('" + this.auditoria + "') AND TRIM(CV.BODEGA) = TRIM('" + this.bodega + "')))  " +
+                                        " ORDER BY TRIM(UBICACION) ASC ";
+                            }
+                        }
+                    }
+                }
+                break;
+            }
+
+
+            case Conteo.BUSCAR_POR_ITEM: {
+                sql = Conteo.SELECT_CONTEO;
+                if (this.conteocode != null) {
+                    if (this.conteocode.trim().compareToIgnoreCase(Conteo.CC_001) == 0) {
+                        where = "    WHERE " +
+                                "    TRIM(P.BODEGA) =  TRIM('" + this.bodega + " ') " +
+                                "    AND TRIM(P.CODIGO) = TRIM(C.CODIGO(+)) " +
+                                "    AND TRIM(P.CODIGO) LIKE TRIM('" + this.codigo.trim() + "%') " +
+                                "    AND TRIM(P.BODEGA) = TRIM(C.BODEGA(+)) " +
+                                "    AND NVL(TRIM(P.UBICACION),'---') = TRIM(C.UBICACION(+)) " +
+                                "    AND UPPER(TRIM(P.AUDITORIA)) = UPPER(TRIM('" + this.auditoria + " ')) AND UPPER(TRIM(C.AUDITORIA)) = UPPER(TRIM(P.AUDITORIA))) " +
+                                "    ORDER BY TRIM(UBICACION) ASC ";
+                    } else {
+                        if (this.conteocode.trim().compareToIgnoreCase(Conteo.CC_002) == 0) {
+                            where = "  WHERE   " +
+                                    " TRIM(P.BODEGA) =  TRIM('" + this.bodega + "')   " +
+                                    " AND TRIM(P.CODIGO) = TRIM(C.CODIGO)   " +
+                                    "    AND TRIM(P.CODIGO) LIKE TRIM('" + this.codigo.trim() + "%') " +
+                                    " AND TRIM(P.BODEGA) = TRIM(C.BODEGA)   " +
+                                    "    AND NVL(TRIM(P.UBICACION),'---') = TRIM(C.UBICACION) " +
+                                    " AND TRIM(C.AUDITORIA) = TRIM('" + this.auditoria + "')   " +
+
+                                    " AND NVL(C.DIFERENCIA1,-999999)!= 0 " +
+                                    " UNION " +
+                                    " SELECT   " +
+                                    " P.BODEGA, " +
+                                    " P.UBICACION, " +
+                                    " P.CODIGO,  " +
+                                    " NVL(P.CANTIDAD,0)/100 CANTIDAD,  " +
+                                    " P.DESCRIPCION || P.DESCRIPCION2 AS DESCRIPCION,  " +
+                                    " NVL(P.COSTO_UNITARIO,0)/10000  COSTO_UNITARIO,  " +
+                                    " P.FAMILIA,   " +
+                                    " P.NUMERO_CORTO,  " +
+                                    " C.OBSERVACION, " +
+                                    " NVL(C.CONTEO1,-9999999)/1000  CONTEO1,  " +
+                                    " NVL(C.DIFERENCIA1,-9999999)/1000  DIFERENCIA1,  " +
+                                    " NVL(C.CONTEO2,-9999999)/1000  CONTEO2,  " +
+                                    " NVL(C.DIFERENCIA2,-9999999)/1000  DIFERENCIA2,  " +
+                                    " NVL(C.CONTEO3,-9999999)/1000  CONTEO3,  " +
+                                    " NVL(C.DIFERENCIA3,-9999999)/1000  DIFERENCIA3,  " +
+                                    " C.AUDITORIA,  " +
+                                    " C.GRUPO, " +
+                                    " C.GRUPOC1, " +
+                                    " C.GRUPOC2, " +
+                                    " C.GRUPOC3, " +
+                                    " C.OBSERVACIONC1, " +
+                                    " C.OBSERVACIONC2, " +
+                                    " C.OBSERVACIONC3 " +
+                                    " FROM JDE_TO_OPEN_PRODUCTO P, JDE_TO_OPEN_CONTEO C   " +
+                                    " WHERE   " +
+                                    " TRIM(P.BODEGA) =  TRIM('" + this.bodega + "')   " +
+                                    " AND TRIM(P.CODIGO) = TRIM(C.CODIGO(+))   " +
+                                    "    AND TRIM(P.CODIGO) LIKE TRIM('" + this.codigo.trim() + "%') " +
+                                    " AND TRIM(P.BODEGA) = TRIM(C.BODEGA(+))   " +
+                                    " AND TRIM(P.UBICACION) = TRIM(C.UBICACION(+))   " +
+                                    " AND UPPER(TRIM(P.AUDITORIA)) = UPPER(TRIM('" + this.auditoria + " ')) AND UPPER(TRIM(C.AUDITORIA)) = UPPER(TRIM(P.AUDITORIA))   " +
+                                    " AND TRIM(P.CODIGO)  NOT IN (SELECT TRIM(CV.CODIGO) FROM  JDE_TO_OPEN_CONTEO CV  WHERE  TRIM(CV.AUDITORIA) = TRIM('" + this.auditoria + "') AND TRIM(CV.BODEGA) = TRIM('" + this.bodega + "')))  " +
+                                    " ORDER BY TRIM(UBICACION) ASC ";
+                        } else {
+                            if (this.conteocode.trim().compareToIgnoreCase(Conteo.CC_003) == 0) {
+                                where = " WHERE   " +
+                                        " TRIM(P.BODEGA) =  TRIM('" + this.bodega + "')   " +
+                                        " AND TRIM(P.CODIGO) = TRIM(C.CODIGO)   " +
+                                        "    AND TRIM(P.CODIGO) LIKE TRIM('" + this.codigo.trim() + "%') " +
+                                        " AND TRIM(P.BODEGA) = TRIM(C.BODEGA)   " +
+                                        "    AND NVL(TRIM(P.UBICACION),'---') = TRIM(C.UBICACION) " +
+                                        " AND TRIM(C.AUDITORIA) = TRIM('" + this.auditoria + "')   " +
+                                        " AND ((NVL(C.DIFERENCIA1,-999999) != NVL(C.DIFERENCIA2,-888888) AND NVL(C.DIFERENCIA1,-999999)!=0 AND NVL(C.DIFERENCIA2,-888888)!=0)) " +
+                                        " UNION " +
+                                        " SELECT   " +
+                                        " P.BODEGA, " +
+                                        " P.UBICACION, " +
+                                        " P.CODIGO,  " +
+                                        " NVL(P.CANTIDAD,0)/100 CANTIDAD,  " +
+                                        " P.DESCRIPCION || P.DESCRIPCION2 AS DESCRIPCION,  " +
+                                        " NVL(P.COSTO_UNITARIO,0)/10000  COSTO_UNITARIO,  " +
+                                        " P.FAMILIA,   " +
+                                        " P.NUMERO_CORTO,  " +
+                                        " C.OBSERVACION, " +
+                                        " NVL(C.CONTEO1,-9999999)/1000  CONTEO1,  " +
+                                        " NVL(C.DIFERENCIA1,-9999999)/1000  DIFERENCIA1,  " +
+                                        " NVL(C.CONTEO2,-9999999)/1000  CONTEO2,  " +
+                                        " NVL(C.DIFERENCIA2,-9999999)/1000  DIFERENCIA2,  " +
+                                        " NVL(C.CONTEO3,-9999999)/1000  CONTEO3,  " +
+                                        " NVL(C.DIFERENCIA3,-9999999)/1000  DIFERENCIA3,  " +
+                                        " C.AUDITORIA,  " +
+                                        " C.GRUPO, " +
+                                        " C.GRUPOC1, " +
+                                        " C.GRUPOC2, " +
+                                        " C.GRUPOC3, " +
+                                        " C.OBSERVACIONC1, " +
+                                        " C.OBSERVACIONC2, " +
+                                        " C.OBSERVACIONC3 " +
+                                        " FROM JDE_TO_OPEN_PRODUCTO P, JDE_TO_OPEN_CONTEO C   " +
+                                        " WHERE   " +
+                                        " TRIM(P.BODEGA) =  TRIM('" + this.bodega + "')   " +
+                                        " AND TRIM(P.CODIGO) = TRIM(C.CODIGO(+))   " +
+                                        "    AND TRIM(P.CODIGO) LIKE TRIM('" + this.codigo.trim() + "%') " +
+                                        " AND TRIM(P.BODEGA) = TRIM(C.BODEGA(+))   " +
+                                        " AND TRIM(P.UBICACION) = TRIM(C.UBICACION(+))   " +
+                                        " AND UPPER(TRIM(P.AUDITORIA)) = UPPER(TRIM('" + this.auditoria + " ')) AND UPPER(TRIM(C.AUDITORIA)) = UPPER(TRIM(P.AUDITORIA))   " +
+                                        " AND TRIM(P.CODIGO)  NOT IN (SELECT TRIM(CV.CODIGO) FROM  JDE_TO_OPEN_CONTEO CV  WHERE  TRIM(CV.AUDITORIA) = TRIM('" + this.auditoria + "') AND TRIM(CV.BODEGA) = TRIM('" + this.bodega + "')))  " +
+                                        " ORDER BY TRIM(UBICACION) ASC ";
+                            }
+                        }
+                    }
+                }
+                break;
+            }
+
+
+            case Conteo.BUSCA_UBICACION: {
+                sql = Conteo.SELECT_CONTEO;
+                if (this.conteocode != null) {
+                    if (this.conteocode.trim().compareToIgnoreCase(Conteo.CC_001) == 0) {
+                        where = "  WHERE " +
+                                "    UPPER(TRIM(P.BODEGA)) =  UPPER(TRIM('" + this.bodega + " ')) " +
+                                "    AND TRIM(P.CODIGO) = TRIM(C.CODIGO(+)) " +
+                                "    AND TRIM(P.BODEGA) = TRIM(C.BODEGA(+)) " +
+                                "    AND NVL(TRIM(P.UBICACION),'---') = TRIM(C.UBICACION(+)) " +
+                                "    AND UPPER(TRIM(P.UBICACION)) LIKE UPPER(TRIM('" + this.ubicacion.trim() + "%'))" +
+                                "   AND UPPER(TRIM(P.AUDITORIA)) = UPPER(TRIM('" + this.auditoria + " ')) AND UPPER(TRIM(C.AUDITORIA)) = UPPER(TRIM(P.AUDITORIA))) " +
+                                "    ORDER BY TRIM(UBICACION) ASC ";
+                    } else {
+                        if (this.conteocode.trim().compareToIgnoreCase(Conteo.CC_002) == 0) {
+                            where = "  WHERE   " +
+                                    " TRIM(P.BODEGA) = UPPER(TRIM('" + this.bodega + "'))  " +
+                                    " AND TRIM(P.CODIGO) = TRIM(C.CODIGO)   " +
+                                    " AND TRIM(P.BODEGA) = TRIM(C.BODEGA)   " +
+                                    "    AND NVL(TRIM(P.UBICACION),'---') = TRIM(C.UBICACION) " +
+                                    "    AND UPPER(TRIM(P.UBICACION)) LIKE UPPER(TRIM('" + this.ubicacion.trim() + "%'))" +
+                                    " AND UPPER(TRIM(C.AUDITORIA)) = UPPER(TRIM('" + this.auditoria + "'))   " +
+                                    " AND NVL(C.DIFERENCIA1,-999999)!= 0 " +
+                                    " UNION " +
+                                    " SELECT   " +
+                                    " P.BODEGA, " +
+                                    " P.UBICACION, " +
+                                    " P.CODIGO,  " +
+                                    " NVL(P.CANTIDAD,0)/100 CANTIDAD,  " +
+                                    " P.DESCRIPCION || P.DESCRIPCION2 AS DESCRIPCION,  " +
+                                    " NVL(P.COSTO_UNITARIO,0)/10000  COSTO_UNITARIO,  " +
+                                    " P.FAMILIA,   " +
+                                    " P.NUMERO_CORTO,  " +
+                                    " C.OBSERVACION, " +
+                                    " NVL(C.CONTEO1,-9999999)/1000  CONTEO1,  " +
+                                    " NVL(C.DIFERENCIA1,-9999999)/1000  DIFERENCIA1,  " +
+                                    " NVL(C.CONTEO2,-9999999)/1000  CONTEO2,  " +
+                                    " NVL(C.DIFERENCIA2,-9999999)/1000  DIFERENCIA2,  " +
+                                    " NVL(C.CONTEO3,-9999999)/1000  CONTEO3,  " +
+                                    " NVL(C.DIFERENCIA3,-9999999)/1000  DIFERENCIA3,  " +
+                                    " C.AUDITORIA,  " +
+                                    " C.GRUPO, " +
+                                    " C.GRUPOC1, " +
+                                    " C.GRUPOC2, " +
+                                    " C.GRUPOC3, " +
+                                    " C.OBSERVACIONC1, " +
+                                    " C.OBSERVACIONC2, " +
+                                    " C.OBSERVACIONC3 " +
+                                    " FROM JDE_TO_OPEN_PRODUCTO P, JDE_TO_OPEN_CONTEO C   " +
+                                    " WHERE   " +
+                                    " UPPER(TRIM(P.BODEGA)) =  UPPER(TRIM('" + this.bodega + "'))   " +
+                                    " AND TRIM(P.CODIGO) = TRIM(C.CODIGO(+))   " +
+                                    " AND TRIM(P.BODEGA) = TRIM(C.BODEGA(+))   " +
+                                    " AND TRIM(P.UBICACION) = TRIM(C.UBICACION(+))   " +
+                                    "    AND UPPER(TRIM(P.UBICACION)) LIKE UPPER(TRIM('" + this.ubicacion.trim() + "%'))" +
+                                    " AND UPPER(TRIM(C.AUDITORIA(+))) = UPPER(TRIM('" + this.auditoria + "'))   " +
+                                    " AND TRIM(P.CODIGO)  NOT IN (SELECT TRIM(CV.CODIGO) FROM  JDE_TO_OPEN_CONTEO CV  WHERE  UPPER(TRIM(CV.AUDITORIA)) = UPPER(TRIM('" + this.auditoria + "')) AND UPPER(TRIM(CV.BODEGA)) = UPPER(TRIM('" + this.bodega + "'))))  " +
+                                    " ORDER BY TRIM(UBICACION) ASC ";
+                        } else {
+                            if (this.conteocode.trim().compareToIgnoreCase(Conteo.CC_003) == 0) {
+                                where = " WHERE   " +
+                                        " UPPER(TRIM(P.BODEGA)) =  UPPER(TRIM('" + this.bodega + "'))   " +
+                                        " AND TRIM(P.CODIGO) = TRIM(C.CODIGO)   " +
+                                        " AND TRIM(P.BODEGA) = TRIM(C.BODEGA)   " +
+                                        "    AND NVL(TRIM(P.UBICACION),'---') = TRIM(C.UBICACION) " +
+                                        "    AND UPPER(TRIM(P.UBICACION)) LIKE UPPER(TRIM('" + this.ubicacion.trim() + "%'))" +
+                                        " AND UPPER(TRIM(C.AUDITORIA)) = UPPER(TRIM('" + this.auditoria + "')) " +
+                                        " AND ((NVL(C.DIFERENCIA1,-999999) != NVL(C.DIFERENCIA2,-888888) AND NVL(C.DIFERENCIA1,-999999)!=0 AND NVL(C.DIFERENCIA2,-888888)!=0)) " +
+                                        " UNION " +
+                                        " SELECT   " +
+                                        " P.BODEGA, " +
+                                        " P.UBICACION, " +
+                                        " P.CODIGO,  " +
+                                        " NVL(P.CANTIDAD,0)/100 CANTIDAD,  " +
+                                        " P.DESCRIPCION || P.DESCRIPCION2 AS DESCRIPCION,  " +
+                                        " NVL(P.COSTO_UNITARIO,0)/10000  COSTO_UNITARIO,  " +
+                                        " P.FAMILIA,   " +
+                                        " P.NUMERO_CORTO,  " +
+                                        " C.OBSERVACION, " +
+                                        " NVL(C.CONTEO1,-9999999)/1000  CONTEO1,  " +
+                                        " NVL(C.DIFERENCIA1,-9999999)/1000  DIFERENCIA1,  " +
+                                        " NVL(C.CONTEO2,-9999999)/1000  CONTEO2,  " +
+                                        " NVL(C.DIFERENCIA2,-9999999)/1000  DIFERENCIA2,  " +
+                                        " NVL(C.CONTEO3,-9999999)/1000  CONTEO3,  " +
+                                        " NVL(C.DIFERENCIA3,-9999999)/1000  DIFERENCIA3,  " +
+                                        " C.AUDITORIA,  " +
+                                        " C.GRUPO, " +
+                                        " C.GRUPOC1, " +
+                                        " C.GRUPOC2, " +
+                                        " C.GRUPOC3, " +
+                                        " C.OBSERVACIONC1, " +
+                                        " C.OBSERVACIONC2, " +
+                                        " C.OBSERVACIONC3 " +
+                                        " FROM JDE_TO_OPEN_PRODUCTO P, JDE_TO_OPEN_CONTEO C   " +
+                                        " WHERE   " +
+                                        " UPPER(TRIM(P.BODEGA)) =  UPPER(TRIM('" + this.bodega + "'))   " +
+                                        " AND TRIM(P.CODIGO) = TRIM(C.CODIGO(+))   " +
+                                        " AND TRIM(P.BODEGA) = TRIM(C.BODEGA(+))   " +
+                                        " AND UPPER(TRIM(P.UBICACION)) = UPPER(TRIM(C.UBICACION(+)))   " +
+                                        "    AND UPPER(TRIM(P.UBICACION)) LIKE UPPER(TRIM('" + this.ubicacion.trim() + "%'))" +
+                                        " AND UPPER(TRIM(P.AUDITORIA)) = UPPER(TRIM('" + this.auditoria + " ')) AND UPPER(TRIM(C.AUDITORIA)) = UPPER(TRIM(P.AUDITORIA))   " +
+                                        " AND TRIM(P.CODIGO)  NOT IN (SELECT TRIM(CV.CODIGO) FROM  JDE_TO_OPEN_CONTEO CV  WHERE  UPPER(TRIM(CV.AUDITORIA)) = UPPER(TRIM('" + this.auditoria + "')) AND UPPER(TRIM(CV.BODEGA)) = UPPER(TRIM('" + this.bodega + "'))))  " +
+                                        " ORDER BY TRIM(UBICACION) ASC ";
+                            }
+                        }
+                    }
+                }
+                break;
+            }
+
+            case Conteo.BUSCAR_RANGO_UBUCACIONES: {
+                sql = Conteo.SELECT_CONTEO;
+                if (this.conteocode != null) {
+                    if (this.conteocode.trim().compareToIgnoreCase(Conteo.CC_001) == 0) {
+                        where = "  WHERE " +
+                                "    UPPER(TRIM(P.BODEGA)) =  UPPER(TRIM('" + this.bodega + " ')) " +
+                                "    AND TRIM(P.CODIGO) = TRIM(C.CODIGO(+)) " +
+                                "    AND TRIM(P.BODEGA) = TRIM(C.BODEGA(+)) " +
+                                "    AND NVL(TRIM(P.UBICACION),'---') = TRIM(C.UBICACION(+)) " +
+                                "    AND UPPER(TRIM(P.UBICACION)) BETWEEN UPPER(TRIM('" + this.ubicacion + "')) AND UPPER(TRIM('" + this.observacion + "')) " +
+                                "   AND UPPER(TRIM(P.AUDITORIA)) = UPPER(TRIM('" + this.auditoria + " ')) AND UPPER(TRIM(C.AUDITORIA)) = UPPER(TRIM(P.AUDITORIA))) " +
+                                "    ORDER BY TRIM(UBICACION) ASC ";
+                    } else {
+                        if (this.conteocode.trim().compareToIgnoreCase(Conteo.CC_002) == 0) {
+                            where = "  WHERE   " +
+                                    " TRIM(P.BODEGA) = UPPER(TRIM('" + this.bodega + "'))  " +
+                                    " AND TRIM(P.CODIGO) = TRIM(C.CODIGO)   " +
+                                    " AND TRIM(P.BODEGA) = TRIM(C.BODEGA)   " +
+                                    "    AND NVL(TRIM(P.UBICACION),'---') = TRIM(C.UBICACION) " +
+                                    "    AND UPPER(TRIM(P.UBICACION)) BETWEEN UPPER(TRIM('" + this.ubicacion + "')) AND UPPER(TRIM('" + this.observacion + "')) " +
+                                    " AND UPPER(TRIM(C.AUDITORIA)) = UPPER(TRIM('" + this.auditoria + "'))   " +
+                                    " AND NVL(C.DIFERENCIA1,-999999)!= 0 " +
+                                    " UNION " +
+                                    " SELECT   " +
+                                    " P.BODEGA, " +
+                                    " P.UBICACION, " +
+                                    " P.CODIGO,  " +
+                                    " NVL(P.CANTIDAD,0)/100 CANTIDAD,  " +
+                                    " P.DESCRIPCION || P.DESCRIPCION2 AS DESCRIPCION,  " +
+                                    " NVL(P.COSTO_UNITARIO,0)/10000  COSTO_UNITARIO,  " +
+                                    " P.FAMILIA,   " +
+                                    " P.NUMERO_CORTO,  " +
+                                    " C.OBSERVACION, " +
+                                    " NVL(C.CONTEO1,-9999999)/1000  CONTEO1,  " +
+                                    " NVL(C.DIFERENCIA1,-9999999)/1000  DIFERENCIA1,  " +
+                                    " NVL(C.CONTEO2,-9999999)/1000  CONTEO2,  " +
+                                    " NVL(C.DIFERENCIA2,-9999999)/1000  DIFERENCIA2,  " +
+                                    " NVL(C.CONTEO3,-9999999)/1000  CONTEO3,  " +
+                                    " NVL(C.DIFERENCIA3,-9999999)/1000  DIFERENCIA3,  " +
+                                    " C.AUDITORIA,  " +
+                                    " C.GRUPO, " +
+                                    " C.GRUPOC1, " +
+                                    " C.GRUPOC2, " +
+                                    " C.GRUPOC3, " +
+                                    " C.OBSERVACIONC1, " +
+                                    " C.OBSERVACIONC2, " +
+                                    " C.OBSERVACIONC3 " +
+                                    " FROM JDE_TO_OPEN_PRODUCTO P, JDE_TO_OPEN_CONTEO C   " +
+                                    " WHERE   " +
+                                    " UPPER(TRIM(P.BODEGA)) =  UPPER(TRIM('" + this.bodega + "'))   " +
+                                    " AND TRIM(P.CODIGO) = TRIM(C.CODIGO(+))   " +
+                                    " AND TRIM(P.BODEGA) = TRIM(C.BODEGA(+))   " +
+                                    " AND TRIM(P.UBICACION) = TRIM(C.UBICACION(+))   " +
+                                    "    AND UPPER(TRIM(P.UBICACION)) BETWEEN UPPER(TRIM('" + this.ubicacion + "')) AND UPPER(TRIM('" + this.observacion + "')) " +
+                                    " AND UPPER(TRIM(C.AUDITORIA(+))) = UPPER(TRIM('" + this.auditoria + "'))   " +
+                                    " AND TRIM(P.CODIGO)  NOT IN (SELECT TRIM(CV.CODIGO) FROM  JDE_TO_OPEN_CONTEO CV  WHERE  UPPER(TRIM(CV.AUDITORIA)) = UPPER(TRIM('" + this.auditoria + "')) AND UPPER(TRIM(CV.BODEGA)) = UPPER(TRIM('" + this.bodega + "'))))  " +
+                                    " ORDER BY TRIM(UBICACION) ASC ";
+                        } else {
+                            if (this.conteocode.trim().compareToIgnoreCase(Conteo.CC_003) == 0) {
+                                where = " WHERE   " +
+                                        " UPPER(TRIM(P.BODEGA)) =  UPPER(TRIM('" + this.bodega + "'))   " +
+                                        " AND TRIM(P.CODIGO) = TRIM(C.CODIGO)   " +
+                                        " AND TRIM(P.BODEGA) = TRIM(C.BODEGA)   " +
+                                        "    AND NVL(TRIM(P.UBICACION),'---') = TRIM(C.UBICACION) " +
+                                        "    AND UPPER(TRIM(P.UBICACION)) BETWEEN UPPER(TRIM('" + this.ubicacion + "')) AND UPPER(TRIM('" + this.observacion + "')) " +
+                                        " AND UPPER(TRIM(C.AUDITORIA)) = UPPER(TRIM('" + this.auditoria + "')) " +
+                                        " AND ((NVL(C.DIFERENCIA1,-999999) != NVL(C.DIFERENCIA2,-888888) AND NVL(C.DIFERENCIA1,-999999)!=0 AND NVL(C.DIFERENCIA2,-888888)!=0)) " +
+                                        " UNION " +
+                                        " SELECT   " +
+                                        " P.BODEGA, " +
+                                        " P.UBICACION, " +
+                                        " P.CODIGO,  " +
+                                        " NVL(P.CANTIDAD,0)/100 CANTIDAD,  " +
+                                        " P.DESCRIPCION || P.DESCRIPCION2 AS DESCRIPCION,  " +
+                                        " NVL(P.COSTO_UNITARIO,0)/10000  COSTO_UNITARIO,  " +
+                                        " P.FAMILIA,   " +
+                                        " P.NUMERO_CORTO,  " +
+                                        " C.OBSERVACION, " +
+                                        " NVL(C.CONTEO1,-9999999)/1000  CONTEO1,  " +
+                                        " NVL(C.DIFERENCIA1,-9999999)/1000  DIFERENCIA1,  " +
+                                        " NVL(C.CONTEO2,-9999999)/1000  CONTEO2,  " +
+                                        " NVL(C.DIFERENCIA2,-9999999)/1000  DIFERENCIA2,  " +
+                                        " NVL(C.CONTEO3,-9999999)/1000  CONTEO3,  " +
+                                        " NVL(C.DIFERENCIA3,-9999999)/1000  DIFERENCIA3,  " +
+                                        " C.AUDITORIA,  " +
+                                        " C.GRUPO, " +
+                                        " C.GRUPOC1, " +
+                                        " C.GRUPOC2, " +
+                                        " C.GRUPOC3, " +
+                                        " C.OBSERVACIONC1, " +
+                                        " C.OBSERVACIONC2, " +
+                                        " C.OBSERVACIONC3 " +
+                                        " FROM JDE_TO_OPEN_PRODUCTO P, JDE_TO_OPEN_CONTEO C   " +
+                                        " WHERE   " +
+                                        " UPPER(TRIM(P.BODEGA)) =  UPPER(TRIM('" + this.bodega + "'))   " +
+                                        " AND TRIM(P.CODIGO) = TRIM(C.CODIGO(+))   " +
+                                        " AND TRIM(P.BODEGA) = TRIM(C.BODEGA(+))   " +
+                                        " AND UPPER(TRIM(P.UBICACION)) = UPPER(TRIM(C.UBICACION(+)))   " +
+                                        "    AND UPPER(TRIM(P.UBICACION)) BETWEEN UPPER(TRIM('" + this.ubicacion + "')) AND UPPER(TRIM('" + this.observacion + "')) " +
+                                        " AND UPPER(TRIM(P.AUDITORIA)) = UPPER(TRIM('" + this.auditoria + " ')) AND UPPER(TRIM(C.AUDITORIA)) = UPPER(TRIM(P.AUDITORIA))   " +
+                                        " AND TRIM(P.CODIGO)  NOT IN (SELECT TRIM(CV.CODIGO) FROM  JDE_TO_OPEN_CONTEO CV  WHERE  UPPER(TRIM(CV.AUDITORIA)) = UPPER(TRIM('" + this.auditoria + "')) AND UPPER(TRIM(CV.BODEGA)) = UPPER(TRIM('" + this.bodega + "'))))  " +
+                                        " ORDER BY TRIM(UBICACION) ASC ";
+                            }
+                        }
+                    }
+                }
+                break;
+            }
+
+            case Conteo.BUSCAR_MAESTRO_OPEN: {
+                sql = SELECT_MAESTRO_OPEN;
+                where = " WHERE TRIM(M.CODIGO) = '" + this.getCodigo() + "'";
+                break;
+            }
+            default: {
+                sql = Conteo.SELECT_CONTEO;
+                where = "  WHERE " +
+                        "    TRIM(P.BODEGA) =  TRIM('" + this.bodega + " ') " +
+                        "    AND TRIM(P.CODIGO) = TRIM(C.CODIGO) " +
+                        "    AND TRIM(P.BODEGA) = TRIM(C.BODEGA) " +
+                        "    AND NVL(TRIM(P.UBICACION),'---') = TRIM(C.UBICACION) " +
+                        "                         AND TRIM(C.AUDITORIA) = TRIM('" + this.auditoria + " ')) " +
+                        "                         ORDER BY TRIM(UBICACION) ASC ";
+            }
+        }
+        return where;
+    }
 }
