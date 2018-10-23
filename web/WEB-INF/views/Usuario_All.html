@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <!--<meta http-equiv="refresh" content="5">-->
+    <title id="id_title">Usuarios</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <!--PRODUCCION-->
+    <!--<link rel="stylesheet" href="/auditoriasV2/resources/css/normalize.css">-->
+    <!--<link rel="stylesheet" href="/auditoriasV2/resources/css/materialize.css">-->
+    <!--<link rel="stylesheet" href="/auditoriasV2/resources/css/counts.css">-->
+
+    <!--&lt;!&ndash;PRUEBAS&ndash;&gt;-->
+    <link rel="stylesheet" href="/resources/css/normalize.css">
+    <link rel="stylesheet" href="/resources/css/materialize.css">
+    <link rel="stylesheet" href="/resources/css/counts.css">
+
+    <!--&lt;!&ndash;PREPROS&ndash;&gt;-->
+    <!--<link rel="stylesheet" href="../resources/css/normalize.css">-->
+    <!--<link rel="stylesheet" href="../resources/css/materialize.css">-->
+    <!--<link rel="stylesheet" href="../resources/css/counts.css">-->
+
+
+</head>
+<body>
+
+<!-- Navbar goes here -->
+<div class="row">
+    <!-- Dropdown Structure -->
+
+    <div class="navbar-fixed">
+        <nav class="deep-orange accent-4 nav-extended">
+            <div class="nav-wrapper grey lighten-5">
+                <div class="row">
+                    <div class="col s2">
+                        <!-- Dropdown Trigger -->
+                        <div class="input-field col s12">
+                            <select id="select_search_id">
+                                <option value="999" selected>Perfil de Usuario</option>
+                                <option value="A">Administrador</option>
+                                <option value="O">Operativo</option>
+                                <option value="S">Supervisor</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input-field col s1" id="div_inp_cedula">
+                        <input placeholder="Ingrese Cedula." id="inp_cedula" type="text"
+                               class="validate">
+                        <label for="inp_cedula">Cedula</label>
+                    </div>
+
+                    <div class="input-field col s1" id="div_inp_nombres">
+                        <input placeholder="Ingrese Nombres" id="inp_nombres" type="text" class="validate">
+                        <label for="inp_nombres">Nombres</label>
+                    </div>
+
+                    <div class=" col s2">
+                        <ul class="right hide-on-med-and-down">
+                            <li>
+                                <a class="waves-effect waves-light btn" id="but_search_user">
+                                    Buscar <i class="material-icons left">play_circle_outline</i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="row">
+                        <div class=" col s2">
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+<!-- Page Layout here -->
+
+
+<div class="col s12 m8 l9"> <!-- Note that "m8 l9" was added -->
+    <div id="content-table" class="col s10">
+        <table class="responsive-table highlight">
+            <thead style="color:#b0bec5;">
+            <tr>
+                <td>Cédula</td>
+                <td>Nombres</td>
+                <td>Perfil</td>
+                <td>CodigoJDE</td>
+                <td>Editar</td>
+                <td>Eliminar</td>
+            </tr>
+            </thead>
+            <tbody style="color:#5a5a5a">
+            <tr>
+                <td>0926921263</td>
+                <td>Marcos Eloy Cuadros</td>
+                <td>Administrador</td>
+                <td>c456rt</td>
+                <td>
+                    <i class="material-icons" onclick="">Save</i></td>
+                <td>
+                    <i class="material-icons" onclick="">Save</i></td>
+            </tr>
+            </tbody>
+
+        </table>
+    </div>
+</div>
+
+</div>
+
+
+<!--PRODUCCION-->
+<!--<script src="/auditoriasV2/resources/js/materialize.js"></script>-->
+<!--<script src="/auditoriasV2/resources/js/ajax_library_flascano.js"></script>-->
+<!--<script src="/auditoriasV2/resources/js/counts.js"></script>-->
+<!--<script src="/auditoriasV2/resources/js/counts_noaud.js"></script>-->
+
+<!--PRUEBA-->
+<script src="/resources/js/materialize.js"></script>
+<script src="/resources/js/ajax_library_flascano.js"></script>
+<script src="/resources/js/counts.js"></script>
+<script src="/resources/js/counts_noaud.js"></script>
+
+
+<!--PREPROS-->
+<!--<script src="../resources/js/materialize.js"></script>-->
+<!--<script src="../resources/js/ajax_library_flascano.js"></script>-->
+<!--<script src="../resources/js/counts.js"></script>-->
+<!--<script src="../resources/js/counts_noaud.js"></script>-->
+
+
+</body>
+</html>

@@ -3,6 +3,8 @@ package mva.api.taller.bodega.configuration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import mva.api.taller.bodega.controller.ControllerAuditorias;
 import mva.api.taller.bodega.controller.ControllerCounts;
+import mva.api.taller.bodega.controller.ControllerLogin;
+import mva.api.taller.bodega.controller.ControllerUsuario;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScans;
@@ -10,7 +12,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.CacheControl;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -75,4 +76,19 @@ public class ConfigurationWeb implements WebMvcConfigurer {
     public ControllerCounts controllerCounts() {
         return new ControllerCounts();
     }
+
+
+    //--------------------------- MARCOS ------------------------------
+
+    @Bean
+    public ControllerLogin controllerLogin() {
+        return new ControllerLogin();
+    }
+
+    @Bean
+    public ControllerUsuario controllerUsuario() {
+        return new ControllerUsuario();
+    }
+
+    //-----------------------------------------------------------------
 }
