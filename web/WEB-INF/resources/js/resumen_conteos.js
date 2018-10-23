@@ -224,7 +224,7 @@ const tablaResumenConteoPorcetual = (data) => {
                    <td>${validarNulos(dato.bodega)}</td>            
                    <td>${validarNulos(dato.grupoc1)}</td>
                    <td>${validarNulos(dato.ubicacion)}</td>
-                   <td>${((parseFloat(dato.cantidad) * 100) / valores_totales.total_stock).toFixed(3)}%</td>  
+                   <td>${((parseFloat(dato.ubicacion) * 100) / valores_totales.total_ubicaciones).toFixed(3)}%</td>  
                    <td>${validarNulos(parseFloat(dato.cantidad).toFixed(3))}</td>                                      
                    <td>$ ${validarNulos(parseFloat(dato.costounitario).toFixed(3))}</td>  
                    <td>${validarNulos(parseFloat(dato.conteo1).toFixed(3))}</td>  
