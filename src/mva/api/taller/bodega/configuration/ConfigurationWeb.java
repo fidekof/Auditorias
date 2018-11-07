@@ -1,10 +1,7 @@
 package mva.api.taller.bodega.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import mva.api.taller.bodega.controller.ControllerAuditorias;
-import mva.api.taller.bodega.controller.ControllerCounts;
-import mva.api.taller.bodega.controller.ControllerLogin;
-import mva.api.taller.bodega.controller.ControllerUsuario;
+import mva.api.taller.bodega.controller.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScans;
@@ -31,13 +28,11 @@ import java.util.concurrent.TimeUnit;
 public class ConfigurationWeb implements WebMvcConfigurer {
 
 
-
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         ObjectMapper objectMapper = new ObjectMapper();
         converters.add(new MappingJackson2HttpMessageConverter(objectMapper));
     }
-
 
 
     @Bean
@@ -72,12 +67,24 @@ public class ConfigurationWeb implements WebMvcConfigurer {
     public ControllerAuditorias controllerAuditorias() {
         return new ControllerAuditorias();
     }
+
+
     @Bean
     public ControllerCounts controllerCounts() {
         return new ControllerCounts();
     }
 
 
+    @Bean
+    public ControllerInventario controllerInventario() {
+        return new ControllerInventario();
+    }
+
+
+    @Bean
+    public ControllerInventarioVistas controllerInventarioVistas() {
+        return new ControllerInventarioVistas();
+    }
     //--------------------------- MARCOS ------------------------------
 
     @Bean

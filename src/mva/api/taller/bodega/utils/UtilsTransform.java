@@ -5,8 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
 
-public class UtilsTransform
-{
+public class UtilsTransform {
     String toJson(ArrayList<Object> listaBodegas) {
         String resultJson = "";
         ObjectMapper mapper = new ObjectMapper();

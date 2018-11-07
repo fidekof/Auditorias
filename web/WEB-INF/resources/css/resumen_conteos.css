@@ -14,5 +14,22 @@
     margin-right: auto;
     border: 1px darkgray solid;
     box-shadow: 5px 3px 5px black;
-
 }
+
+.no_mostrar {
+    display: none;
+}
+
+.td_resumen_total {
+    background-color: #00695c;
+    font-weight: bold;
+    color: #eeeeee;
+}
+
+#content-table table thead {
+    background-color: #263238;
+    font-weight: bold;
+    color: #eeeeee;
+}
+
+

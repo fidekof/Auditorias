@@ -16,65 +16,56 @@ public class DaoAuditorias {
     public static final int ALL_BY_BODEGA_AND_UBICACIONES = 3;
     public static final int ALL_BY_BODEGA_UDITORIA = 4;
 
-    public ArrayList<Conteo> ProductsGetAllByBodegaDAO(Conteo product, ConexionJde conexionJde, int typeSearch)
-    {
-        return this.getListProduct(product, null,  typeSearch, conexionJde);
+    public ArrayList<Conteo> ProductsGetAllByBodegaDAO(Conteo product, ConexionJde conexionJde, int typeSearch) {
+        return this.getListProduct(product, null, typeSearch, conexionJde);
     }
 
 
-    public ArrayList<Conteo> getCountListDao(Conteo product, ConexionJde conexionJde, int typeSearch)
-    {
-        return this.getListConteo(product, null,  typeSearch, conexionJde);
+    public ArrayList<Conteo> getCountListDao(Conteo product, ConexionJde conexionJde, int typeSearch) {
+        return this.getListConteo(product, null, typeSearch, conexionJde);
     }
 
 
-    public ArrayList<Conteo> ProductsGetAllByUbicacionDAO(Conteo productI, Conteo productF, ConexionJde conexionJde, int typeSearch)
-    {
-        return this.getListProduct(productI, productF,  typeSearch, conexionJde);
+    public ArrayList<Conteo> ProductsGetAllByUbicacionDAO(Conteo productI, Conteo productF, ConexionJde conexionJde, int typeSearch) {
+        return this.getListProduct(productI, productF, typeSearch, conexionJde);
     }
 
-    private ArrayList<Conteo> getListProduct(Conteo productI,Conteo productF, int option, ConexionJde conexionJde) {
+    private ArrayList<Conteo> getListProduct(Conteo productI, Conteo productF, int option, ConexionJde conexionJde) {
 
         ArrayList<Conteo> productArrayList = new ArrayList<Conteo>();
         String wheresql = "";
-        switch (option)
-        {
-            case ALL_BY_BODEGA:
-            {
-                if(productI != null && productI.getBodega() != null && productI.getBodega().trim().isEmpty()==false){
+        switch (option) {
+            case ALL_BY_BODEGA: {
+                if (productI != null && productI.getBodega() != null && productI.getBodega().trim().isEmpty() == false) {
 
-                    if(productI.getConteocode().compareToIgnoreCase("C002")==0)
-                    {
-                       wheresql = " WHERE \n" +
-                               "                        TRIM(UPPER(P.BODEGA)) =  TRIM('"+productI.getBodega().toUpperCase()+"') " +
-                               "                        AND TRIM(P.CODIGO) = TRIM(C.CODIGO) " +
-                               "                        AND TRIM(P.BODEGA) = TRIM(C.BODEGA) " +
-                               "                        AND TRIM(P.UBICACION) = TRIM(C.UBICACION) " +
-                               "                        AND TRIM(UPPER(C.AUDITORIA)) = TRIM('"+productI.getAuditoria().toUpperCase()+"') " +
-                               "                        AND C.DIFERENCIA1 != 0 " +
-                               "                        ORDER BY P.UBICACION ASC ";
+                    if (productI.getConteocode().compareToIgnoreCase("C002") == 0) {
+                        wheresql = " WHERE \n" +
+                                "                        TRIM(UPPER(P.BODEGA)) =  TRIM('" + productI.getBodega().toUpperCase() + "') " +
+                                "                        AND TRIM(P.CODIGO) = TRIM(C.CODIGO) " +
+                                "                        AND TRIM(P.BODEGA) = TRIM(C.BODEGA) " +
+                                "                        AND TRIM(P.UBICACION) = TRIM(C.UBICACION) " +
+                                "                        AND TRIM(UPPER(C.AUDITORIA)) = TRIM('" + productI.getAuditoria().toUpperCase() + "') " +
+                                "                        AND C.DIFERENCIA1 != 0 " +
+                                "                        ORDER BY P.UBICACION ASC ";
 
 
-                    }
-                    else{
-                        if(productI.getConteocode().compareToIgnoreCase("C003")==0)
-                        {
+                    } else {
+                        if (productI.getConteocode().compareToIgnoreCase("C003") == 0) {
                             wheresql = " WHERE \n" +
-                                    "                        TRIM(UPPER(P.BODEGA)) =  TRIM('"+productI.getBodega().toUpperCase()+"') " +
+                                    "                        TRIM(UPPER(P.BODEGA)) =  TRIM('" + productI.getBodega().toUpperCase() + "') " +
                                     "                        AND TRIM(P.CODIGO) = TRIM(C.CODIGO) " +
                                     "                        AND TRIM(P.BODEGA) = TRIM(C.BODEGA) " +
                                     "                        AND TRIM(P.UBICACION) = TRIM(C.UBICACION) " +
-                                    "                        AND TRIM(UPPER(C.AUDITORIA)) = TRIM('"+productI.getAuditoria().toUpperCase()+"') " +
+                                    "                        AND TRIM(UPPER(C.AUDITORIA)) = TRIM('" + productI.getAuditoria().toUpperCase() + "') " +
                                     "                        AND C.DIFERENCIA2 != 0 " +
                                     "                        ORDER BY P.UBICACION ASC ";
-                        }
-                        else{
-                            wheresql =  " WHERE " +
-                                    " TRIM(UPPER(P.BODEGA)) =  TRIM('"+productI.getBodega().toUpperCase()+"') " +
+                        } else {
+                            wheresql = " WHERE " +
+                                    " TRIM(UPPER(P.BODEGA)) =  TRIM('" + productI.getBodega().toUpperCase() + "') " +
                                     " AND TRIM(P.CODIGO) = TRIM(C.CODIGO(+)) " +
                                     " AND TRIM(P.BODEGA) = TRIM(C.BODEGA(+)) " +
                                     " AND TRIM(P.UBICACION) = TRIM(C.UBICACION(+)) " +
-                                    " AND TRIM(UPPER(C.AUDITORIA(+))) = TRIM('"+productI.getAuditoria().toUpperCase()+"') " +
+                                    " AND TRIM(UPPER(C.AUDITORIA(+))) = TRIM('" + productI.getAuditoria().toUpperCase() + "') " +
                                     " ORDER BY P.UBICACION ASC ";
                         }
                     }
@@ -83,22 +74,21 @@ public class DaoAuditorias {
                 break;
             }
 
-            case ALL_BY_BODEGA_AND_PRODUCTCODE:
-            {
-                if(productI != null &&
+            case ALL_BY_BODEGA_AND_PRODUCTCODE: {
+                if (productI != null &&
                         productI.getBodega() != null &&
-                        productI.getBodega().trim().isEmpty()==false &&
+                        productI.getBodega().trim().isEmpty() == false &&
                         productI.getCodigo() != null &&
-                        productI.getCodigo().trim().isEmpty()==false
-                ){
+                        productI.getCodigo().trim().isEmpty() == false
+                ) {
 
-                    wheresql =  " WHERE " +
-                            " TRIM(UPPER(P.BODEGA)) =  TRIM('"+productI.getBodega().toUpperCase().trim()+"') " +
+                    wheresql = " WHERE " +
+                            " TRIM(UPPER(P.BODEGA)) =  TRIM('" + productI.getBodega().toUpperCase().trim() + "') " +
                             " AND TRIM(P.CODIGO) = TRIM(C.CODIGO(+)) " +
                             " AND TRIM(P.BODEGA) = TRIM(C.BODEGA(+)) " +
                             " AND TRIM(P.UBICACION) = TRIM(C.UBICACION(+)) " +
-                            " AND TRIM(UPPER(P.CODIGO)) LIKE TRIM('%"+productI.getCodigo().toUpperCase().trim()+"%') " +
-                            " AND TRIM(UPPER(C.AUDITORIA(+))) = TRIM('"+productI.getAuditoria().toUpperCase()+"') " +
+                            " AND TRIM(UPPER(P.CODIGO)) LIKE TRIM('%" + productI.getCodigo().toUpperCase().trim() + "%') " +
+                            " AND TRIM(UPPER(C.AUDITORIA(+))) = TRIM('" + productI.getAuditoria().toUpperCase() + "') " +
                             " ORDER BY P.UBICACION ASC ";
 
                     productArrayList = getListProductFromOpen(wheresql, conexionJde);
@@ -107,31 +97,26 @@ public class DaoAuditorias {
             }
 
 
-            case ALL_BY_BODEGA_AND_UBICACIONES:
-            {
-                if(productI != null &&
+            case ALL_BY_BODEGA_AND_UBICACIONES: {
+                if (productI != null &&
                         productI.getBodega() != null &&
-                        productI.getBodega().trim().isEmpty()==false &&
+                        productI.getBodega().trim().isEmpty() == false &&
                         productI.getUbicacion() != null &&
-                        productI.getUbicacion().trim().isEmpty()==false &&
+                        productI.getUbicacion().trim().isEmpty() == false &&
                         productF.getUbicacion() != null &&
-                        productF.getUbicacion().trim().isEmpty()==false &&
+                        productF.getUbicacion().trim().isEmpty() == false &&
                         productI.getConteocode() != null &&
                         productI.getConteocode().isEmpty() == false
-                ){
+                ) {
 
 
-
-
-
-
-                    wheresql =  " WHERE " +
-                            " TRIM(UPPER(P.BODEGA)) =  TRIM('"+productI.getBodega().toUpperCase().trim()+"') " +
+                    wheresql = " WHERE " +
+                            " TRIM(UPPER(P.BODEGA)) =  TRIM('" + productI.getBodega().toUpperCase().trim() + "') " +
                             " AND TRIM(P.CODIGO) = TRIM(C.CODIGO(+)) " +
                             " AND TRIM(P.BODEGA) = TRIM(C.BODEGA(+)) " +
                             " AND TRIM(P.UBICACION) = TRIM(C.UBICACION(+)) " +
-                            " AND TRIM(UPPER(P.UBICACION)) BETWEEN '" +productI.getUbicacion().toUpperCase().trim() +"' AND '" +productF.getUbicacion().toUpperCase().trim() + "' " +
-                            " AND TRIM(UPPER(C.AUDITORIA(+))) = TRIM('"+productI.getAuditoria().toUpperCase()+"') " +
+                            " AND TRIM(UPPER(P.UBICACION)) BETWEEN '" + productI.getUbicacion().toUpperCase().trim() + "' AND '" + productF.getUbicacion().toUpperCase().trim() + "' " +
+                            " AND TRIM(UPPER(C.AUDITORIA(+))) = TRIM('" + productI.getAuditoria().toUpperCase() + "') " +
                             " ORDER BY P.UBICACION ASC ";
 
                     productArrayList = getListProductFromOpen(wheresql, conexionJde);
@@ -139,11 +124,10 @@ public class DaoAuditorias {
                 break;
             }
 
-            default:
-                {
-                    productArrayList = new  ArrayList<Conteo>();
-                    break;
-                }
+            default: {
+                productArrayList = new ArrayList<Conteo>();
+                break;
+            }
         }
         return productArrayList;
     }
@@ -153,14 +137,16 @@ public class DaoAuditorias {
 
         ArrayList<Conteo> productArrayList = new ArrayList<Conteo>();
         Statement stmt;
-        try
-        {
+        try {
             stmt = conexionJde.getConexionOpenMotorec().getCon().createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             if (rs != null) {
                 Conteo conteo;
                 while (rs.next() == true) {
                     conteo = new Conteo();
+
+                    conteo.setIdproducto(Tools.cleanString(rs.getString("ID_PRODUCTO")));
+
                     conteo.setBodega(Tools.cleanString(rs.getString("BODEGA")));
                     conteo.setUbicacion(Tools.cleanString(rs.getString("UBICACION")));
 
@@ -203,32 +189,26 @@ public class DaoAuditorias {
             }
         } catch (SQLException e) {
             productArrayList.add(new Conteo());
-        }
-        finally {
+        } finally {
             return productArrayList;
         }
 
     }
 
 
-
-
-    private ArrayList<Conteo> getListConteo(Conteo conteoI,Conteo conteoF, int option, ConexionJde conexionJde) {
+    private ArrayList<Conteo> getListConteo(Conteo conteoI, Conteo conteoF, int option, ConexionJde conexionJde) {
 
         ArrayList<Conteo> conteoArrayList = new ArrayList<Conteo>();
         String wheresql = "";
-        switch (option)
-        {
-            case ALL_BY_BODEGA:
-            {
-                if(conteoI != null && conteoI.getBodega() != null && conteoI.getBodega().trim().isEmpty()==false)
-                {
+        switch (option) {
+            case ALL_BY_BODEGA: {
+                if (conteoI != null && conteoI.getBodega() != null && conteoI.getBodega().trim().isEmpty() == false) {
                     wheresql = " WHERE " +
-                            "                        TRIM(P.BODEGA) =  TRIM('"+conteoI.getBodega()+"') " +
+                            "                        TRIM(P.BODEGA) =  TRIM('" + conteoI.getBodega() + "') " +
                             "                        AND TRIM(P.CODIGO) = TRIM(C.CODIGO) " +
                             "                        AND TRIM(P.BODEGA) = TRIM(C.BODEGA) " +
                             "                        AND TRIM(P.UBICACION) = TRIM(C.UBICACION) " +
-                            "                        AND TRIM(C.AUDITORIA) = TRIM('"+conteoI.getAuditoria()+"') " +
+                            "                        AND TRIM(C.AUDITORIA) = TRIM('" + conteoI.getAuditoria() + "') " +
                             "                        ORDER BY TRIM(P.UBICACION) ASC ";
 
 
@@ -237,23 +217,22 @@ public class DaoAuditorias {
                 break;
             }
 
-            case ALL_BY_BODEGA_AND_PRODUCTCODE:
-            {
-                if(conteoI != null &&
+            case ALL_BY_BODEGA_AND_PRODUCTCODE: {
+                if (conteoI != null &&
                         conteoI.getBodega() != null &&
-                        conteoI.getBodega().trim().isEmpty()==false &&
+                        conteoI.getBodega().trim().isEmpty() == false &&
                         conteoI.getCodigo() != null &&
-                        conteoI.getCodigo().trim().isEmpty()==false &&
+                        conteoI.getCodigo().trim().isEmpty() == false &&
                         conteoI.getAuditoria() != null &&
-                        conteoI.getAuditoria().trim().isEmpty()==false
-                ){
+                        conteoI.getAuditoria().trim().isEmpty() == false
+                ) {
 
                     wheresql = " WHERE " +
-                            "                        TRIM(P.BODEGA) =  TRIM('"+conteoI.getBodega().trim()+"') " +
-                            "                        AND TRIM(P.CODIGO) LIKE '%"+conteoI.getCodigo().trim()+"%' "+
+                            "                        TRIM(P.BODEGA) =  TRIM('" + conteoI.getBodega().trim() + "') " +
+                            "                        AND TRIM(P.CODIGO) LIKE '%" + conteoI.getCodigo().trim() + "%' " +
                             "                        AND TRIM(P.BODEGA) = TRIM(C.BODEGA) " +
                             "                        AND TRIM(P.UBICACION) = TRIM(C.UBICACION) " +
-                            "                        AND TRIM(C.AUDITORIA) = TRIM('"+conteoI.getAuditoria()+"') " +
+                            "                        AND TRIM(C.AUDITORIA) = TRIM('" + conteoI.getAuditoria() + "') " +
                             "                        ORDER BY TRIM(P.UBICACION) ASC ";
 
 
@@ -263,30 +242,28 @@ public class DaoAuditorias {
             }
 
 
-            case ALL_BY_BODEGA_AND_UBICACIONES:
-            {
-                if(conteoI != null &&
+            case ALL_BY_BODEGA_AND_UBICACIONES: {
+                if (conteoI != null &&
                         conteoI.getBodega() != null &&
-                        conteoI.getBodega().trim().isEmpty()==false &&
+                        conteoI.getBodega().trim().isEmpty() == false &&
                         conteoI.getUbicacion() != null &&
-                        conteoI.getUbicacion().trim().isEmpty()==false &&
+                        conteoI.getUbicacion().trim().isEmpty() == false &&
                         conteoI.getAuditoria() != null &&
-                        conteoI.getAuditoria().trim().isEmpty()==false &&
+                        conteoI.getAuditoria().trim().isEmpty() == false &&
                         conteoF.getUbicacion() != null &&
-                        conteoF.getUbicacion().trim().isEmpty()==false
-                ){
+                        conteoF.getUbicacion().trim().isEmpty() == false
+                ) {
 
                     wheresql = " WHERE " +
-                            "   TRIM(P.BODEGA) =  TRIM('"+conteoI.getBodega()+"') " +
+                            "   TRIM(P.BODEGA) =  TRIM('" + conteoI.getBodega() + "') " +
                             "   AND TRIM(P.CODIGO) = TRIM(C.CODIGO) " +
                             "   AND TRIM(P.BODEGA) = TRIM(C.BODEGA) " +
                             "   AND TRIM(P.UBICACION) = TRIM(C.UBICACION) " +
                             "   AND TRIM(C.UBICACION) BETWEEN '"
-                            +   conteoI.getUbicacion().trim() +"' AND '"
-                            +   conteoF.getUbicacion().trim() + "' AND " +
-                            "                        AND TRIM(C.AUDITORIA) = TRIM('"+conteoI.getAuditoria()+"') " +
+                            + conteoI.getUbicacion().trim() + "' AND '"
+                            + conteoF.getUbicacion().trim() + "' AND " +
+                            "                        AND TRIM(C.AUDITORIA) = TRIM('" + conteoI.getAuditoria() + "') " +
                             "                        ORDER BY TRIM(P.UBICACION) ASC ";
-
 
 
                     conteoArrayList = getListProductFromOpen(wheresql, conexionJde);
@@ -294,15 +271,13 @@ public class DaoAuditorias {
                 break;
             }
 
-            default:
-            {
-                conteoArrayList = new  ArrayList<Conteo>();
+            default: {
+                conteoArrayList = new ArrayList<Conteo>();
                 break;
             }
         }
         return conteoArrayList;
     }
-
 
 
     private ArrayList<Conteo> getListProductsCounts(String wheresql, ConexionJde conexionJde) {
@@ -324,25 +299,23 @@ public class DaoAuditorias {
                 " NVL(C.DIFERENCIA3,-1000000)/1000 DIFERENCIA3, " +
                 " C.AUDITORIA, " +
                 " C.GRUPO ," +
-                " C.GRUPOC1, "+
-                " C.GRUPOC2, "+
+                " C.GRUPOC1, " +
+                " C.GRUPOC2, " +
                 " C.GRUPOC3, " +
-                " C.OBSERVACIONC1, "+
-                " C.OBSERVACIONC2, "+
-                " C.OBSERVACIONC3 "+
+                " C.OBSERVACIONC1, " +
+                " C.OBSERVACIONC2, " +
+                " C.OBSERVACIONC3 " +
 
                 " FROM JDE_TO_OPEN_PRODUCTO P, JDE_TO_OPEN_CONTEO C "
                 + wheresql;
         ArrayList<Conteo> productArrayList = new ArrayList<Conteo>();
         Statement stmt;
-        try
-        {
+        try {
             stmt = conexionJde.getConexionOpenMotorec().getCon().createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             if (rs != null) {
                 Conteo conteo;
-                while (rs.next() == true)
-                {
+                while (rs.next() == true) {
                     conteo = new Conteo();
 
                     conteo = new Conteo();
@@ -389,8 +362,7 @@ public class DaoAuditorias {
             }
         } catch (SQLException e) {
             productArrayList.add(new Conteo());
-        }
-        finally {
+        } finally {
             return productArrayList;
         }
 
@@ -405,14 +377,15 @@ public class DaoAuditorias {
         if (connection != null) {
             try {
                 connection.setAutoCommit(false);
-                resultado += conteo.generarInsertConteo(connection);
+                // resultado += conteo.generarInsertConteo(connection);
                 resultado += conteo.generarUpdateConteo(connection);
                 connection.commit();
                 salida = resultado > 0 ? "OK" : "ERROR";
 
 
-            } catch (SQLException e) {e.printStackTrace();}
-            finally {
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
                 return salida;
             }
         }
@@ -444,7 +417,7 @@ public class DaoAuditorias {
     }
 
     public ArrayList<Conteo> searchResumenCountsBo(Conteo conteo, int typesearch, ConexionJde conexionMotorec) {
-        return getListResumenFromOpen(conteo.getSqlResumenByTypeSearch(typesearch), conexionMotorec);
+        return getListProductFromOpen(conteo.getSqlResumenByTypeSearch(typesearch), conexionMotorec);
     }
 
     private ArrayList<Conteo> getListResumenFromOpen(String sqlResumenByTypeSearch, ConexionJde conexionMotorec) {
@@ -484,5 +457,9 @@ public class DaoAuditorias {
             return productArrayList;
         }
 
+    }
+
+    public ArrayList<Conteo> ObternerResumenPorItemsDao(Conteo conteo, int typesearch, ConexionJde conexionMotorec) {
+        return getListProductFromOpen(conteo.getSqlResumePorItem(typesearch), conexionMotorec);
     }
 }

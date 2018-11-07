@@ -7,14 +7,13 @@ import mva.api.taller.bodega.models.Conteo;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class BoAuditorias
-{
+public class BoAuditorias {
     public ArrayList<Conteo> ProductsGetAllByBodegaBO(Conteo product, ConexionJde conexionMotorec, int typeSearch) {
         ArrayList<Conteo> productArrayList = new ArrayList<Conteo>();
         if (conexionMotorec != null) {
             try {
                 DaoAuditorias daoAuditorias = new DaoAuditorias();
-                productArrayList = daoAuditorias.ProductsGetAllByBodegaDAO(product,conexionMotorec, typeSearch);
+                productArrayList = daoAuditorias.ProductsGetAllByBodegaDAO(product, conexionMotorec, typeSearch);
             } catch (Exception e) {
                 return productArrayList;
             } finally {
@@ -30,7 +29,7 @@ public class BoAuditorias
         if (conexionMotorec != null) {
             try {
                 DaoAuditorias daoAuditorias = new DaoAuditorias();
-                productArrayList = daoAuditorias.getCountListDao(product,conexionMotorec, typeSearch);
+                productArrayList = daoAuditorias.getCountListDao(product, conexionMotorec, typeSearch);
             } catch (Exception e) {
                 return productArrayList;
             } finally {
@@ -45,7 +44,7 @@ public class BoAuditorias
         if (conexionMotorec != null) {
             try {
                 DaoAuditorias daoAuditorias = new DaoAuditorias();
-                productArrayList = daoAuditorias.ProductsGetAllByUbicacionDAO(productI, productF,  conexionMotorec, typeSearch);
+                productArrayList = daoAuditorias.ProductsGetAllByUbicacionDAO(productI, productF, conexionMotorec, typeSearch);
             } catch (Exception e) {
                 return productArrayList;
             } finally {
@@ -55,8 +54,7 @@ public class BoAuditorias
         return productArrayList;
     }
 
-    public String CountsSaveBO(Conteo conteo, ConexionJde conexionMotorec)
-    {
+    public String CountsSaveBO(Conteo conteo, ConexionJde conexionMotorec) {
         String result = "ERROR";
         if (conexionMotorec != null) {
             try {
@@ -71,13 +69,12 @@ public class BoAuditorias
         return result;
     }
 
-    public Collection<Conteo> ProductGetAllByTypeSearchBo(Conteo conteo, int typeSearch,  ConexionJde conexionMotorec)
-    {
+    public Collection<Conteo> ProductGetAllByTypeSearchBo(Conteo conteo, int typeSearch, ConexionJde conexionMotorec) {
         ArrayList<Conteo> productArrayList = new ArrayList<Conteo>();
         if (conexionMotorec != null) {
             try {
                 DaoAuditorias daoAuditorias = new DaoAuditorias();
-                productArrayList = daoAuditorias.ProductGetAllByTypeSearchBo( conteo,  typeSearch,   conexionMotorec);
+                productArrayList = daoAuditorias.ProductGetAllByTypeSearchBo(conteo, typeSearch, conexionMotorec);
             } catch (Exception e) {
                 return productArrayList;
             } finally {
@@ -108,6 +105,21 @@ public class BoAuditorias
             try {
                 DaoAuditorias daoAuditorias = new DaoAuditorias();
                 productArrayList = daoAuditorias.searchResumenCountsBo(conteo, typesearch, conexionMotorec);
+            } catch (Exception e) {
+                return productArrayList;
+            } finally {
+                conexionMotorec.desconectarJD();
+            }
+        }
+        return productArrayList;
+    }
+
+    public Collection<Conteo> ObternerResumenPorItemsBO(Conteo conteo, int typesearch, ConexionJde conexionMotorec) {
+        ArrayList<Conteo> productArrayList = new ArrayList<Conteo>();
+        if (conexionMotorec != null) {
+            try {
+                DaoAuditorias daoAuditorias = new DaoAuditorias();
+                productArrayList = daoAuditorias.ObternerResumenPorItemsDao(conteo, typesearch, conexionMotorec);
             } catch (Exception e) {
                 return productArrayList;
             } finally {

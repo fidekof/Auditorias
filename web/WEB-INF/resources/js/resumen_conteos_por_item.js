@@ -3,8 +3,7 @@ const BUSCAR_POR_ITEM = 2;
 const BUSCA_UBICACION = 3;
 const BUSCAR_RANGO_UBUCACIONES = 4;
 const BUSCAR_MAESTRO_OPEN = 5;
-const BUSCAR_MAESTRO_UBICACIONES = 7;
-const BUSCAR_NO_CONTADAS = 8;
+
 // VALOR DE LOS INPUTS
 let div_inp_cod_bodega;
 let div_inp_cod_auditoria;
@@ -53,13 +52,6 @@ const mostrarOcultarOpcionesDeBusqueda = (value) => {
 
                 switch (valor) {
                     case BUSCAR_TODO: {
-                        div_inp_cod_ubicacion_i.style.display = 'none';
-                        div_inp_cod_ubicacion_f.style.display = 'none';
-                        div_inp_cod_product.style.display = 'none';
-                        break;
-                    }
-
-                    case BUSCAR_NO_CONTADAS: {
                         div_inp_cod_ubicacion_i.style.display = 'none';
                         div_inp_cod_ubicacion_f.style.display = 'none';
                         div_inp_cod_product.style.display = 'none';
@@ -149,14 +141,14 @@ document.addEventListener('DOMContentLoaded', () => {
     button_add.addEventListener('click', () => {
         const itemcode = (document.getElementById("inp_cod_product")).value;
         const conteo = getCountForTipoSearch();
-        const url = getParamName(`${ambienteruta()}product/auditoria/${BUSCAR_MAESTRO_OPEN}`).replace("/index/noaud", "").replace("/index/aud", "");
+        const url = getParamName(`${ambienteruta()}product/auditoria/${BUSCAR_MAESTRO_OPEN}`).replace("/index/noaud", "").replace("/counts/resumen_conteo", "");
         if (itemcode != null && itemcode.trim().length > 0) {
             addItemForMI(conteo, BUSCAR_MAESTRO_OPEN, url);
         }
         else {
             M.toast(
                 {
-                    html: `El codigo de item Ingresado no es invalido`,
+                    html: `El codigo de item Ingresado es invalido`,
                     classes: 'rounded red lighten-1'
                 }
             );

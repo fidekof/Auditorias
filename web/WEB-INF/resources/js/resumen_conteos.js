@@ -33,7 +33,7 @@ const mostrarTodosLosFiltros = () => {
 
 const mostrarOcultarOpcionesDeBusqueda = (value) => {
 
-    mostrarTodosLosFiltros();
+    // mostrarTodosLosFiltros();
     if (!value) {
         M.toast(
             {
@@ -143,9 +143,9 @@ const searchResumenCounts = async (typeAud) => {
 
     // const productos = await getDataProducts();
     const productos = await getDataResumenProductsFetch();
-    if (productos !== null && productos.length > 0) {
-        DrawResumenCouns(productos, typeAud);
-    }
+
+    DrawResumenCouns(productos, typeAud);
+
 };
 
 
@@ -165,24 +165,23 @@ const DrawResumenCouns = (data, typeAud) => {
     contenedorTable.innerHTML = ``;
     if (data.length > 0) {
         let tabla = ``;
-        tabla = tablaResumenConteoPorcetual(data);
+        tabla = tablaResumenConteoPorcetual2(data);
         contenedorTable.innerHTML = tabla;
     }
 };
 
-
 const calcularTotales = (data) => {
     let result = {
-        total_ubicaciones: 0,
-        total_stock: 0,
+        total_idproducto: 0,
+        total_diferencia1: 0,
         total_stock_contado: 0,
         total_precio_stock: 0,
         total_precio_contado: 0
     };
     if (data != null && data.length > 0) {
         data.forEach(dato => {
-            result.total_ubicaciones += parseFloat(dato.ubicacion);
-            result.total_stock += parseFloat(dato.cantidad);
+            result.total_idproducto += parseFloat(dato.idproducto);
+            result.total_diferencia1 += parseFloat(dato.diferencia1);
             result.total_stock_contado += parseFloat(dato.conteo1);
             result.total_precio_stock += parseFloat(dato.costounitario);
             result.total_precio_contado += parseFloat(dato.conteo2);
@@ -210,7 +209,6 @@ const tablaResumenConteoPorcetual = (data) => {
                     <td>Costo Sistema</td>
                     <td>Stock Contado</td>   
                     <td>Costo Contado</td>
-                
                 </tr>
             </thead>
             <tbody>
@@ -224,9 +222,9 @@ const tablaResumenConteoPorcetual = (data) => {
                    <td>${validarNulos(dato.bodega)}</td>            
                    <td>${validarNulos(dato.grupoc1)}</td>
                    <td>${validarNulos(dato.ubicacion)}</td>
-                   <td>${((parseFloat(dato.ubicacion) * 100) / valores_totales.total_ubicaciones).toFixed(3)}%</td>  
-                   <td>${validarNulos(parseFloat(dato.cantidad).toFixed(3))}</td>                                      
-                   <td>$ ${validarNulos(parseFloat(dato.costounitario).toFixed(3))}</td>  
+                   <td>${((parseFloat(dato.ubicacion) * 100) / valores_totales.total_ubicaciones).toFixed(0)}%</td>  
+                   <td>${validarNulos(parseFloat(dato.cantidad).toFixed(0))}</td>                                      
+                   <td>$ ${validarNulos(parseFloat(dato.costounitario).toFixed(0))}</td>  
                    <td>${validarNulos(parseFloat(dato.conteo1).toFixed(3))}</td>  
                    <td>$ ${validarNulos(parseFloat(dato.conteo2).toFixed(3))}</td>   
                 </tr>
@@ -252,6 +250,63 @@ const tablaResumenConteoPorcetual = (data) => {
 };
 
 
+const getClassForTr = (flag) => {
+    return (flag === true) ? 'class="blue lighten-4"' : '';
+}
+const tablaResumenConteoPorcetual2 = (data) => {
+    console.log(data);
+    const valores_totales = calcularTotales(data);
+    let tabla = `
+        <table class="striped">
+        <caption>Resumen de conteo <a id="img_file_download" onclick="exportTableToCSV('auditoria.csv')" class="waves-effect waves-light btn-small light-blue darken-4"><i  class="material-icons left">file_download</i></a></caption>
+            <thead>
+                <tr>
+                    
+                    <td>Grupo</td>
+                    <td>Items con stock</td>
+                    <td>Contadas</td>
+                    <td>Faltantes</td>
+                    <td>Porcentaje</td>
+                   
+                
+                </tr>
+            </thead>
+            <tbody>
+        `;
+    let flag = true;
+    data.forEach(
+        dato => {
+            tabla += `
+                <tr ${getClassForTr(flag)}>
+                       
+                   <td>${(validarNulos(dato.grupoc1).trim() === 'G000') ? '<b>SIN ASIGNACION</b>' : validarNulos(dato.grupoc1)}</td>
+                   <td>${validarNulos(parseFloat(dato.idproducto).toFixed(0))}</td>
+                   <td>${validarNulos(parseFloat(dato.diferencia1).toFixed(0))}</td>  
+                   <td>${validarNulos(parseFloat(dato.idproducto).toFixed(0) - parseFloat(dato.diferencia1).toFixed(0))}</td>  
+                   <td>${((parseFloat(dato.diferencia1) * 100) / parseFloat(dato.idproducto)).toFixed(3)}%</td>  
+                 
+                </tr>
+            `;
+            flag = !flag;
+        });
+
+
+    tabla += `
+                <tr class="tr_resumen_total">
+                   <td class="td_resumen_total">Tolal: </td>
+                   <td class="td_resumen_total">${valores_totales.total_idproducto}</td>
+                   <td class="td_resumen_total">${valores_totales.total_diferencia1}</td>  
+                   <td class="td_resumen_total">${valores_totales.total_idproducto - valores_totales.total_diferencia1}</td>  
+                   <td class="td_resumen_total">${((parseFloat(valores_totales.total_diferencia1) * 100) / parseFloat(valores_totales.total_idproducto)).toFixed(3)}%</td>                                      
+                </tr>
+            `;
+
+
+    tabla += ` </tbody></table> `;
+    return tabla;
+};
+
+
 const getDataResumenProductsFetch = async () => {
     const auditoria = document.getElementById("inp_cod_auditoria");
     const bodega = (document.getElementById("inp_cod_bodega"));
@@ -260,7 +315,9 @@ const getDataResumenProductsFetch = async () => {
     const ubicF = (document.getElementById("inp_cod_ubicacion_f"));
     const conteocode = (document.getElementById("inp_cod_count"));
     const product = (document.getElementById("inp_cod_product"));
-    const tipoBusqueda = select_search_id.value;
+    // const tipoBusqueda = select_search_id.value;
+    const tipoBusqueda = BUSCAR_TODO;
+
 
     if ((auditoria.value === null || auditoria.value.length < 1 || auditoria.value.trim().length < 1) && auditoria.parentNode.style.display !== 'none') {
         M.toast({html: 'Debe inresar un codigo de auditoria', classes: 'rounded red lighten-1'});
@@ -272,11 +329,11 @@ const getDataResumenProductsFetch = async () => {
         return {};
     }
 
-
-    if ((grupo.value.length < 1 || grupo.value.trim().length < 1 || grupo.value === null) && (grupo.parentNode.style.display !== 'none')) {
-        M.toast({html: 'Debe Ingresar su codigo de grupo', classes: 'rounded red lighten-1'});
-        return {};
-    }
+    //
+    // if ((grupo.value.length < 1 || grupo.value.trim().length < 1 || grupo.value === null) && (grupo.parentNode.style.display !== 'none')) {
+    //     M.toast({html: 'Debe Ingresar su codigo de grupo', classes: 'rounded red lighten-1'});
+    //     return {};
+    // }
 
 
     if ((conteocode.value === null || conteocode.value.length < 1 || conteocode.value.trim().length < 1) && (conteocode.parentNode.style.display !== 'none')) {
@@ -284,37 +341,48 @@ const getDataResumenProductsFetch = async () => {
         return {};
     }
 
-    if ((ubicI.value === null || ubicI.value.length < 1 || ubicI.value.trim().length < 1) && (ubicI.parentNode.style.display !== 'none')) {
-        M.toast({html: 'Debe Ingresar la ubicacion inicial', classes: 'rounded red lighten-1'});
-        return {};
-    }
+    // if ((ubicI.value === null || ubicI.value.length < 1 || ubicI.value.trim().length < 1) && (ubicI.parentNode.style.display !== 'none')) {
+    //     M.toast({html: 'Debe Ingresar la ubicacion inicial', classes: 'rounded red lighten-1'});
+    //     return {};
+    // }
+    //
+    //
+    // if ((ubicF.value === null || ubicF.value.length < 1 || ubicF.value.trim().length < 1) && (ubicF.parentNode.style.display !== 'none')) {
+    //     M.toast({html: 'Debe Ingresar la ubicacion final', classes: 'rounded red lighten-1'});
+    //     return {};
+    // }
+    //
+    // if ((product.value === null || product.value.length < 1 || product.value.trim().length < 1) && (product.parentNode.style.display !== 'none')) {
+    //     M.toast({html: 'Debe Ingresar el codigo de productos', classes: 'rounded red lighten-1'});
+    //     return {};
+    // }
 
-
-    if ((ubicF.value === null || ubicF.value.length < 1 || ubicF.value.trim().length < 1) && (ubicF.parentNode.style.display !== 'none')) {
-        M.toast({html: 'Debe Ingresar la ubicacion final', classes: 'rounded red lighten-1'});
-        return {};
-    }
-
-    if ((product.value === null || product.value.length < 1 || product.value.trim().length < 1) && (product.parentNode.style.display !== 'none')) {
-        M.toast({html: 'Debe Ingresar el codigo de productos', classes: 'rounded red lighten-1'});
-        return {};
-    }
-
-    const url = getParamName(`${ambienteruta()}product/resumen/${tipoBusqueda}`).replace("/counts/resumen_conteo", "").replace("/index/aud", "");
+    const url = getParamName(`${ambienteruta()}product/resumen/${tipoBusqueda}`).replace("/counts/resumen_conteo", "").replace("/counts/resumen_conteo", "");
 
 
     const myHeaders = new Headers();
     myHeaders.append('Accept', 'application/json');
     myHeaders.append('Content-Type', 'application/json');
 
+    // const conteo = {
+    //     auditoria: `${quitarAll(auditoria.value)}`,
+    //     bodega: `${bodega.value}`,
+    //     grupo: `${grupo.value}`,
+    //     conteocode: `${conteocode.value}`,
+    //     ubicacion: `${ubicI.value}`,
+    //     codigo: `${product.value}`,
+    //     observacion: `${ubicF.value}`
+    // };
+
+
     const conteo = {
         auditoria: `${quitarAll(auditoria.value)}`,
         bodega: `${bodega.value}`,
-        grupo: `${grupo.value}`,
+        grupo: `G001`,
         conteocode: `${conteocode.value}`,
-        ubicacion: `${ubicI.value}`,
-        codigo: `${product.value}`,
-        observacion: `${ubicF.value}`
+        ubicacion: `A`,
+        codigo: `B`,
+        observacion: `C}`
     };
 
     const MyConfig = {

@@ -12,28 +12,28 @@ import java.util.Collection;
 public class ServiceAuditorias implements InterfaceAuditorias {
     @Override
     public Collection<Conteo> ProductsGet(Conteo product, int typeSearch) {
-        return (new BoAuditorias()).ProductsGetAllByBodegaBO(product,(new ConexionJde()),typeSearch);
+        return (new BoAuditorias()).ProductsGetAllByBodegaBO(product, (new ConexionJde()), typeSearch);
     }
 
     @Override
     public Collection<Conteo> ProductsGetByUbicaciones(Conteo productI, Conteo productF, int typeSearch) {
-        return (new BoAuditorias()).ProductsGetAllByUbicacionBO(productI, productF, (new ConexionJde()),typeSearch);
+        return (new BoAuditorias()).ProductsGetAllByUbicacionBO(productI, productF, (new ConexionJde()), typeSearch);
     }
 
     @Override
     public Collection<Conteo> CountGet(Conteo count, int typeSearch) {
-        return (new BoAuditorias()).getCountLisBO(count,(new ConexionJde()),typeSearch);
+        return (new BoAuditorias()).getCountLisBO(count, (new ConexionJde()), typeSearch);
 
     }
 
     @Override
     public String CountsSave(Conteo conteo) {
-        return (new BoAuditorias()).CountsSaveBO(conteo,  (new ConexionJde()));
+        return (new BoAuditorias()).CountsSaveBO(conteo, (new ConexionJde()));
     }
 
     @Override
     public Collection<Conteo> ProductGetAllByTypeSearch(Conteo conteo, int typesearch) {
-        return (new BoAuditorias()).ProductGetAllByTypeSearchBo(conteo, typesearch,  (new ConexionJde()));
+        return (new BoAuditorias()).ProductGetAllByTypeSearchBo(conteo, typesearch, (new ConexionJde()));
     }
 
     @Override
@@ -44,6 +44,16 @@ public class ServiceAuditorias implements InterfaceAuditorias {
     @Override
     public Collection<Conteo> searchResumenCounts(Conteo conteo, int typesearch) {
         return (new BoAuditorias()).searchResumenCountsBo(conteo, typesearch, (new ConexionJde()));
+    }
+
+    @Override
+    public Collection<Conteo> ObternerResumenPorItems(Conteo conteo, int typesearch) {
+        return (new BoAuditorias()).ObternerResumenPorItemsBO(conteo, typesearch, (new ConexionJde()));
+    }
+
+    @Override
+    public Collection<Conteo> ObternerUbicacionMaestroPorBodega(Conteo conteo, int typesearch) {
+        return (new BoAuditorias()).ProductGetAllByTypeSearchBo(conteo, typesearch, (new ConexionJde()));
     }
 
 

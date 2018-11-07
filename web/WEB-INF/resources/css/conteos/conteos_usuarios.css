@@ -1,0 +1,10 @@
+#div_inp_cod_auditoria,
+#div_inp_cod_bodega,
+#div_inp_cod_group,
+#dvi_inp_cod_count {
+    display: none;
+}
+
+#select_search_id {
+    display: table;
+}

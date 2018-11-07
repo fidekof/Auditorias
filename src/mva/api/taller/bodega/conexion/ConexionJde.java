@@ -37,10 +37,7 @@ public class ConexionJde {
     }
 
 
-
-
-    public conexiones ConectarEvolution()
-    {
+    public conexiones ConectarEvolution() {
         this.conex = new conexiones();
         this.conex.setUsuario("desarrollo");
         this.conex.setBaseDatos("hra_prod");
@@ -79,7 +76,6 @@ public class ConexionJde {
         */
         return this.ConectarSipecom("ap-facturacion", "fidekof", "Df3a0b95", "1433", "SIPE_ComprobanteElectronico");
     }
-
 
 
     public void desconectarJD() {

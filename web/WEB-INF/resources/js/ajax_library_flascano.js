@@ -2,11 +2,12 @@ const POST_METHOD = 'POST';
 const GET_METHOD = 'GET';
 
 const ajax = request => {
-    return new Promise((resolve,reject) =>
-        {
+    return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
             xhr.open(request.method, request.url, true);
-            xhr.addEventListener("load", e =>{resolve(e.target);});
+        xhr.addEventListener("load", e => {
+            resolve(e.target);
+        });
             xhr.send();
         }
     );

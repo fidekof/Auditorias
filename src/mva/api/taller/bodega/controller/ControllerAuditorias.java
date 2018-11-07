@@ -20,8 +20,7 @@ public class ControllerAuditorias {
     private InterfaceAuditorias serviceAuditorias;
 
     @GetMapping("/byBodega/{bodega}")
-    public ResponseEntity<Collection<Conteo>> ProductsGetAllByBodega(@PathVariable String bodega, @PathVariable String auditoria)
-    {
+    public ResponseEntity<Collection<Conteo>> ProductsGetAllByBodega(@PathVariable String bodega, @PathVariable String auditoria) {
         Conteo product = new Conteo();
         product.setBodega(bodega);
         Collection<Conteo> productCollection = this.serviceAuditorias.ProductsGet(product, DaoAuditorias.ALL_BY_BODEGA);
@@ -30,43 +29,51 @@ public class ControllerAuditorias {
 
 
     @GetMapping("/byBodega/{bodega}/{auditoria}")
-    public ResponseEntity<Collection<Conteo>> ProductsGetAllByBodegaAndAuditoria(@PathVariable String bodega, @PathVariable String auditoria)
-    {
+    public ResponseEntity<Collection<Conteo>> ProductsGetAllByBodegaAndAuditoria(@PathVariable String bodega, @PathVariable String auditoria) {
         Conteo product = new Conteo();
         product.setBodega(bodega);
-        product.setAuditoria(auditoria.replace("*",""));
+        product.setAuditoria(auditoria.replace("*", ""));
         Collection<Conteo> productCollection = this.serviceAuditorias.CountGet(product, DaoAuditorias.ALL_BY_BODEGA);
         return new ResponseEntity<Collection<Conteo>>(productCollection, HttpStatus.OK);
     }
 
 
     @GetMapping("/byBodegaAndUbicacion/{bodega}/{ubici}/{ubicf}/{auditoria}")
-    public ResponseEntity<Collection<Conteo>> ProductsGetAllByBodegaAndUbi(@PathVariable String bodega, @PathVariable String ubici, @PathVariable String ubicf, @PathVariable String auditoria)
-    {
+    public ResponseEntity<Collection<Conteo>> ProductsGetAllByBodegaAndUbi(@PathVariable String bodega, @PathVariable String ubici, @PathVariable String ubicf, @PathVariable String auditoria) {
         Conteo productI = new Conteo();
         productI.setAuditoria(auditoria);
         productI.setBodega(bodega);
         productI.setUbicacion(ubici);
         Conteo productF = new Conteo();
         productF.setUbicacion(ubicf);
-        Collection<Conteo> productCollection = this.serviceAuditorias.ProductsGetByUbicaciones(productI,productF , DaoAuditorias.ALL_BY_BODEGA_AND_UBICACIONES);
+        Collection<Conteo> productCollection = this.serviceAuditorias.ProductsGetByUbicaciones(productI, productF, DaoAuditorias.ALL_BY_BODEGA_AND_UBICACIONES);
         return new ResponseEntity<Collection<Conteo>>(productCollection, HttpStatus.OK);
     }
 
 
+    @PostMapping("/buscar/ubicaciones/{typesearch}")
+    public ResponseEntity<Collection<Conteo>> ObternerUbicacionMaestroPorBodega(@PathVariable int typesearch, @RequestBody Conteo conteo) {
+        Collection<Conteo> productCollection = this.serviceAuditorias.ObternerUbicacionMaestroPorBodega(conteo, typesearch);
+        return new ResponseEntity<Collection<Conteo>>(productCollection, HttpStatus.OK);
+    }
 
 
     @PostMapping("/auditoria/{typesearch}")
-    public ResponseEntity<Collection<Conteo>> ProductGetAllByTypeSearch(@PathVariable int typesearch, @RequestBody Conteo conteo)
-    {
-        Collection<Conteo> productCollection = this.serviceAuditorias.ProductGetAllByTypeSearch(conteo , typesearch);
+    public ResponseEntity<Collection<Conteo>> ProductGetAllByTypeSearch(@PathVariable int typesearch, @RequestBody Conteo conteo) {
+        Collection<Conteo> productCollection = this.serviceAuditorias.ProductGetAllByTypeSearch(conteo, typesearch);
+        return new ResponseEntity<Collection<Conteo>>(productCollection, HttpStatus.OK);
+    }
+
+
+    @PostMapping("/resume_por_items/{typesearch}")
+    public ResponseEntity<Collection<Conteo>> ObternerResumenPorItems(@PathVariable int typesearch, @RequestBody Conteo conteo) {
+        Collection<Conteo> productCollection = this.serviceAuditorias.ObternerResumenPorItems(conteo, typesearch);
         return new ResponseEntity<Collection<Conteo>>(productCollection, HttpStatus.OK);
     }
 
 
     @GetMapping("/byBodegaAndCode/{bodega}/{productCode}/{auditoria}")
-    public ResponseEntity<Collection<Conteo>> ProductsGetAllByBodega(@PathVariable String bodega, @PathVariable String productCode, @PathVariable String auditoria)
-    {
+    public ResponseEntity<Collection<Conteo>> ProductsGetAllByBodega(@PathVariable String bodega, @PathVariable String productCode, @PathVariable String auditoria) {
         Conteo conteo = new Conteo();
         conteo.setBodega(bodega);
         conteo.setCodigo(productCode);
@@ -77,8 +84,7 @@ public class ControllerAuditorias {
 
 
     @GetMapping("/saveconteo/{codigoAuditoria}/{codigoGrupo}/{codConteo}/{bodega}/{ubicacion}/{itemcode}/{valorInicial}/{idValorContado}/{descripcion}")
-    public ResponseEntity<String> SaveConteo(@PathVariable String codigoAuditoria, @PathVariable String codigoGrupo, @PathVariable String codConteo, @PathVariable String bodega, @PathVariable String ubicacion, @PathVariable String itemcode, @PathVariable String valorInicial, @PathVariable String idValorContado, @PathVariable String descripcion)
-    {
+    public ResponseEntity<String> SaveConteo(@PathVariable String codigoAuditoria, @PathVariable String codigoGrupo, @PathVariable String codConteo, @PathVariable String bodega, @PathVariable String ubicacion, @PathVariable String itemcode, @PathVariable String valorInicial, @PathVariable String idValorContado, @PathVariable String descripcion) {
         Collection<Conteo> productCollection = new ArrayList<Conteo>();
         Conteo conteo = new Conteo();
         conteo.setAuditoria(codigoAuditoria);
@@ -96,12 +102,10 @@ public class ControllerAuditorias {
     }
 
 
-
     @PostMapping("/saveconteo/postmode")
-    public ResponseEntity<String> SaveConteo(@RequestBody Conteo conteo)
-    {
+    public ResponseEntity<String> SaveConteo(@RequestBody Conteo conteo) {
         String respuesta = "ERROR";
-        if(conteo!= null){
+        if (conteo != null) {
             conteo.calculeDiferencias();
             respuesta = this.serviceAuditorias.CountsSave(conteo);
         }

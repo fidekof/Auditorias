@@ -105,7 +105,7 @@ const getDataItems = async () => {
         return {};
     }
 
-    const url = getParamName(`${ambienteruta()}product/byBodegaAndCode/${bodega}/${product}/${quitarAll(auditoria)}`).replace("/index/noaud", "").replace("/index/aud", "");
+    const url = getParamName(`${ambienteruta()}product/byBodegaAndCode/${bodega}/${product}/${quitarAll(auditoria)}`).replace("/counts/conteo_admin", "").replace("/index/aud", "");
     // const url = `http://localhost:8080/product/byBodegaAndCode/${bodega}/${product}/${quitarAll(auditoria)}`;
     const request = {method: 'GET', url: url};
     const response = await ajax(request);
@@ -130,55 +130,6 @@ const quitarAll = (valor) => {
         result = valor.replace("*", "");
     }
     return result;
-}
-
-
-const obtenerUbicacionPorConteo = async (conteo, tipoBusqueda, url) => {
-    const myHeaders = new Headers();
-    myHeaders.append('Accept', 'application/json');
-    myHeaders.append('Content-Type', 'application/json');
-
-    const MyConfig = {
-        method: 'POST',
-        headers: myHeaders,
-        body: JSON.stringify(conteo)
-    };
-
-
-    let resultado = false;
-    await fetch(url, MyConfig)
-        .then(response => {
-            return response.json();
-        })
-        .catch(error => {
-            console.log(error);
-            M.toast({html: `La busqueda no devolvio resultados`, classes: 'rounded red lighten-1'});
-            resultado = false;
-        })
-        .then(
-            response => {
-
-                if (response === null) {
-                    M.toast({html: `La busqueda no devolvio resultados`, classes: 'rounded red lighten-1'});
-                    resultado = false;
-                }
-                else {
-                    if (response.length > 0) {
-                        M.toast({
-                            html: `Se encontraron ${response.length} registros`,
-                            classes: 'rounded green lighten-1'
-                        });
-                        resultado = true;
-                    }
-                    else {
-                        M.toast({html: `No se encontraron registros`, classes: 'rounded red lighten-1'});
-                        resultado = false;
-                    }
-                }
-
-            }
-        );
-    return resultado;
 }
 
 
@@ -281,7 +232,7 @@ const getDataProductsFetch = async () => {
 
     const tieneT = auditoria.value.indexOf("*");
     // let url = `http://localhost:8080/product/byBodegaAndUbicacion/${bodega}/${ubicI}/${ubicF}/${quitarAll(auditoria)}`;
-    const url = getParamName(`${ambienteruta()}product/auditoria/${tipoBusqueda}`).replace("/index/noaud", "").replace("/index/aud", "");
+    const url = getParamName(`${ambienteruta()}product/auditoria/${tipoBusqueda}`).replace("/counts/conteo_admin", "").replace("/index/aud", "");
 
 
     const myHeaders = new Headers();
@@ -425,7 +376,7 @@ const getDataProducts = async () => {
 
         url = getParamName(`${ambienteruta()}product/byBodega/${bodega}/${quitarAll(auditoria)}`);
     }
-    url = url.replace("/index/noaud", "").replace("/index/aud", "");
+    url = url.replace("/counts/conteo_admin", "").replace("/index/aud", "");
     const request = {method: 'GET', url: url};
     const response = await ajax(request);
     switch (response.status) {
@@ -459,23 +410,28 @@ const DrawCountsData = (data, typeAud) => {
     contenedorTable.innerHTML = ``;
     if (data.length > 0) {
         contenedorTable.innerHTML = '';
-        tabla = tablaConteos(data, typeAud, auditoria, grupo, conteo);
+
+        let tabla = ``;
+        tabla = tablaResumenConteo(data);
         contenedorTable.innerHTML = tabla;
     }
 };
 
-
+const getClassForTr = (flag) => {
+    return (flag === true) ? 'class="blue lighten-4"' : '';
+}
 const tablaResumenConteo = (data) => {
+    const conteo = (document.getElementById("inp_cod_count")).value;
     let tabla = `
         <table class="responsive-table highlight">
         <caption>Resumen de conteo <a id="img_file_download" onclick="exportTableToCSV('auditoria.csv')" class="waves-effect waves-light btn-small light-blue darken-4"><i  class="material-icons left">file_download</i></a></caption>
             <thead>
                 <tr>
-                    <td>Cod. Aud</td>
-                    <td>Bodega</td>
+                   <td>Id</td>
                     <td>Grupo</td>
                     <td>Ubicacion</td>
                     <td>Nueva Ubicacion</td>
+                    <td>Familia</td>
                     <td>Item Cod.</td>
                     <td>Descripcion</td>
                     <td>Stock</td>
@@ -492,16 +448,18 @@ const tablaResumenConteo = (data) => {
             </thead>
             <tbody>
         `;
+    let flag = true;
 
     data.forEach(
         dato => {
+            let conteo_mostrar = obtenerGrupoPorConteo(dato, conteo);
             tabla += `
-                <tr>
-                   <td>${validarNulos(dato.auditoria)}</td>
-                   <td>${validarNulos(dato.bodega)}</td>            
-                   <td>${validarNulos(dato.grupo)}</td>
+                <tr ${getClassForTr(flag)}>      
+                   <td>${dato.idproducto}</td>           
+                   <td>${obtenerGrupoPorConteo(dato, conteo)}</td>
                    <td>${validarNulos(dato.ubicacion)}</td>
                    <td>${validarNulos(dato.observacion)}</td>
+                   <td>${validarNulos(dato.familia)}</td>
                    <td>${validarNulos(dato.codigo)}</td>
                    <td>${validarNulos(dato.descripcion)}</td>   
                    <td>${validarNulos(dato.cantidad)}</td>
@@ -516,6 +474,7 @@ const tablaResumenConteo = (data) => {
                    <td>${validarNulos(dato.observacion1)} -- ${validarNulos(dato.observacion2)} -- ${validarNulos(dato.observacion3)} </td>   
                 </tr>
             `;
+            flag = !flag;
         });
     tabla += ` </tbody></table> `;
     return tabla;
@@ -701,7 +660,7 @@ const saveCount = async (codigoAuditoria, codigoGrupo, codConteo, bodega, ubicac
     const valorConteo = (document.getElementById(`${idValorContado}`)).value;
 
     // const url =  `http://localhost:8080/product/saveconteo/${codigoAuditoria}/${codigoGrupo}/${codConteo}/${bodega}/${ubicacion}/${itemcode}/${valorInicial}/${valorConteo}/${descripcion}`;
-    const url = getParamName(`${ambienteruta()}product/saveconteo/${codigoAuditoria}/${codigoGrupo}/${codConteo}/${bodega}/${ubicacion}/${itemcode}/${valorInicial}/${valorConteo}/${descripcion}`).replace("/index/noaud", "").replace("/index/Aud", "");
+    const url = getParamName(`${ambienteruta()}product/saveconteo/${codigoAuditoria}/${codigoGrupo}/${codConteo}/${bodega}/${ubicacion}/${itemcode}/${valorInicial}/${valorConteo}/${descripcion}`).replace("/counts/conteo_admin", "").replace("/index/Aud", "");
 
 
     const request = {method: 'GET', url: url};
@@ -742,12 +701,6 @@ const searchItemsForCounts = async (typeAud) => {
 
     const productos = await getDataItems();
     DrawCountsData(productos, typeAud);
-};
-
-
-const searchUbcacionPorBodega = async (typeAud) => {
-
-    const productos = await getDataItems();
 };
 
 
@@ -809,7 +762,7 @@ const saveCountPost = async (auditoria, grupo, conteocode, bodega, ubicacion, it
 
 
     // const url =  `http://localhost:8080/product/saveconteo/postmode`;
-    const url = getParamName(`${ambienteruta()}product/saveconteo/postmode`).replace("/index/noaud", "").replace("/index/aud", "");
+    const url = getParamName(`${ambienteruta()}product/saveconteo/postmode`).replace("/counts/conteo_admin", "").replace("/index/aud", "");
 
 
     await fetch(url, MyConfig)
@@ -1049,7 +1002,7 @@ const saveItemPost = async (auditoria, bodega, ubicacion_id, codigo_id, descripc
         M.toast(
             {
                 html: `El item ${codigo} no tiene ubicacion
-                Ingresela en la Nueva ubicacion`,
+                Ingresela en la observacion`,
                 classes: 'rounded red lighten-1'
             }
         );
@@ -1083,30 +1036,43 @@ const saveItemPost = async (auditoria, bodega, ubicacion_id, codigo_id, descripc
 
 
     // const url =  `http://localhost:8080/product/saveconteo/postmode`;
-    const url = getParamName(`${ambienteruta()}product/saveitem/postmode`).replace("/index/noaud", "").replace("/index/aud", "");
-    const url_ubicacion = getParamName(`${ambienteruta()}product/buscar/ubicaciones/${BUSCAR_MAESTRO_UBICACIONES}`).replace("/index/noaud", "").replace("/index/aud", "");
+    const url = getParamName(`${ambienteruta()}product/saveitem/postmode`).replace("/counts/conteo_admin", "").replace("/index/aud", "");
 
 
-    const existe_ubicacion = await obtenerUbicacionPorConteo(conteo, BUSCAR_MAESTRO_UBICACIONES, url_ubicacion);
-
-    if (existe_ubicacion == true) {
-        await fetch(url, MyConfig)
-            .then(response => {
-                return response.json();
-            })
-            .catch(error => {
-                M.toast(
-                    {
-                        html: `No se guardo el conteo del item ${codigo}
+    await fetch(url, MyConfig)
+        .then(response => {
+            return response.json();
+        })
+        .catch(error => {
+            M.toast(
+                {
+                    html: `No se guardo el conteo del item ${codigo}
                            Error encontrado ${error}`,
-                        classes: 'rounded red lighten-1'
+                    classes: 'rounded red lighten-1'
+                }
+            );
+        })
+        .then(
+            response => {
+                console.log(response);
+                if (response === 'ERROR') {
+                    M.toast(
+                        {
+                            html: `No se guardo el conteo del item ${codigo}`,
+                            classes: 'rounded red lighten-1'
+                        }
+                    );
+                }
+                else {
+                    if (response === 'OK') {
+                        M.toast(
+                            {
+                                html: `Se guardo el conteo del item ${codigo}`,
+                                classes: 'rounded green lighten-1'
+                            }
+                        );
                     }
-                );
-            })
-            .then(
-                response => {
-                    console.log(response);
-                    if (response === 'ERROR') {
+                    else {
                         M.toast(
                             {
                                 html: `No se guardo el conteo del item ${codigo}`,
@@ -1114,33 +1080,7 @@ const saveItemPost = async (auditoria, bodega, ubicacion_id, codigo_id, descripc
                             }
                         );
                     }
-                    else {
-                        if (response === 'OK') {
-                            M.toast(
-                                {
-                                    html: `Se guardo el conteo del item ${codigo}`,
-                                    classes: 'rounded green lighten-1'
-                                }
-                            );
-                        }
-                        else {
-                            M.toast(
-                                {
-                                    html: `No se guardo el conteo del item ${codigo}`,
-                                    classes: 'rounded red lighten-1'
-                                }
-                            );
-                        }
-                    }
                 }
-            );
-    }
-    else {
-        M.toast(
-            {
-                html: `No se guardo el conteo del item ${codigo}. \nLa ubicacion ingresada no existe, en la bodega ${bodega}`,
-                classes: 'rounded red lighten-1'
             }
         );
-    }
 };

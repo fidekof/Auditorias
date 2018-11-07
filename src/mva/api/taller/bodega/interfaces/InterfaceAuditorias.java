@@ -6,12 +6,21 @@ import java.util.Collection;
 
 public interface InterfaceAuditorias {
     public Collection<Conteo> ProductsGet(Conteo product, int typeSeaarch);
+
     public Collection<Conteo> ProductsGetByUbicaciones(Conteo productI, Conteo productF, int typeSearch);
+
     public Collection<Conteo> CountGet(Conteo count, int typeSeaarch);
+
     String CountsSave(Conteo conteo);
+
     Collection<Conteo> ProductGetAllByTypeSearch(Conteo conteo, int typesearch);
+
     String ItemSave(Conteo conteo);
 
     Collection<Conteo> searchResumenCounts(Conteo conteo, int typesearch);
+
+    Collection<Conteo> ObternerResumenPorItems(Conteo conteo, int typesearch);
+
+    Collection<Conteo> ObternerUbicacionMaestroPorBodega(Conteo conteo, int typesearch);
 }
 

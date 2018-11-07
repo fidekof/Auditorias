@@ -34,4 +34,17 @@ public class ControllerCounts {
     }
 
 
+    @GetMapping("resumen_items")
+    public String ResumenPorItems(Locale locale, Model model) {
+
+        return "resumen_por_items";
+    }
+
+
+    @GetMapping("conteo_admin")
+    public String Conteo_administrador(Locale locale, Model model) {
+        return "counts_admin";
+    }
+
+
 }
